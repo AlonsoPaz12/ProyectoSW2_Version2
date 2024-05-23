@@ -1,0 +1,40 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    background-color: #E7F6F1;
+}
+
+.cabecera{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.Logo{
+    display: flex;
+    align-items: center;
+    width: 250px;
+}
+
+.nombreLogo{
+    font-family: "Staatliches", sans-serif;
+    font-size: 38px;
+    color: #014433;
+}
+
+.body{
+    flex-grow: 1;
+}
+
+.footer{
+    background-color: #B8D0C7;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

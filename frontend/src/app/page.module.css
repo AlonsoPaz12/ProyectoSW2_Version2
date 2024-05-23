@@ -1,0 +1,72 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.banner {
+    background-image: url("../../public/img/FondoInicio.png");
+    display: flex;
+    justify-content: space-evenly;
+    padding: 25px;
+}
+
+.verMas {
+    padding-left: 10px;
+}
+
+.column {
+    flex: 1 1 25%;
+}
+
+.pregunta {
+    font-family: "Staatliches", sans-serif;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+}
+  
+.contenidoLista {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.contenidoOpcion {
+    display: flex;
+    align-items: center;
+    height: 9.5em;
+    border: 3px solid #00916E; 
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px;
+}
+
+.iconList {
+ padding-right: 10px;
+ color: #014433;
+}
+
+@media (min-width: 768px) {
+    .column {
+        flex-basis: 50%;
+    }    
+}
+
+@media screen and (max-width: 608px) {
+
+    .pregunta {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .column {
+        flex-basis: 100%;
+    }
+
+    .banner {
+        display: flex;
+        flex-direction: column;
+    }
+}

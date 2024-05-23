@@ -1,0 +1,21 @@
+.especialidadItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2%;
+    width: 60vh;
+}
+  
+.especialidadIconoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px; 
+    border-radius: 50%;
+}
+  
+.especialidadNombre {
+    font-size: 18px; 
+    width: 50%;
+}

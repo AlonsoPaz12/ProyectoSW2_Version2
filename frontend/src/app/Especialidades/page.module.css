@@ -1,0 +1,11 @@
+.container{
+  background-color: #E7F6F1;
+}
+
+.especialidadesContainer {
+  display: flex;
+  justify-items: center;
+  padding: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

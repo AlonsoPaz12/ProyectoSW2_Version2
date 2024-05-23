@@ -1,0 +1,62 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #E7F6F1;
+    overflow: hidden;
+}
+
+.cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.Logo {
+    display: flex;
+    align-items: center;
+    width: 250px;
+}
+
+.nombreLogo {
+    font-family: "Staatliches", sans-serif;
+    font-size: 38px;
+    color: #014433;
+}
+
+.body {
+    flex-grow: 1;
+    overflow-y: auto; /* Permite el scroll vertical */
+    display: flex;
+    flex-direction: column;
+}
+
+.DoctorCards {
+    flex-grow: 1;
+    padding-left: 90px;
+    padding-right: 90px;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(395px, 1fr));
+    gap: 32px;
+    justify-items: center;
+}
+
+.footer {
+    background-color: #B8D0C7;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky; /* Mantiene el footer en la parte inferior */
+    flex-shrink: 0;
+}
+
+@media (max-width: 1500px) {
+    .DoctorCards {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}

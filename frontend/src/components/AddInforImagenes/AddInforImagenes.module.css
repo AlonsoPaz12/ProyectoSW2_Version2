@@ -1,0 +1,66 @@
+
+.customModal {
+    top: 40px;
+    width: 100%;
+    max-width: 800px; 
+    margin: auto; 
+  
+    background-color: rgba(0, 0, 0, 0.5);
+  
+}
+  
+  
+.customHeader {
+    background-color: #333; 
+    color: #000000;
+    border-bottom: none;  background-color: #fff;
+}
+  
+  
+.customBody {
+    padding: 20px; 
+}
+  
+  
+.customFooter {
+    background-color: #ffffff; 
+    border-top: none; 
+}
+  
+.table-responsive {
+    max-height: 400px; 
+    overflow-y: auto; 
+}
+  
+.table-responsive table {
+    width: 100%; 
+}
+  
+.addRowButton {
+    margin-top: 20px; 
+    background-color: #00916E;
+    border-color: #00916E;
+}
+  
+  
+.addRowButtonSave {
+    margin-top: auto; 
+    background-color: #00916E;
+    border-color: #00916E;
+}
+  
+.modalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px; /* Aumenta el tamaño máximo del cuadro modal */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro o transparente */
+    border-radius: 10px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5); /* Extiende la sombra por toda la pantalla */
+    padding: 20px;
+    z-index: 1050;
+}
+  
+  

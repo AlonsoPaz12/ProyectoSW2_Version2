@@ -1,0 +1,101 @@
+.container{
+    background-color: #E7F6F1;
+    display: flex;
+}
+
+.body{
+    height: 100hv;
+    flex-grow: 1;
+    padding-left: 100px;
+}
+
+.cabecera{
+    display: flex;
+    justify-content: space-between;
+    height: 180px;
+    padding-right: 20px;
+    align-items: center;
+}
+
+.cardlabel {
+    position: relative;
+    height: 135px;
+    line-height: 80px;
+    
+}
+
+.inputlabal{
+    
+    position: absolute;
+    width: 89%;
+    outline: none;
+    font-size: 1.5em;
+    padding: 0 30px;
+    line-height: 80px;
+    border-radius: 10px;
+    border: 2px solid rgb(97, 139, 89);
+    background: transparent;
+    transition: 0.1s ease;
+    
+}
+
+.labelline{
+    position: absolute;
+    font-size: 1.2em;
+    color: green;
+    padding: 0 25px;
+    margin: 0 20px;
+    background-color: #E7F6F1;
+    transition: 0.2s ease;
+  
+}
+
+.inputlabal:focus + .labelline,
+.inputlabal:valid + .labelline{
+    height: 30px;
+    line-height: 30px;
+    transform: translate(-15px, -16px) scale(0.88);
+    z-index: 1111;
+}
+
+.cardbody {
+    display: grid;
+    grid-template-columns: 
+        repeat(
+            auto-fit,
+            minmax(400px, 1fr)
+        );
+    gap: 32px;
+}
+
+@media (max-width: 1500px) {
+    .cardbody {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 32px;
+    }
+    
+  }
+
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.agregarImagen{
+    background-color: black;
+    border-color: black;
+    width: 250px;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 20px;
+    width: 300px; 
+}
+
+
+
+
+  
+  

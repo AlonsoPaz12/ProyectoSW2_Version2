@@ -1,0 +1,24 @@
+.banner{
+    display: flex;
+    justify-content: space-around;
+    height: calc(7.5rem + 3vw);
+    width: 100%;
+    background-color: #5ED2B7;
+}
+
+.title {
+    font-family: "Staatliches", sans-serif;
+}
+
+.texto {
+ margin-left: 20px;
+ margin-right: 20px;
+ margin-top: 20PX;
+ font-size: calc(0.5rem + 1vw);
+}
+
+@media screen and (max-width: 767px) {
+    .image{
+        display:none;
+    }
+}

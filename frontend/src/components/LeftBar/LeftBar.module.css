@@ -1,0 +1,19 @@
+.container{
+    height: 100vh;
+    width: 265px;
+    background-color: white;
+    padding: 15px 15px;
+}
+
+.cabecera{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.nombreLogo{
+    font-family: "Staatliches", sans-serif;
+    font-size: 38px;
+    color: #014433;
+}

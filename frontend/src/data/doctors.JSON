@@ -1,0 +1,10 @@
+[
+  { "id": 1, "nombre": "Dr. Juan Pérez", "cmp": "4259875" , "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Pediatría", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 2, "nombre": "Dra. María González", "cmp": "4259875", "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Dermatología", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 3, "nombre": "Dra. Gianella Carrion", "cmp": "4259875", "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Dermatología", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 4, "nombre": "Dr. Juan Pérez", "cmp": "4259875" , "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Pediatría", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 5, "nombre": "Dra. María González", "cmp": "4259875", "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Dermatología", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 6, "nombre": "Dra. Gianella Carrion", "cmp": "4259875", "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Dermatología", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 7, "nombre": "Dra. María González", "cmp": "4259875", "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Dermatología", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" },
+  { "id": 8, "nombre": "Dra. Gianella Carrion", "cmp": "4259875", "uni": "Universidad Nacional Autónoma de Ciudad X", "especialidad": "Dermatología", "imagen": "https://i.ibb.co/b6SDFTN/01.jpg" }
+]

@@ -1,0 +1,17 @@
+[
+    { "id": 1, "nombre": "Cardiología", "color": "red" },
+    { "id": 2, "nombre": "Dermatología", "color": "blue" },
+    { "id": 3, "nombre": "Pediatría", "color": "green" },
+    { "id": 4, "nombre": "Oftalmología", "color": "purple" },
+    { "id": 5, "nombre": "Ginecología", "color": "orange" },
+    { "id": 6, "nombre": "Neurología", "color": "teal" },
+    { "id": 7, "nombre": "Urología", "color": "indigo" },
+    { "id": 8, "nombre": "Endocrinología", "color": "yellow" },
+    { "id": 9, "nombre": "Oncología", "color": "pink" },
+    { "id": 10, "nombre": "Traumatología", "color": "brown" },
+    { "id": 11, "nombre": "Hematología", "color": "maroon" },
+    { "id": 12, "nombre": "Psiquiatría", "color": "cyan" },
+    { "id": 13, "nombre": "Nutrición", "color": "lime" },
+    { "id": 14, "nombre": "Cirugía General", "color": "navy" },
+    { "id": 15, "nombre": "Odontología", "color": "gray" }
+]
