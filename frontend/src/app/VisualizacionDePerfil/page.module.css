@@ -1,0 +1,68 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.backButton {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.profileContainer {
+    display: flex;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.leftSide, .rightSide {
+    flex: 1;
+    padding: 20px;
+    align-content: center;
+}
+
+.leftSide {
+    border-right: 1px solid #ccc;
+}
+
+.profilePicture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.profileInfo h2 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.profileInfo p {
+    margin: 5px 0;
+}
+
+.optionsList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.optionsList li {
+    margin: 10px 0;
+    cursor: pointer;
+    color: #007BFF;
+}
