@@ -1,0 +1,86 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #46e1a8;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    color: #007BFF;
+}
+
+.header h2 {
+    color: #28a745;
+}
+
+.schedule {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dayColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.dayColumn h3 {
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
+.hourBlock {
+    width: 100px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #28a745;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.hourBlock:hover {
+    background-color: #e0f5e9;
+}
+
+.selected {
+    background-color: #28a745;
+    color: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #16c81f82;
+    margin-bottom: 20px;
+    font-family: "Staatliches", sans-serif;
+  font-size: 48px;
+  color: white;
+}
+
+.saveButton {
+    margin-top: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.saveButton:hover {
+    background-color: #218838;
+}
