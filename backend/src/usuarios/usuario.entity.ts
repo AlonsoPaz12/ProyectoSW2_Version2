@@ -1,3 +1,13 @@
+export enum GeneroUsuario{
+    MASCULINO = 'MASCULINO',
+    FEMENINO = 'FEMENINO'
+}
+
+export enum RolUsuario{
+    MEDICO = 'MEDICO',
+    PACIENTE = 'PACIENTE'
+}
+
 export class Usuario{
     id: String
     numeroDocumento: String
@@ -9,7 +19,7 @@ export class Usuario{
     correoElectronico: String
     contrasena: String
     repContrasena: String
-    genero: Boolean
-    rol: Boolean
+    genero: GeneroUsuario
+    rol: RolUsuario
 }
 
