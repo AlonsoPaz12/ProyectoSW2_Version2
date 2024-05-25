@@ -16,7 +16,7 @@
 }
 
 .header h2 {
-    color: #28a745;
+    color: black;
 }
 
 .schedule {
@@ -34,7 +34,7 @@
 }
 
 .dayColumn h3 {
-    color: #28a745;
+    color: black;
     margin-bottom: 10px;
 }
 
