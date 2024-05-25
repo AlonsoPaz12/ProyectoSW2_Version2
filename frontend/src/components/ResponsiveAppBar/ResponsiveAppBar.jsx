@@ -18,7 +18,7 @@ import { MdEmail } from "react-icons/md";
 import Link from 'next/link';
 
 const pages = ['Nosotros', 'Especialidades', 'Doctores'];
-const settings = ['Iniciar Sesión', 'Registtrarse'];
+const settings = ['Iniciar Sesión', 'Registrarse'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

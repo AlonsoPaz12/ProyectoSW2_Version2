@@ -1,24 +1,72 @@
-.banner{
+.banner {
     display: flex;
-    justify-content: space-around;
-    height: calc(7.5rem + 3vw);
-    width: 100%;
     background-color: #5ED2B7;
+    width: 100%;
 }
 
+.banner1 {
+    justify-content: space-around;
+    height: calc(7.5rem + 3vw);
+
+}
+
+.banner2 {
+    background-image: url('../../../public/img/fondoNosotros.png');
+    background-size: cover;
+    justify-content: flex-start;
+    height: calc(7.5rem + 3vw);
+}
+
+.banner3 {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.imageContainer {
+    flex: 1;
+}
+
+.textContainer {
+    flex: 1;
+    padding: 20px;
+}
+
+.imagen {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    padding: 20px;
+}
+  
 .title {
     font-family: "Staatliches", sans-serif;
 }
 
+.title2 {
+    font-size: 3em;
+}
+
 .texto {
- margin-left: 20px;
- margin-right: 20px;
- margin-top: 20PX;
- font-size: calc(0.5rem + 1vw);
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.texto1 {
+    font-size: calc(0.5rem + 1vw);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 @media screen and (max-width: 767px) {
     .image{
-        display:none;
+        display: none;
+    }
+
+    .banner3 {
+        flex-direction: column;
     }
 }

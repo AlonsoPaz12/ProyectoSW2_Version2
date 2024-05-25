@@ -13,9 +13,9 @@ import styles from "./page.module.css";
 
 export default function Home() {
   const imagenes = [
-    '/img/FondoBanner.png',
-    '/img/FondoBanner.png',
-    '/img/FondoBanner.png',
+    '/img/FondoCarrusel.png',
+    '/img/FondoCarrusel.png',
+    '/img/FondoCarrusel.png',
   ];
   
   return (
@@ -38,8 +38,7 @@ export default function Home() {
               <div className={styles.datos}>
                 Quiero agendar una cita
                 <div>
-                  <CustomLink href={"/agendarCita"} text={"Ver más"}/>
-                  <IoIosArrowDropright className={styles.verMas} size="2em" />
+                  <CustomLink href={"/agendarCita"} text={"Ver más ↪"}/>
                 </div>  
               </div>
             </div>
@@ -50,8 +49,7 @@ export default function Home() {
               <div className={styles.datos}>
                 Quiero ver mis laboratorios
                 <div>
-                  <CustomLink href={"/agendarCita"} text={"Ver más"}/>
-                  <IoIosArrowDropright className={styles.verMas} size="2em" />
+                  <CustomLink href={"/agendarCita"} text={"Ver más ↪"}/>
                 </div>  
               </div>
             </div>
@@ -65,8 +63,7 @@ export default function Home() {
               <div className={styles.datos}>
                 Quiero ver una especialidad
                 <div>
-                  <CustomLink href={"/agendarCita"} text={"Ver más"}/>
-                  <IoIosArrowDropright className={styles.verMas} size="2em" />
+                  <CustomLink href={"/agendarCita"} text={"Ver más ↪"}/>
                 </div>  
               </div>
             </div>
@@ -77,8 +74,7 @@ export default function Home() {
               <div className={styles.datos}>
                 Quiero ver mis imágenes médicas
                 <div>
-                  <CustomLink href={"/ImagenesMedicas"} text={"Ver más"}/>
-                  <IoIosArrowDropright className={styles.verMas} size="2em" />
+                  <CustomLink href={"/ImagenesMedicas"} text={"Ver más ↪"}/>
                 </div>  
               </div>
             </div>

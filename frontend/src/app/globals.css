@@ -16,6 +16,10 @@ body {
   padding-right: 0 !important;
 }
 
+p {
+  margin: 0 !important;
+}
+
 a {
   text-decoration: none !important;
 }

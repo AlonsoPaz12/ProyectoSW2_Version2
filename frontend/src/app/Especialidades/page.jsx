@@ -2,7 +2,7 @@
 
 import { React, useState } from "react";
 import styles from './page.module.css';
-import Banner from '@/components/Banner/Banner.jsx';
+import BannerFactory from '@/components/Banner/BannerFactory';
 import Footer from '@/components/Footer/Footer.jsx';
 import Buscador from "@/components/Buscador/Buscador";
 import ListaEspecialidades from "@/components/ListaEspecialidades/ListaEspecialidades";
@@ -12,20 +12,21 @@ const Especialidades = () => {
   const [inputText, setInputText] = useState("");
 
   const handleSearchInputChange = (value) => {
-    setInputText(value);
+    setInputText(value)
   };
 
+  const bannerFactory = new BannerFactory();
 
   return (
     <div className={styles.container}>
       <ResponsiveAppBar/>
-      
-      <Banner
-        pageTitle="NUESTRAS ESPECIALIDADES"
-        parrafo="Descubre nuestra gama de especialidades médicas diseñadas para cuidar de ti de manera integral."
-        imagen="/img/doctores1.png"
-      />
 
+      {bannerFactory.createBanner('style1', {
+        pageTitle: "NUESTRAS ESPECIALIDADES",
+        parrafo: "Descubre nuestra gama de especialidades médicas diseñadas para cuidar de ti de manera integral.",
+        imagen: "/img/doctores1.png",
+      })}
+      
       <Buscador onChange={handleSearchInputChange} label={"Buscar especialidad por nombre"} />
      
 

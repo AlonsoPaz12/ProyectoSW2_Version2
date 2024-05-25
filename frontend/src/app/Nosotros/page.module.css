@@ -1,0 +1,107 @@
+.container{
+  background-color: #E7F6F1;
+}
+
+.clinicInfoTitle {
+  font-size: 1.2rem;
+  padding: 2em;
+  text-align: center;
+}
+
+.clinicInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.clinicItems {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-right: 3em;
+  margin-left: 3em;
+  margin-bottom: 2em;
+}
+
+.infoItemIcon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 1rem;
+}
+
+.infoItemP {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.valoresSection {
+  padding: 3rem 1rem;
+}
+
+.valoresTitle {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.valoresContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 3rem;
+  padding: 3em 6em 3em 6em;
+}
+
+.valorItem {
+  background-color: #fff;
+  padding: 2rem;
+  border: #00916E 2px solid;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.valorIcon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+}
+
+.valorTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+
+}
+
+.valorDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .valoresTitle {
+    font-size: 1.8rem;
+  }
+
+  .valorIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .valorTitle {
+    font-size: 1.3rem;
+  }
+
+  .valorDescription {
+    font-size: 0.9rem;
+  }
+}
