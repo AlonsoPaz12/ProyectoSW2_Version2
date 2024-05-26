@@ -1,0 +1,4 @@
+.cabecera {
+    display: flex;
+    justify-content: flex-end;
+}
