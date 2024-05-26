@@ -49,10 +49,10 @@ const UserMenu = () => {
           },
         }}
       >
-        <MenuItem onClick={() =>  handleNavigate('/VisualizacionPerfil')}>
+        <MenuItem onClick={() => { handleMenuClose(); navigate(`/VisualizacionDePerfil`);}}>
           <Typography variant="body1" style={{ color: '#1a73e8' }}>Mi perfil</Typography>
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={() => { handleMenuClose()}}>
           <Typography variant="body1">Cerrar sesión</Typography>
         </MenuItem>
       </Menu>

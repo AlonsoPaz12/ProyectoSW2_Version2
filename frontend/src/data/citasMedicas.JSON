@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "motivo": "Consulta general",
+    "IDmedico": "1",
+    "Observacion": "Paciente se queja de dolor de cabeza persistente",
+    "diagnostico": "Migraña",
+    "IDpaciente": "P001",
+    "fecha": "2024-06-15T10:00:00Z",
+    "documentoMedico": ["doc1.pdf", "doc2.pdf"]
+  },
+  {
+    "id": "2",
+    "motivo": "Chequeo anual",
+    "IDmedico": "2",
+    "Observacion": "Paciente necesita análisis de sangre",
+    "diagnostico": "Anemia",
+    "IDpaciente": "P002",
+    "fecha": "2024-07-20T09:30:00Z",
+    "documentoMedico": ["doc3.pdf"]
+  },
+  {
+    "id": "3",
+    "motivo": "Revisión de resultados",
+    "IDmedico": "3",
+    "Observacion": "Revisión de resultados de análisis previos",
+    "diagnostico": "Ninguno",
+    "IDpaciente": "P003",
+    "fecha": "2024-08-05T11:00:00Z",
+    "documentoMedico": ["doc4.pdf", "doc5.pdf"]
+  }
+]
+
+  

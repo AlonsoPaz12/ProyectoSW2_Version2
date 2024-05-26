@@ -2,3 +2,33 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.titulo {
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.containerTabla {
+    overflow-x: auto;
+    
+} 
+
+.botonReceta {
+    background-color: #00916E;
+    color: white;
+    border: #00916E;
+}
+
+.botonReceta:hover, .botonReceta:active {
+    background-color: #014433;
+}
+
+@media (max-width: 860px) {
+    .containerTabla {
+        overflow-x: auto;
+        margin-right: 7em;
+        
+    } 
+}
+
