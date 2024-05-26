@@ -10,6 +10,12 @@ import ProximasCitas from './ProximasCitas/page.jsx';
 import HistorialCitas from './HistorialCitas/page.jsx';
 import Laboratorio from './LabAnalisis/page.jsx';
 import Perfil from './VisualizacionDePerfil/page.jsx';
+import AgendarCitaElegirDoctor from './AgendarCitaElegirDoctor/page.jsx';
+import AgendarCitaElegirHorario from './AgendarCitaElegirHorario/page.jsx';
+import AgregarHorarioDisponible from './AgregarHorarioDisponible/page.jsx';
+import ImagenesMedicas from './ImagenesMedicas/page.jsx';
+import IniciarSesion from './IniciarSesion/page.jsx';
+import Registro from './Registro/page.jsx';
 
 
 const AppRoutes = () => {
@@ -24,6 +30,13 @@ const AppRoutes = () => {
         <Route path="/HistorialCitas" element={<HistorialCitas />} />
         <Route path="/LabAnalisis" element={<Laboratorio />} />
         <Route path="/VisualizacionDePerfil" element={<Perfil />} />
+        <Route path="/AgendarCitaElegirDoctor" element={<AgendarCitaElegirDoctor />} />
+        <Route path="/AgendarCitaElegirHorario" element={<AgendarCitaElegirHorario/>} />
+        <Route path="/AgregarHorarioDisponible" element={<AgregarHorarioDisponible />} />
+        <Route path="/ImagenesMedicas" element={<ImagenesMedicas />} />
+        <Route path="/Iniciar Sesión" element={<IniciarSesion />} />
+        <Route path="/Registrarse" element={<Registro />} />
+
       </Routes>
     </Router>
   );
