@@ -1,5 +1,4 @@
-export class Medicamento{
-    id: string
+export class CrearMedicamentoDto{
     tipo: string
     frecuencia: string
     dosis: string

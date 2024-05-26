@@ -1,5 +1,4 @@
-export class ImagenMedica{
-    id: String
+export class CrearImagenMedicaDto{
     tipo: String
     imagen: String
     nombrePaciente: String

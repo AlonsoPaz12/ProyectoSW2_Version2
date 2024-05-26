@@ -61,4 +61,8 @@ export class UsuariosService {
 
         return nuevoUsuario
     }
+
+    getId(id: String){
+        return this.usuarios.find(usuario => usuario.id === id).id
+    }
 }
