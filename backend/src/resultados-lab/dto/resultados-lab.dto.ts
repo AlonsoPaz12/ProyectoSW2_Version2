@@ -1,5 +1,4 @@
-export class ResultadoLab{
-    id: String
+export class CrearResultadoLabDto{
     tipo: String
     resultado: String
     Nombrepaciente: String
