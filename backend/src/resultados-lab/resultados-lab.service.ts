@@ -33,4 +33,7 @@ export class ResultadosLabService implements ResultadoExamen{
         this.resultadosLab = this.resultadosLab.filter(resultado => resultado.id !== id);
     }
 
+
+    
+
 }
