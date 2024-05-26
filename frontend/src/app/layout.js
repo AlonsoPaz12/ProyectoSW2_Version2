@@ -1,9 +1,11 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AppRoutes from './routes'
+import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ["latin"] });
+
+const AppRoutes = dynamic(() => import('./routes'), { ssr: false });
 
 export const metadata = {
   title: "MedControl+",

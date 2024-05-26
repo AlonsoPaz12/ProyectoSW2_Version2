@@ -1,5 +1,7 @@
 'use client';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,14 +15,16 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
+
 import { FaUser, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import Link from 'next/link';
 
 const pages = ['Nosotros', 'Especialidades', 'Doctores'];
 const settings = ['Iniciar Sesión', 'Registrarse'];
 
 function ResponsiveAppBar() {
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -99,11 +103,9 @@ function ResponsiveAppBar() {
                 }}
               >
                 {pages.map((page) => (
-                  <Link key={page} href={`/${page}`} passHref>
-                    <MenuItem key={page} onClick={handleCloseNavMenu} sx={{ color: '#00916E'}}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                  </Link>                
+                  <MenuItem key={page} onClick={() => { handleCloseNavMenu(); navigate(`/${page}`);}} sx={{ color: '#00916E'}}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
                 ))}
               </Menu>
             </Box>
@@ -129,14 +131,12 @@ function ResponsiveAppBar() {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
-                <Link key={page} href={`/${page}`} passHref>
                   <Button
-                    onClick={handleCloseNavMenu}
+                    onClick={() => navigate(`/${page}`)}
                     sx={{ my: 2, color: 'white', display: 'block'}}
                   >
                     {page}
                   </Button>
-              </Link>
               ))}
             </Box>
 
