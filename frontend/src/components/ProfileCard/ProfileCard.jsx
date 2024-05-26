@@ -2,7 +2,6 @@ import React from 'react';
 import styles from "./ProfileCard.module.css";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-import { colors } from '@mui/material';
 
 const ProfileCard = () =>{
 

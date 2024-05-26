@@ -6,6 +6,12 @@ import ProfileCard from '@/components/ProfileCard/ProfileCard';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './page.module.css';
+import Box from '@mui/material/Box';
+
+import UserMenu from '@/components/UserMenu/UserMenu';
+import SideNavBar from '@/components/SideNavBar/SideNavBar';
+
+
 
 const LabAnalisis = () => {
   const [showModal, setShowModal] = useState(false);
@@ -36,13 +42,13 @@ const LabAnalisis = () => {
   );
 
   return (
-    <div className={styles.container}>
-      <LeftBar />
-      <div className={styles.body}>
+    <Box className={styles.container}>
+      <SideNavBar></SideNavBar>
+      <Box sx={{flexDirection: "column", margin: "2em", width: "100%", height: "100vh"}}>
         <div className={styles.cabecera}>
-          <h5 style={{ marginTop: '80px' }}><b>RESULTADOS DEL LABORATORIO</b></h5>
-          <ProfileCard />
+          <UserMenu />
         </div>
+        <h5 style={{marginTop:'1em', marginBottom:'1em'}}><b>RESULTADOS DEL LABORATORIO</b></h5>
         <div>
           <div className={styles.cardlabel}>
             <input
@@ -67,14 +73,15 @@ const LabAnalisis = () => {
         <div className={styles.footer}>
           <Button variant="dark" className={styles.agregarImagen} onClick={handleShowModal}>Agregar y Editar Análisis</Button>
         </div>
-      </div>
+
       <AddAnalysisModal
         show={showModal}
         handleClose={handleCloseModal}
         handleSave={handleSaveAnalysis}
         initialAnalysisData={analyses}
       />
-    </div>
+      </Box>
+    </Box>
   );
 };
 

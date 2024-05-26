@@ -16,6 +16,9 @@ import AgregarHorarioDisponible from './AgregarHorarioDisponible/page.jsx';
 import ImagenesMedicas from './ImagenesMedicas/page.jsx';
 import IniciarSesion from './IniciarSesion/page.jsx';
 import Registro from './Registro/page.jsx';
+import Calendario from './Calendario/page.jsx';
+import Vacunas from './Vacunas/page.jsx';
+import GenerarInforme from './GenerarInformes/page.jsx';
 
 
 const AppRoutes = () => {
@@ -36,7 +39,9 @@ const AppRoutes = () => {
         <Route path="/ImagenesMedicas" element={<ImagenesMedicas />} />
         <Route path="/Iniciar Sesión" element={<IniciarSesion />} />
         <Route path="/Registrarse" element={<Registro />} />
-
+        <Route path="/Calendario" element={<Calendario />} />
+        <Route path="/Vacunas" element={<Vacunas />} />
+        <Route path="/GenerarInforme" element={<GenerarInforme />} />
       </Routes>
     </Router>
   );
