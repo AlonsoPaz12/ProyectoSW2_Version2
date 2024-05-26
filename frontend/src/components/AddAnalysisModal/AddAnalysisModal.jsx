@@ -2,9 +2,20 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
 import styles from "./AddAnalysisModal.module.css";
 
+
+const testReasons = [ // Array of common test reasons
+  { value: 'cancer', label: 'Sospecha de Cáncer' },
+  { value: 'infeccion', label: 'Sospecha de Infección' },
+  { value: 'control', label: 'Control Rutina' },
+  { value: 'otro', label: 'Otro' }, // Add an "Other" option
+];
+
+
 const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }) => {
   const [analysisData, setAnalysisData] = useState([{
+    MotivoPrueba: '',
     testName: '',
+    testLastName: '',
     testDate: '',
     result: '',
     unit: '',
@@ -27,7 +38,9 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
 
   const handleAddRow = () => {
     setAnalysisData([...analysisData, {
+      MotivoPrueba: '',
       testName: '',
+      testLastName: '',
       testDate: '',
       result: '',
       unit: '',
@@ -63,7 +76,9 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
           <Table striped bordered hover responsive className={styles.tableResponsive}>
             <thead>
               <tr>
+                <th>Motivo de la Prueba</th>
                 <th>Nombre</th>
+                <th>Apellidos</th>
                 <th>Fecha</th>
                 <th>Resultado</th>
                 <th>Unidades</th>
@@ -76,9 +91,31 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                 <tr key={index}>
                   <td>
                     <Form.Control
+                      as="select"
+                      name="MotivoPrueba"
+                      value={analysis.MotivoPrueba}
+                      onChange={(e) => handleChange(e, index)}
+                    >
+                      {testReasons.map((reason) => (
+                        <option key={reason.value} value={reason.value}>
+                          {reason.label}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </td>
+                  <td>
+                    <Form.Control
                       type="text"
                       name="testName"
                       value={analysis.testName}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="testLasName"
+                      value={analysis.testLasName}
                       onChange={(e) => handleChange(e, index)}
                     />
                   </td>

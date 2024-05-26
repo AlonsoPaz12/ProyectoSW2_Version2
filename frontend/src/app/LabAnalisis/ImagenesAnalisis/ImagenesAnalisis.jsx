@@ -18,8 +18,8 @@ const ImagenesAnalisis = ({ analysis, onDelete }) => {
         <div>
           <div style={{ display: 'flex' }}>
             <div style={{ marginLeft: '12px' }}>
-              <h6 style={{ margin: '0' }}><b>{analysis.testName}</b></h6>
-              <p className={styles.labellineCard}><b>Motivo de la prueba:</b> Evaluación de dolor torácico y dificultad respiratoria</p>
+              <h6 style={{ margin: '0' }}><b>{analysis.testName}</b> <b>{analysis.testLasName}</b></h6>
+              <p className={styles.labellineCard}><b>Motivo de la prueba:</b> {analysis.MotivoPrueba} </p>
             </div>
             <Button className={styles.botonImagenesCard} variant="success"><p>{analysis.testDate}</p></Button>  
           </div>
@@ -33,35 +33,32 @@ const ImagenesAnalisis = ({ analysis, onDelete }) => {
 
       {showInfo && (
         <React.Fragment>
-          <div className={styles.modalOverlay}></div>
-          <div className={styles.modalContent}>
-            <div>
-              <h5>Ver Análisis</h5>
-              <p>Aquí puedes visualizar la información de los análisis.</p>
-              <h6>Resultados:</h6>
-              <div className={styles.tableContainer}>
-                <table className={styles.resultsTable}>
-                  <thead>
-                    <tr>
-                      <th>Prueba</th>
-                      <th>Resultado</th>
-                      <th>Rango Normal</th>
-                      <th>Unidades</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{analysis.testName}</td>
-                      <td>{analysis.result}</td>
-                      <td>{analysis.normalRange}</td>
-                      <td>{analysis.unit}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <Button variant="secondary" onClick={handleCloseInfo}>Cerrar</Button>
-              </div>
+        <div className={styles.modalOverlay}></div>
+        <div className={styles.modalContent}>
+          <div>
+            <h5>Ver Análisis</h5>
+            <p>Aquí puedes visualizar la información de los análisis.</p>
+            <h6>Resultados:</h6>
+            <div className={styles.listContainer}>
+              <ul className={styles.resultsList}>
+                <li>
+                  <strong>Prueba:</strong> {analysis.MotivoPrueba}
+                </li>
+                <li>
+                  <strong>Resultado:</strong> {analysis.result}
+                </li>
+                
+                <li>
+                  <strong>Rango Normal:</strong> {analysis.normalRange}
+                </li>
+                <li>
+                  <strong>Unidades:</strong> {analysis.unit}
+                </li>
+              </ul>
+              <Button variant="secondary" onClick={handleCloseInfo}>Cerrar</Button>
             </div>
           </div>
+        </div>
         </React.Fragment>
       )}
     </div>
