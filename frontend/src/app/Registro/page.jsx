@@ -10,9 +10,7 @@ const Registro = () => {
         apellidoPaterno: '',
         apellidoMaterno: '',
         genero: '',
-        dia: '',
-        mes: '',
-        año: '',
+        fechaDeNacimiento: '',
         celular: '',
         correo: '',
         contrasena: '',
@@ -20,15 +18,39 @@ const Registro = () => {
         aceptaTerminos: false,
     });
     const [profileImage, setProfileImage] = useState('/images/user-icon.png');
-
+    const [fecha, setFecha] = useState({
+        dia: '',
+        mes: '',
+        año: '',
+      });
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
+        setFormData((prevData) =>  ({
+            ...prevData,
             [name]: type === 'checkbox' ? checked : value,
-        });
+        }));
     };
-
+    
+    const handleDateChange = (e) => {
+        const { name, value } = e.target;
+        setFecha((prevFecha) => {
+          const updatedFecha = { ...prevFecha, [name]: value };
+          const { dia, mes, año } = updatedFecha;
+    
+          let formattedDate = '';
+          if (dia && mes && año) {
+            formattedDate = `${año.padStart(4, '0')}/${mes.padStart(2, '0')}/${dia.padStart(2, '0')}`;
+          }
+    
+          setFormData((prevData) => ({
+            ...prevData,
+            fechaDeNacimiento: formattedDate,
+          }));
+    
+          return updatedFecha;
+        });
+      };
+    
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -121,26 +143,30 @@ const Registro = () => {
                                     type="text"
                                     name="dia"
                                     placeholder="Día"
-                                    value={formData.dia}
-                                    onChange={handleChange}
+                                    value={fecha.dia}
+                                    onChange={handleDateChange}
                                     className={styles.input}
                                 />
                                 <input
                                     type="text"
                                     name="mes"
                                     placeholder="Mes"
-                                    value={formData.mes}
-                                    onChange={handleChange}
+                                    value={fecha.mes}
+                                    onChange={handleDateChange}
                                     className={styles.input}
                                 />
                                 <input
                                     type="text"
                                     name="año"
                                     placeholder="Año"
-                                    value={formData.año}
-                                    onChange={handleChange}
+                                    value={fecha.año}
+                                    onChange={handleDateChange}
                                     className={styles.input}
                                 />
+                            </div>
+                            
+                            <div>
+                                Fecha Formateada: {formData.fechaDeNacimiento}
                             </div>
                         </div>
                         <input
@@ -186,9 +212,9 @@ const Registro = () => {
                                 Estoy de acuerdo con los <a href="#">Términos y Política de Privacidad</a>
                             </label>
                         </div>
-                        <button type="submit" className={styles.button}>Registrarse</button>
+                        <button onClick={() => console.log(formData)} className={styles.button}>Registrarse</button>
                         <div className={styles.loginLink}>
-                            ¿Tienes una cuenta? <a href="/IniciarSesion">Inicia sesión</a>
+                            ¿Tienes una cuenta? <a href="/Iniciar Sesión">Inicia sesión</a>
                         </div>
                     </form>
                 </div>
