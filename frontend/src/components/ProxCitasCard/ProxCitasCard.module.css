@@ -50,7 +50,12 @@
 
 .botonfav:hover
 {
-    color: #00916E;
     cursor: pointer;
+}
+
+.botonfavActive {
+    color: #00916E;
+    width: 24px;
+    height: 24px;
 }
 

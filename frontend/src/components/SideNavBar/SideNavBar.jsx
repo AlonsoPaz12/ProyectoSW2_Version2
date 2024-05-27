@@ -151,7 +151,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Calendario")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -180,7 +180,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/LabAnalisis")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -209,7 +209,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Vacunas")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -238,7 +238,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
             
-            <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/GenerarInforme")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',

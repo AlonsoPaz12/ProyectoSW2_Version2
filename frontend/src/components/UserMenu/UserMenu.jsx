@@ -15,11 +15,6 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
 
-  const handleNavigate = (path) => {
-    router.push(path);
-    handleMenuClose();
-  };
-
   const open = Boolean(anchorEl);
 
   return (
@@ -45,15 +40,15 @@ const UserMenu = () => {
         }}
         PaperProps={{
           style: {
-            minWidth: anchorEl ? anchorEl.clientWidth : undefined,
+            width: 300, // Ancho fijo del menú
           },
         }}
       >
-        <MenuItem onClick={() =>  handleNavigate('/VisualizacionPerfil')}>
-          <Typography variant="body1" style={{ color: '#1a73e8' }}>Mi perfil</Typography>
+        <MenuItem onClick={() => { handleMenuClose(); navigate(`/VisualizacionDePerfil`);}}>
+          <Typography variant="body1" style={{ color: '#1a73e8', width: '100%' }}>Mi perfil</Typography>
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <Typography variant="body1">Cerrar sesión</Typography>
+        <MenuItem onClick={() => { handleMenuClose()}} style={{ width: 200 }}> {/* Ancho fijo de las opciones del menú */}
+          <Typography variant="body1" style={{ width: '100%' }}>Cerrar sesión</Typography>
         </MenuItem>
       </Menu>
     </div>
