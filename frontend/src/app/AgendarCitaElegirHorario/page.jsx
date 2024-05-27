@@ -1,40 +1,89 @@
 'use client';
-
+// AgendarCitaElegirHorario.js
 import React, { useState } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import styles from './page.module.css';
 import { RiArrowGoBackFill } from "react-icons/ri";
-import Button from 'react-bootstrap/Button';
-import { RiSkipRightLine } from "react-icons/ri";
+import ButtonFactory from '@/components/Button/ButtonFactory';
+import { Button } from 'react-bootstrap';
+import Link from 'next/link';
+import { useNavigate } from 'react-router-dom';
 
-const AgendarCitaEDoctores = () => {
-  
+const AgendarCitaElegirHorario = () => {
+  const buttonFactory = new ButtonFactory();
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  // Función para almacenar la cita en el almacenamiento local
+  const handleSaveCita = () => {
+    if (selectedDate && selectedTime) {
+      const nuevaCita = { fecha: selectedDate, hora: selectedTime };
+      const citasGuardadas = JSON.parse(localStorage.getItem('citas')) || [];
+      localStorage.setItem('citas', JSON.stringify([...citasGuardadas, nuevaCita]));
+      setSelectedDate(null);
+      setSelectedTime(null);
+    } else {
+      alert('Por favor, seleccione una fecha y hora antes de continuar.');
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const availableTimes = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM'];
 
   return (
     <div className={styles.container}>
       <div className={styles.cabecera}>
         <div className={styles.Logo}>
-          <img src='/img/logo.png' height='60' width='60'></img>
+          <img src='/img/logo.png' height='60' width='60' alt="Logo"></img>
           <span className={styles.nombreLogo}>MedControl+</span>
         </div>
-        <a href="" style={{color: '#014433', display: 'flex', alignItems: 'center'}}>
-          <RiArrowGoBackFill size={'30px'} style={{marginRight: '10px'}} />
-          <p style={{margin: '0'}}><b> Regresar al inicio</b></p>
-        </a>
+        <Link href="/" style={{color: '#014433', display: 'flex', alignItems: 'center'}}>
+            <RiArrowGoBackFill size={'30px'} style={{marginRight: '10px'}} />
+            <p style={{margin: '0'}}><b> Regresar al inicio</b></p>
+        </Link>
       </div>
       <div className={styles.body}>
-        {/*Contenido aca*/}
+
+        <h2>Elija una fecha:</h2>
+        <DatePicker
+          selected={selectedDate}
+          onChange={date => setSelectedDate(date)}
+          dateFormat="yyyy-MM-dd"
+          minDate={new Date()}
+          placeholderText="Seleccione una fecha"
+          className={styles.datePicker}
+        />
+        {selectedDate && (
+          <>
+            <h2>Elija un horario disponible:</h2>
+            <div className={styles.availableTimes}>
+              {availableTimes.map((time, index) => (
+                <button
+                  key={index}
+                  className={`${styles.timeButton} ${selectedTime === time ? styles.selectedTime : ''}`}
+                  onClick={() => setSelectedTime(time)}
+                >
+                  {time}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <div className={styles.footer}>
-        <Button variant="secondary" style={{borderRadius: '10px', width: '250px'}}> 
-          <RiArrowGoBackFill/> Regresar
-        </Button>
+        {buttonFactory.createButton('style2', {
+          texto: "Regresar",
+        })}
+
         <div style={{height: '5px', width: '50px'}}></div>
-        <Button variant="success" style={{borderRadius: '10px', width: '250px', backgroundColor: '#00916E', borderColor: '#00916E'}}>
-          Agendar <RiSkipRightLine size={'22'}/> 
-        </Button>
-      </div>
+          <Button onClick={() => { handleSaveCita(); navigate("/ProximasCitas");}} variant="dark" style={{borderRadius: '10px', width: '250px'}}>
+            Guardar Cita
+          </Button>
+        </div>
     </div>
   );
 };
 
-export default AgendarCitaEDoctores;
+export default AgendarCitaElegirHorario;

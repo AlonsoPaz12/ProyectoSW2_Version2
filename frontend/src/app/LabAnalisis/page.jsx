@@ -1,8 +1,6 @@
 'use client';
 import ImagenesAnalisis from '@/app/LabAnalisis/ImagenesAnalisis/ImagenesAnalisis';
 import AddAnalysisModal from '@/components/AddAnalysisModal/AddAnalysisModal';
-import LeftBar from '@/components/LeftBar/LeftBar';
-import ProfileCard from '@/components/ProfileCard/ProfileCard';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './page.module.css';

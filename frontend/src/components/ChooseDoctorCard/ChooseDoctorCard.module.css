@@ -2,6 +2,7 @@
     background-color: white;
     width: 315px;
     height: 400px;
+    cursor: pointer;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -9,8 +10,8 @@
     padding-top: 25px;
 }
 
-.container:hover{
-    background-color: #5ED2B7;
+.selected {
+    background-color: #41BA9D;
 }
 
 .botonfav{

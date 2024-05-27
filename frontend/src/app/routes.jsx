@@ -12,7 +12,7 @@ import Laboratorio from './LabAnalisis/page.jsx';
 import Perfil from './VisualizacionDePerfil/page.jsx';
 import AgendarCitaElegirDoctor from './AgendarCitaElegirDoctor/page.jsx';
 import AgendarCitaElegirHorario from './AgendarCitaElegirHorario/page.jsx';
-import AgregarHorarioDisponible from './AgregarHorarioDisponible/page.jsx';
+import AgregarHorarioDisponible from './AgregarHorarioDisponible/page.module.css';
 import ImagenesMedicas from './ImagenesMedicas/page.jsx';
 import IniciarSesion from './IniciarSesion/page.jsx';
 import Registro from './Registro/page.jsx';
