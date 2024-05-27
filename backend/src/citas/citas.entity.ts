@@ -9,5 +9,4 @@ export class Cita{
     IDpaciente: String;
     fecha: Date;
     documentoMedico: any[];
-    asistio: boolean
 }

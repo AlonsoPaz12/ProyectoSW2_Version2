@@ -10,9 +10,6 @@ import ProximasCitas from './ProximasCitas/page.jsx';
 import HistorialCitas from './HistorialCitas/page.jsx';
 import Laboratorio from './LabAnalisis/page.jsx';
 import Perfil from './VisualizacionDePerfil/page.jsx';
-<<<<<<< HEAD
-import AgendarCitaEDoctores from './AgendarCitaElegirDoctor/page.jsx';
-=======
 import AgendarCitaElegirDoctor from './AgendarCitaElegirDoctor/page.jsx';
 import AgendarCitaElegirHorario from './AgendarCitaElegirHorario/page.jsx';
 import AgregarHorarioDisponible from './AgregarHorarioDisponible/page.jsx';
@@ -22,7 +19,6 @@ import Registro from './Registro/page.jsx';
 import Calendario from './Calendario/page.jsx';
 import Vacunas from './Vacunas/page.jsx';
 import GenerarInforme from './GenerarInformes/page.jsx';
->>>>>>> cb79141df089bb75a3a2f47b5e992eeaa124b454
 
 
 const AppRoutes = () => {
@@ -37,9 +33,6 @@ const AppRoutes = () => {
         <Route path="/HistorialCitas" element={<HistorialCitas />} />
         <Route path="/LabAnalisis" element={<Laboratorio />} />
         <Route path="/VisualizacionDePerfil" element={<Perfil />} />
-<<<<<<< HEAD
-        <Route path="/AgendarCitaElegirDoctor" element={<AgendarCitaEDoctores />}></Route>
-=======
         <Route path="/AgendarCitaElegirDoctor" element={<AgendarCitaElegirDoctor />} />
         <Route path="/AgendarCitaElegirHorario" element={<AgendarCitaElegirHorario/>} />
         <Route path="/AgregarHorarioDisponible" element={<AgregarHorarioDisponible />} />
@@ -49,7 +42,6 @@ const AppRoutes = () => {
         <Route path="/Calendario" element={<Calendario />} />
         <Route path="/Vacunas" element={<Vacunas />} />
         <Route path="/GenerarInforme" element={<GenerarInforme />} />
->>>>>>> cb79141df089bb75a3a2f47b5e992eeaa124b454
       </Routes>
     </Router>
   );

@@ -2,14 +2,12 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
 import styles from "./AddAnalysisModal.module.css";
 
-
 const testReasons = [ // Array of common test reasons
   { value: 'cancer', label: 'Sospecha de Cáncer' },
   { value: 'infeccion', label: 'Sospecha de Infección' },
   { value: 'control', label: 'Control Rutina' },
   { value: 'otro', label: 'Otro' }, // Add an "Other" option
 ];
-
 
 const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }) => {
   const [analysisData, setAnalysisData] = useState([{
@@ -20,6 +18,7 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
     result: '',
     unit: '',
     normalRange: '',
+    image: '', // Add an image field
   }]);
   const [isDateValid, setIsDateValid] = useState(true); // Estado para verificar si la fecha es válida
 
@@ -45,6 +44,7 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
       result: '',
       unit: '',
       normalRange: '',
+      image: '', // Add an image field
     }]);
   };
 
@@ -66,6 +66,24 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
     handleClose();
   };
 
+  const handleImageUpload = async (index, file) => {
+    // Handle image upload logic, e.g., uploading to a server or cloud storage
+    const imageUrl = URL.createObjectURL(file); // Use URL.createObjectURL for demo purposes
+    const updatedData = [...analysisData];
+    updatedData[index].image = imageUrl;
+    setAnalysisData(updatedData);
+  };
+
+  const handleImageRemove = (index) => {
+    const updatedData = [...analysisData];
+    updatedData[index].image = '';
+    setAnalysisData(updatedData);
+  };
+
+  const handleImageUpdate = (index) => {
+    document.getElementById(`image-upload-${index}`).click();
+  };
+
   return (
     <Modal show={show} onHide={() => {}} backdrop="static" keyboard={false} dialogClassName={styles.customModal}>
       <Modal.Header closeButton className={styles.customHeader}>
@@ -83,6 +101,7 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                 <th>Resultado</th>
                 <th>Unidades</th>
                 <th>Rango Normal</th>
+                <th>Imagen</th> {/* Add a column for the image */}
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -154,6 +173,25 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                       value={analysis.normalRange}
                       onChange={(e) => handleChange(e, index)}
                     />
+                  </td>
+                  <td>
+                    {analysis.image ? (
+                      <div>
+                        <img src={analysis.image} alt="uploaded" width={50} height={50} />
+                        <Button onClick={() => handleImageRemove(index)}>Eliminar</Button>
+                        <Button onClick={() => handleImageUpdate(index)}>Actualizar</Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <input
+                          type="file"
+                          id={`image-upload-${index}`}
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(index, e.target.files[0])}
+                        />
+                        <Button onClick={() => handleImageUpdate(index)}>Subir</Button>
+                      </div>
+                    )}
                   </td>
                   <td>
                     <Button variant="danger" onClick={() => handleRemoveRow(index)}>Eliminar</Button>

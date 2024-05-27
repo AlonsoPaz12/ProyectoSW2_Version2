@@ -5,9 +5,18 @@ import { BiBong } from "react-icons/bi";
 
 const ImagenesAnalisis = ({ analysis, onDelete }) => {
   const [showInfo, setShowInfo] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
 
   const handleShowInfo = () => setShowInfo(true);
   const handleCloseInfo = () => setShowInfo(false);
+
+  const handleShowImage = (src) => {
+    setImageSrc(src);
+    setShowImage(true);
+  };
+
+  const handleCloseImage = () => setShowImage(false);
 
   return (
     <div className={styles.containerImg}>
@@ -47,15 +56,40 @@ const ImagenesAnalisis = ({ analysis, onDelete }) => {
                 <li>
                   <strong>Resultado:</strong> {analysis.result}
                 </li>
-                
                 <li>
                   <strong>Rango Normal:</strong> {analysis.normalRange}
                 </li>
                 <li>
                   <strong>Unidades:</strong> {analysis.unit}
                 </li>
+                <li>
+                  <strong>Imagen:</strong> 
+                  {analysis.image ? (
+                    <a href="#" onClick={() => handleShowImage(analysis.image)}>Ver Imagen</a>
+                  ) : (
+                    'No hay imagen disponible'
+                  )}
+                </li>
               </ul>
               <Button variant="secondary" onClick={handleCloseInfo}>Cerrar</Button>
+            </div>
+          </div>
+        </div>
+        </React.Fragment>
+      )}
+
+      {showImage && (
+        <React.Fragment>
+        <div className={styles.modalOverlay}></div>
+        <div className={styles.modalContent}>
+          <div>
+            <h5>Imagen</h5>
+            <img src={imageSrc} alt="Análisis" className={styles.imageModal} />
+            <div className={styles.imageButtons}>
+              <Button variant="secondary" onClick={handleCloseImage}>Cerrar</Button>
+              <a href={imageSrc} download className={styles.downloadButton}>
+                <Button variant="success">Descargar Imagen</Button>
+              </a>
             </div>
           </div>
         </div>

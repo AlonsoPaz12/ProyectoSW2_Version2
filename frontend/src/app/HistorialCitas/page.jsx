@@ -1,3 +1,5 @@
+
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -25,7 +27,7 @@ const HistorialCitas = () => {
         receta: receta ? receta : null,
       };
     });
-    
+
     setCitas(citasConMedicosYRecetas);
   }, []);
 
@@ -40,9 +42,9 @@ const HistorialCitas = () => {
   };
 
   return (
-    <Box sx={{display: "flex", backgroundColor:"#E7F6F1", height: "100vh", width: "100%"}}>
+    <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
       <SideNavBar />
-      <Box sx={{flexDirection: "column", margin: "2em", width: "100%"}}>
+      <Box sx={{ flexDirection: "column", margin: "2em", width: "100%" }}>
         <div className={styles.cabecera}>
           <UserMenu />
         </div>
@@ -83,28 +85,32 @@ const HistorialCitas = () => {
             </tbody>
           </table>
         </div>
-        <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
+        <Modal show={showModal} onHide={handleCloseModal} centered backdrop="static">
+          <Modal.Header closeButton style={{ backgroundColor: '#00916e', color: '#fff', borderBottom: 'none' }}>
             <Modal.Title>Receta Médica</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ backgroundColor: '#ffffff', padding: '20px' }}>
             {recetaSeleccionada && (
               <>
-                <h5>Observación:</h5>
-                <p>{recetaSeleccionada.observacion}</p>
-                <h5>Medicamentos:</h5>
-                <ul>
-                  {recetaSeleccionada.medicamento.map((med, index) => (
-                    <li key={index}>
-                      {med.nombre} - {med.dosis}, {med.frecuencia}
-                    </li>
-                  ))}
-                </ul>
+                <div className={styles.observationSection}>
+                  <h5 style={{ color: '#00916e', marginBottom: '10px' }}>Observación:</h5>
+                  <p style={{ color: '#333333' }}>{recetaSeleccionada.observacion}</p>
+                </div>
+                <div className={styles.medicationSection}>
+                  <h5 style={{ color: '#00916e', marginBottom: '10px' }}>Medicamentos:</h5>
+                  <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    {recetaSeleccionada.medicamento.map((med, index) => (
+                      <li key={index} style={{ color: '#333333', marginBottom: '5px' }}>
+                        {med.nombre} - {med.dosis}, {med.frecuencia}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </>
             )}
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer style={{ backgroundColor: '#f0f0f0', borderTop: 'none' }}>
+            <Button variant="secondary" onClick={handleCloseModal} style={{ backgroundColor: '#00916e', borderColor: '#00916e', borderRadius: '20px', color: '#ffffff', transition: 'background-color 0.3s ease' }}>
               Cerrar
             </Button>
           </Modal.Footer>
@@ -116,3 +122,156 @@ const HistorialCitas = () => {
 
 export default HistorialCitas;
 
+
+
+/*
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+import citasData from "@/data/citasMedicas.JSON";
+import medicosData from "@/data/doctors.JSON";
+import recetasData from "@/data/recetaMedica.JSON";
+import styles from './page.module.css';
+import SideNavBar from '@/components/SideNavBar/SideNavBar';
+import Box from '@mui/material/Box';
+import UserMenu from '@/components/UserMenu/UserMenu';
+import { Modal, Button } from 'react-bootstrap';
+
+const HistorialCitas = () => {
+  const [citas, setCitas] = useState([]);
+  const [filteredCitas, setFilteredCitas] = useState([]);
+  const [recetaSeleccionada, setRecetaSeleccionada] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEspecialidad, setSelectedEspecialidad] = useState(null);
+
+  useEffect(() => {
+    const citasConMedicosYRecetas = citasData.map(cita => {
+      const medico = medicosData.find(m => m.id === parseInt(cita.IDmedico));
+      const receta = recetasData.find(r => r.citaId === cita.id);
+      return {
+        ...cita,
+        medico: medico ? medico : { nombre: 'Médico no encontrado', especialidad: 'Desconocida' },
+        receta: receta ? receta : null,
+      };
+    });
+
+    setCitas(citasConMedicosYRecetas);
+    setFilteredCitas(citasConMedicosYRecetas);
+  }, []);
+
+  const handleShowModal = (receta) => {
+    setRecetaSeleccionada(receta);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setRecetaSeleccionada(null);
+  };
+
+  const handleFilterChange = (selectedOption) => {
+    setSelectedEspecialidad(selectedOption);
+    if (selectedOption) {
+      const filtered = citas.filter(cita => cita.medico.especialidad === selectedOption.value);
+      setFilteredCitas(filtered);
+    } else {
+      setFilteredCitas(citas);
+    }
+  };
+
+  const especialidadOptions = [
+    ...new Set(citas.map(cita => cita.medico.especialidad))
+  ].map(especialidad => ({ value: especialidad, label: especialidad }));
+
+  return (
+    <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
+      <SideNavBar />
+      <Box sx={{ flexDirection: "column", margin: "2em", width: "100%" }}>
+        <div className={styles.cabecera}>
+          <UserMenu />
+        </div>
+        <h5 className={styles.titulo}>HISTORIAL DE CITAS</h5>
+        <div className={styles.filterContainer}>
+          <Select
+            options={especialidadOptions}
+            placeholder="Filtrar por especialidad"
+            isClearable
+            onChange={handleFilterChange}
+            className={styles.select}
+          />
+        </div>
+        <div className={styles.containerTabla}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Motivo</th>
+                <th>Médico</th>
+                <th>Especialidad</th>
+                <th>Diagnóstico</th>
+                <th>Observación</th>
+                <th>Receta Médica</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCitas.map(cita => (
+                <tr key={cita.id}>
+                  <td>{new Date(cita.fecha).toLocaleString()}</td>
+                  <td>{cita.motivo}</td>
+                  <td>{cita.medico.nombre}</td>
+                  <td>{cita.medico.especialidad}</td>
+                  <td>{cita.diagnostico}</td>
+                  <td>{cita.Observacion}</td>
+                  <td>
+                    {cita.receta ? (
+                      <Button variant="success" className={styles.botonReceta} onClick={() => handleShowModal(cita.receta)}>
+                        Ver Receta
+                      </Button>
+                    ) : (
+                      "No hay receta"
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Modal show={showModal} onHide={handleCloseModal} centered backdrop="static">
+          <Modal.Header closeButton style={{ backgroundColor: '#00916e', color: '#fff', borderBottom: 'none' }}>
+            <Modal.Title>Receta Médica</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{ backgroundColor: '#ffffff', padding: '20px' }}>
+            {recetaSeleccionada && (
+              <>
+                <div className={styles.observationSection}>
+                  <h5 style={{ color: '#00916e', marginBottom: '10px' }}>Observación:</h5>
+                  <p style={{ color: '#333333' }}>{recetaSeleccionada.observacion}</p>
+                </div>
+                <div className={styles.medicationSection}>
+                  <h5 style={{ color: '#00916e', marginBottom: '10px' }}>Medicamentos:</h5>
+                  <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    {recetaSeleccionada.medicamento.map((med, index) => (
+                      <li key={index} style={{ color: '#333333', marginBottom: '5px' }}>
+                        {med.nombre} - {med.dosis}, {med.frecuencia}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
+          </Modal.Body>
+          <Modal.Footer style={{ backgroundColor: '#f0f0f0', borderTop: 'none' }}>
+            <Button variant="secondary" onClick={handleCloseModal} style={{ backgroundColor: '#00916e', borderColor: '#00916e', borderRadius: '20px', color: '#ffffff', transition: 'background-color 0.3s ease' }}>
+              Cerrar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Box>
+    </Box>
+  );
+};
+
+export default HistorialCitas;
+
+*/

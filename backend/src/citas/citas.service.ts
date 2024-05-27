@@ -17,8 +17,7 @@ export class CitasService {
             Observacion: 'Llegar Puntual, y con muestra de heces',
             IDpaciente: '1',
             fecha: new Date('2024-02-20'),
-            documentoMedico: [this.doc],
-            asistio: true
+            documentoMedico: [this.doc]
         }
     ]
 
@@ -30,8 +29,7 @@ export class CitasService {
             Observacion,
             IDpaciente,
             fecha,
-            documentoMedico,
-            asistio: false
+            documentoMedico
         }
         this.citas.push(nuevaCita);
         return nuevaCita;

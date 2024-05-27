@@ -32,3 +32,73 @@
     } 
 }
 
+/*
+
+.cabecera {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.titulo {
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.containerTabla {
+  overflow-x: auto;
+  background-color: #E7F6F1;
+  padding: 1em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border: 1px solid #014433;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #5ED2B7;
+  color: #fff;
+}
+
+.table td {
+  background-color: #fff;
+}
+
+.botonReceta {
+  background-color: #00916E;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.botonReceta:hover, .botonReceta:active {
+  background-color: #014433;
+}
+
+@media (max-width: 860px) {
+  .containerTabla {
+    overflow-x: auto;
+    margin-right: 7em;
+  }
+}
+
+.filter-container {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+*/
