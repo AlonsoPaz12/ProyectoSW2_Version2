@@ -1,61 +1,65 @@
 'use client';
-
-import React, { useState } from 'react';
-import styles from './page.module.css';
-import LeftBar from '@/components/LeftBar/LeftBar';
-import Button from 'react-bootstrap/Button';
-import ProfileCard from '@/components/ProfileCard/ProfileCard';
-import ImagenesCard from '@/components/ImagenesCard/ImagenesCard';
+import ImagenesAnalisis from '@/app/LabAnalisis/ImagenesAnalisis/ImagenesAnalisis';
 import AddInforImagenes from '@/components/AddInforImagenes/AddInforImagenes';
+import LeftBar from '@/components/LeftBar/LeftBar';
+import ProfileCard from '@/components/ProfileCard/ProfileCard';
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import styles from './page.module.css';
+import Box from '@mui/material/Box';
+
+
+
 
 const ImagenesMedicas = () => {
-  const [showCard, setshowCard] = useState(false);
-  const [imagen, setImagen] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [analyses, setAnalyses] = useState([]);
 
-  const viewPageImage = () => setshowCard(true);
-  const closePageImage = () => setshowCard(false);
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
-  const viewSaveImage = (NewImagen) => {
-    setImagen(NewImagen);
+  const handleSaveAnalysis = (newAnalyses) => {
+    setAnalyses(newAnalyses);
   };
 
-  const viewBorrarImage = (index) => {
-    const updateImage = imagen.filter((_, i) => i !== index);
-    setImagen(updateImage);
+  const handleDeleteAnalysis = (index) => {
+    const updatedAnalyses = analyses.filter((_, i) => i !== index);
+    setAnalyses(updatedAnalyses);
   };
+
+  //para poder buscar agrego aca ya sea nmbre o lo que sea
+  const filteredAnalyses = analyses.filter((analysis) =>
+    analysis.testName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    analysis.testLasName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    analysis.testDate.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className={styles.container}>
-      <LeftBar/>
-      <div className={styles.body}>
-        <div className={styles.cabecera}>
-          <h5 style={{marginTop:'80px'}}><b>MIS IMÁGENES MÉDICAS</b></h5>
-          <ProfileCard/>
-        </div>
-        <div className={styles.cardlabel}>
-            <input className={styles.inputlabal} type="text" required />
-            <div className={styles.labelline}>Buscar por nombre de análisis</div>
-          </div>
-        <div className={styles.cardbody}>
-            {imagen.map((imagen, index) => (
-              <ImagenesCard
+    <Box className={styles.container}>
+        <h5 style={{marginTop:'1em', marginBottom:'1em'}}><b>IMAGENES MEDICAS</b></h5>
+        <div>
+          <div className={styles.cardbody}>
+            {filteredAnalyses.map((analysis, index) => (
+              <ImpresionImagen
                 key={index}
-                imagen={imagen}
-                onDelete={() => viewBorrarImage(index)}
+                analysis={analysis}
+                onDelete={() => handleDeleteAnalysis(index)}
               />
             ))}
+          </div>
         </div>
         <div className={styles.footer}>
-          <Button variant="dark" className={styles.agregarImagen} onClick={viewPageImage}>Agregar y Editar Diagnostico</Button>
+          <Button variant="dark" className={styles.agregarImagen} onClick={handleShowModal}>Agregar y Editar Imagen medica</Button>
         </div>
-      </div>
+
       <AddInforImagenes
-        show={showCard}
-        closePage={closePageImage}
-        viewSave={viewSaveImage}
-        initialImageData={imagen}
+        show={showModal}
+        handleClose={handleCloseModal}
+        handleSave={handleSaveAnalysis}
+        initialAnalysisData={analyses}
       />
-    </div>
+      
+    </Box>
   );
 };
 

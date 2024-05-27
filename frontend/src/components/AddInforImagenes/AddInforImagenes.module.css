@@ -1,66 +1,93 @@
-
 .customModal {
-    top: 40px;
-    width: 100%;
-    max-width: 800px; 
-    margin: auto; 
+    top: 30px;
+    max-width: 1500px; 
+    margin-left: 5em;
+    margin-right: 6em;
+    background-color: #fff; /* Fondo blanco para el modal */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    overflow: hidden; /* Para que no se desborde el contenido */
+  }
   
-    background-color: rgba(0, 0, 0, 0.5);
-  
-}
-  
-  
-.customHeader {
+  .customHeader {
     background-color: #333; 
-    color: #000000;
-    border-bottom: none;  background-color: #fff;
-}
+    color: #fff; /* Texto blanco para contraste */
+    padding: 15px 20px; /* Espaciado interno */
+    border-bottom: 2px solid #00916E; /* Línea de separación */
+  }
   
-  
-.customBody {
+  .customBody {
     padding: 20px; 
-}
+    background-color: #f8f9fa; /* Color de fondo claro */
+  }
   
-  
-.customFooter {
-    background-color: #ffffff; 
+  .customFooter {
+    background-color: #fff; 
     border-top: none; 
-}
+    padding: 15px 20px; /* Espaciado interno */
+    display: flex;
+    justify-content: space-between; /* Separación de botones */
+  }
   
-.table-responsive {
+  .tableResponsive {
     max-height: 400px; 
     overflow-y: auto; 
-}
+    margin-top: 20px; /* Separación superior */
+  }
   
-.table-responsive table {
+  .tableResponsive table {
     width: 100%; 
-}
+    border-collapse: collapse; /* Colapsa los bordes de la tabla */
+  }
   
-.addRowButton {
+  .tableResponsive th,
+  .tableResponsive td {
+    padding: 12px 15px; /* Espaciado interno */
+    border: 1px solid #dee2e6; /* Bordes de las celdas */
+  }
+  
+  .tableResponsive th {
+    background-color: #00916E; /* Fondo de encabezado */
+    color: #fff; /* Texto blanco */
+  }
+  
+  .tableResponsive tr:nth-child(even) {
+    background-color: #f8f9fa; /* Fondo de filas pares */
+  }
+  
+  .addRowButton,
+  .addRowButtonSave {
     margin-top: 20px; 
     background-color: #00916E;
     border-color: #00916E;
-}
+    color: #fff; /* Texto blanco */
+    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease; /* Transición suave */
+  }
   
+  .addRowButton:hover,
+  .addRowButtonSave:hover {
+    background-color: #007a5b; /* Color más oscuro al pasar el ratón */
+  }
   
-.addRowButtonSave {
-    margin-top: auto; 
-    background-color: #00916E;
-    border-color: #00916E;
-}
-  
-.modalContent {
+  .modalContent {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
-    max-width: 800px; /* Aumenta el tamaño máximo del cuadro modal */
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro o transparente */
+    max-width: 800px;
+    background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5); /* Extiende la sombra por toda la pantalla */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     z-index: 1050;
-}
+  }
   
+  .imageLab {
+    margin-left: 50px;
+    margin-right: 50px;
+    
+  }
   

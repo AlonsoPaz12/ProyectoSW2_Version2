@@ -1,0 +1,213 @@
+.containerImg {
+    background-color: white;
+    height: 150px;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 
+    0px 4px 2px rgba(0, 0, 0, 0.1),
+    0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .topcard {
+    padding-top: 10px;
+    padding-left: 10px;
+    display: flex;
+  }
+  
+  .MedicIcon {
+    background-color: #E7F6F1;
+    background-size: contain;
+    padding: 10px;
+    margin-top: 5%;
+    margin-left: 3%;
+    list-style: none;
+    margin-right: 3%;
+    border-radius: 10px;
+  }
+  
+  .bottomcardImg {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .botonImagenesCard {
+    background-color: #00916E;
+    border-color: #00916E;
+    width: 170px;
+    height: 29px;
+    border-radius: 20px;
+    font-size: 10px;
+    margin-right: 7%;
+    margin-top: 5px;
+  }
+  
+  .labellineCard {
+    max-width: 80%;
+    font-size: 13px;
+  }
+  
+  .botonImagenes {
+    background-color: #00916E;
+    border-color: #00916E;
+    width: 130px;
+    height: 27px;
+    border-radius: 20px;
+    font-size: 10px;
+    margin-bottom: 0%;
+  }
+  
+  .botonImagenesEliminar {
+    background-color: rgb(200, 54, 54);
+    border-color: rgb(200, 54, 54);
+    width: 130px;
+    height: 27px;
+    border-radius: 20px;
+    font-size: 10px;
+    margin-bottom: 0%;
+  }
+  
+  .botonImagenesEliminar:hover {
+    background-color: rgb(173, 9, 9);
+    border-color: rgb(173, 9, 9);
+  }
+  
+  .modalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1050;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .modalContent > div {
+    background-color: #fff; /* Contenido dentro del cuadro modal es blanco */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1040;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .modalContent h5 {
+    margin-bottom: 20px;
+    color: #00916E;
+  }
+  
+  .modalContent p {
+    margin-bottom: 20px;
+  }
+  
+  .listContainer {
+    background-color: #f9f9f9;
+    padding: 16px;
+    border-radius: 10px;
+  }
+  
+  .resultsList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .resultsList li {
+    margin-bottom: 12px;
+    line-height: 1.5;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .resultsList li strong {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .resultsList li span {
+    color: #666;
+  }
+  
+  .resultsList li:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+  }
+  
+  .btn-secondary {
+    background-color: #00916E;
+    border-color: #00916E;
+    color: white;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #007a5a;
+    border-color: #007a5a;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  
+  .imageModal {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+  
+  .modalImageContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 80%;
+    max-height: 90%;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1050;
+    animation: fadeIn 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .modalImageContent img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+  }
+  

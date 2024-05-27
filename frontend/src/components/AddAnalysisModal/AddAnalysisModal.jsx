@@ -176,10 +176,12 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                   </td>
                   <td>
                     {analysis.image ? (
-                      <div>
+                      <div className={styles.imageLab}>
                         <img src={analysis.image} alt="uploaded" width={50} height={50} />
-                        <Button onClick={() => handleImageRemove(index)}>Eliminar</Button>
-                        <Button onClick={() => handleImageUpdate(index)}>Actualizar</Button>
+                        <div>
+                          <Button variant='danger' onClick={() => handleImageRemove(index)}>Eliminar</Button>
+                          <Button variant='info' onClick={() => handleImageUpdate(index)}>Actualizar</Button>
+                        </div>
                       </div>
                     ) : (
                       <div>
@@ -189,7 +191,7 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                           style={{ display: 'none' }}
                           onChange={(e) => handleImageUpload(index, e.target.files[0])}
                         />
-                        <Button onClick={() => handleImageUpdate(index)}>Subir</Button>
+                        <Button variant="primary" href='/ImagenesMedicas' className={styles.addRowButton} >Subir</Button>
                       </div>
                     )}
                   </td>

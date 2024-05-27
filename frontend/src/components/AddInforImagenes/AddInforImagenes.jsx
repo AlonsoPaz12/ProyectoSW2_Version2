@@ -2,151 +2,227 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
 import styles from "./AddInforImagenes.module.css";
 
-const AddInforImagenes = ({ show, closePage, viewSave, initialImageData }) => {
-    const [ImageData, setImageData] = useState([{
-        testNamePacient: '',
-        testDateImg: '',
-        diagnostico: '',
-        hallazgos: '',
-        rayox: '',
-        InfoDoc: '',
+const testReasons = [ // listados de los pacientes
+  { value: 'Dr. Juan Pérez', label: 'Dr. Juan Pérez' },
+  { value: 'Dra. María González', label: 'Dra. María González' },
+  { value: 'Dr. Luis Méndez', label: 'Dr. Luis Méndez' },
+  { value: 'Dr. Roberto Martínez', label: 'Dr. Roberto Martínez' }, 
+];
+
+const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }) => {
+  const [analysisData, setAnalysisData] = useState([{
+    NombrePaciente: '',
+    ExamDate: '',
+    ExamTipo: '',
+    ParteCuerpo: '',
+    indicaciones: '',
+    AnatomicasEstruc: '',
+    NombreDoc: '',
+    NotasMedic: '',
+    image: '', // Add an image field
+  }]);
+  const [isDateValid, setIsDateValid] = useState(true); // Estado para verificar si la fecha es válida
+
+  useEffect(() => {
+    if (initialAnalysisData) {
+      setAnalysisData(initialAnalysisData);
+    }
+  }, [initialAnalysisData]);
+
+  const handleChange = (e, index) => {
+    const { name, value } = e.target;
+    const updatedData = [...analysisData];
+    updatedData[index] = { ...updatedData[index], [name]: value };
+    setAnalysisData(updatedData);
+  };
+
+  const handleAddRow = () => {
+    setAnalysisData([...analysisData, {
+        NombrePaciente: '',
+        ExamDate: '',
+        ExamTipo: '',
+        ParteCuerpo: '',
+        indicaciones: '',
+        AnatomicasEstruc: '',
+        NombreDoc: '',
+        NotasMedic: '',
+        image: '', // Add an image field
     }]);
-    const [isDateValid, setIsDateValid] = useState(true); // ¿Fecha valida?
+  };
 
-    useEffect(() => {
-        if (initialImageData) {
-            setImageData(initialImageData);
-        }
-    }, [initialImageData]);
+  const handleRemoveRow = (index) => {
+    const updatedData = [...analysisData];
+    updatedData.splice(index, 1);
+    setAnalysisData(updatedData);
+  };
 
-    const viewChange = (e, index) => {
-        const { name, value } = e.target;
-        const updatedData = [...ImageData];
-        updatedData[index] = { ...updatedData[index], [name]: value };
-        setImageData(updatedData);
-    };
-
-    const viewAddPage = () => {
-        setImageData([...ImageData, {
-            testNamePacient: '',
-            testDateImg: '',
-            diagnostico: '',
-            hallazgos: '',
-            rayox: '',
-            InfoDoc: '',
-        }]);
-    };
-
-    const viewRemovePage = (index) => {
-        const updatedData = [...ImageData];
-        updatedData.splice(index, 1);
-        setImageData(updatedData);
-    };
-
-    const viewSubmitData = () => {
+  const handleSubmit = () => {
     // Validar si la fecha es válida antes de guardar
-        const newData = ImageData.filter(data => data.testNamePacient.trim() !== "" || data.testDateImg.trim() !== "" || data.diagnostico.trim() !== "" || data.hallazgos.trim() !== "" || data.rayox.trim() !== "" || data.InfoDoc.trim() !== "");
-        if (newData.some(data => data.testDateImg.trim() === "")) {
-            setIsDateValid(false);
-            return;
-        }
-        setIsDateValid(true);
-        viewSave(newData);
-        closePage();
-    };
+    const newData = analysisData.filter(data => data.NombrePaciente.trim() !== "" || data.ExamDate.trim() !== "" || data.ExamTipo.trim() !== "" || data.ParteCuerpo.trim() !== "" || data.indicaciones.trim() !== "" || data.AnatomicasEstruc.trim() !== "" ||  data.NombreDoc.trim() !== "" || data.NotasMedic.trim() !== "");
+    if (newData.some(data => data.ExamDate.trim() === "")) {
+      setIsDateValid(false);
+      return;
+    }
+    setIsDateValid(true);
+    handleSave(newData);
+    handleClose();
+  };
 
-    return (
-        <Modal show={show} onHide={() => {}} backdrop="static" keyboard={false} dialogClassName={styles.customModal}>
-            <Modal.Header closeButton className={styles.customHeader}>
-                <Modal.Title>{initialImageData ? 'Editar Diagnostico' : 'Agregar Diagnostico'}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body className={styles.customBody}>
-                <Form>
-                    <Table striped bordered hover responsive className={styles.tableResponsive}>
-                        <thead>
-                            <tr>
-                                <th>Nombre Paciente</th>
-                                <th>Fecha</th>
-                                <th>Diagnostico</th>
-                                <th>Hallazgos</th>
-                                <th>Imagenl</th>
-                                <th>Doctor Encargado</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {ImageData.map((imagen, index) => (
-                                <tr key={index}>
-                                    <td>
-                                        <Form.Control
-                                            type="text"
-                                            name="testNamePacient"
-                                            value={imagen.testNamePacient}
-                                            onChange={(e) => viewChange(e, index)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            type="date"
-                                            name="testDateImg"
-                                            value={imagen.testDateImg}
-                                            onChange={(e) => viewChange(e, index)}
-                                            isInvalid={!isDateValid} // Fecha invalida
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            Este campo es obligatorio
-                                        </Form.Control.Feedback>
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            type="text"
-                                            name="diagnostico"
-                                            value={imagen.diagnostico}
-                                            onChange={(e) => viewChange(e, index)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            type="text"
-                                            name="hallazgos"
-                                            value={imagen.hallazgos}
-                                            onChange={(e) => viewChange(e, index)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            type="text"
-                                            name="rayox"
-                                            value={imagen.rayox}
-                                            onChange={(e) => viewChange(e, index)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            type="text"
-                                            name="InfoDoc"
-                                            value={imagen.InfoDoc}
-                                            onChange={(e) => viewChange(e, index)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Button variant="danger" onClick={() => handleRemovePage(index)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                    <Button variant="primary" onClick={viewAddPage} className={styles.addRowButton}>Agregar Diagnostico</Button>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer className={styles.customFooter}>
-                <Button variant="secondary" onClick={closePage}>Cerrar</Button>
-                <Button variant="primary" onClick={viewSubmitData} className={styles.addRowButtonSave}>
-                    {initialImageData ? 'Guardar Cambios' : 'Agregar'}
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
+  const handleImageUpload = async (index, file) => {
+    const imageUrl = URL.createObjectURL(file); 
+    const updatedData = [...analysisData];
+    updatedData[index].image = imageUrl;
+    setAnalysisData(updatedData);
+  };
+
+  const handleImageRemove = (index) => {
+    const updatedData = [...analysisData];
+    updatedData[index].image = '';
+    setAnalysisData(updatedData);
+  };
+
+  const handleImageUpdate = (index) => {
+    document.getElementById(`image-upload-${index}`).click();
+  };
+
+  return (
+    <Modal show={show} onHide={() => {}} backdrop="static" keyboard={false} dialogClassName={styles.customModal}>
+      <Modal.Header closeButton className={styles.customHeader}>
+        <Modal.Title>{initialAnalysisData ? 'Editar Imagen' : 'Agregar Imagen'}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={styles.customBody}>
+        <Form>
+          <Table striped bordered hover responsive className={styles.tableResponsive}>
+            <thead>
+              <tr>
+                <th>Nombre del Doctor</th>
+                <th>Nombre del Paciente</th>
+                <th>Tipo de examen</th>
+                <th>Fecha de examen</th>
+                <th>Parte de cuerpo</th>
+                <th>Indicaciones</th>
+                <th>Estructuras anatomicas</th>
+                <th>Notas Medicas</th>
+                <th>Imagen</th> {/* Add a column for the image */}
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {analysisData.map((analysis, index) => (
+                <tr key={index}>
+                  <td>
+                    <Form.Control
+                      as="select"
+                      name="NombreDoc"
+                      value={analysis.NombreDoc}
+                      onChange={(e) => handleChange(e, index)}
+                    >
+                      {testReasons.map((reason) => (
+                        <option key={reason.value} value={reason.value}>
+                          {reason.label}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="NombrePaciente"
+                      value={analysis.NombrePaciente}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="ExamTipo"
+                      value={analysis.ExamTipo}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="date"
+                      name="ExamDate"
+                      value={analysis.ExamDate}
+                      onChange={(e) => handleChange(e, index)}
+                      isInvalid={!isDateValid} // Marca la fecha como inválida si no está llena
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      La fecha es obligatoria.
+                    </Form.Control.Feedback>
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="ParteCuerpo"
+                      value={analysis.ParteCuerpo}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="indicaciones"
+                      value={analysis.indicaciones}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="AnatomicasEstruc"
+                      value={analysis.AnatomicasEstruc}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <Form.Control
+                      type="text"
+                      name="NotasMedic"
+                      value={analysis.NotasMedic}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    {analysis.image ? (
+                      <div className={styles.imageLab}>
+                        <img src={analysis.image} alt="uploaded" width={50} height={50} />
+                        <div>
+                          <Button variant='danger' onClick={() => handleImageRemove(index)}>Eliminar</Button>
+                          <Button variant='info' onClick={() => handleImageUpdate(index)}>Actualizar</Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <input
+                          type="file"
+                          id={`image-upload-${index}`}
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(index, e.target.files[0])}
+                        />
+                        <Button variant="primary" onClick={() => handleImageUpdate(index)} className={styles.addRowButton} >Subir</Button>
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <Button variant="danger" onClick={() => handleRemoveRow(index)}>Eliminar</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Button variant="primary" onClick={handleAddRow} className={styles.addRowButton}>Agregar Fila</Button>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer className={styles.customFooter}>
+        <Button variant="secondary" onClick={handleClose}>Cerrar</Button>
+        <Button variant="primary" onClick={handleSubmit} className={styles.addRowButtonSave}>
+          {initialAnalysisData ? 'Guardar Cambios' : 'Agregar'}
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 };
 
 export default AddInforImagenes;

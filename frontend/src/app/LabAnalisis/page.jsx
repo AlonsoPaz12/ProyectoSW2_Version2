@@ -7,7 +7,6 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './page.module.css';
 import Box from '@mui/material/Box';
-
 import UserMenu from '@/components/UserMenu/UserMenu';
 import SideNavBar from '@/components/SideNavBar/SideNavBar';
 
