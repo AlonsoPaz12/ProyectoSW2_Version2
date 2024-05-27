@@ -1,6 +1,6 @@
 export class Medicamento{
-    id: string
-    tipo: string
-    frecuencia: string
-    dosis: string
+    id: String
+    tipo: String
+    frecuencia: String
+    dosis: String
 }

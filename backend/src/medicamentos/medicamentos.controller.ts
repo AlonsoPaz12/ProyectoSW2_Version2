@@ -18,7 +18,7 @@ export class MedicamentosController {
     }
 
     @Delete(':id')
-    eliminarMedicamento(@Param('id') id:string){
+    eliminarMedicamento(@Param('id') id:String){
         this.medicamentosService.eliminarMedicamento(id)
     }
 
