@@ -30,7 +30,7 @@ const ImpresionImagen = ({ analysis, onDelete }) => {
               <h6 style={{ margin: '0' }}><b>{analysis.NombrePaciente}</b> <b>{analysis.NombrePaciente}</b></h6>
               <p className={styles.labellineCard}><b>Tipo de prueba:</b> {analysis.ExamTipo} </p>
             </div>
-            <Button className={styles.botonImagenesCard} variant="success"><p>{analysis.testDate}</p></Button>  
+            <Button className={styles.botonImagenesCard} variant="success"><p>{analysis.ExamDate}</p></Button>  
           </div>
         </div>
       </div>

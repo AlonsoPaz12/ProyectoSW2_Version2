@@ -1,27 +1,16 @@
 'use client';
-<<<<<<< HEAD
-import ImagenesAnalisis from '@/app/LabAnalisis/ImagenesAnalisis/ImagenesAnalisis';
-=======
-
-import React, { useState } from 'react';
-import styles from './page.module.css';
-import Button from 'react-bootstrap/Button';
-import ImagenesCard from '@/components/ImagenesCard/ImagenesCard';
->>>>>>> bd87ca4439eb30f959fd3c947ac381691339772b
+import ImpresionImagen from '@/app/ImagenesMedicas/ImpresionImagen/ImpresionImagen';
 import AddInforImagenes from '@/components/AddInforImagenes/AddInforImagenes';
-import LeftBar from '@/components/LeftBar/LeftBar';
-import ProfileCard from '@/components/ProfileCard/ProfileCard';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './page.module.css';
 import Box from '@mui/material/Box';
 
 
-
-
 const ImagenesMedicas = () => {
   const [showModal, setShowModal] = useState(false);
   const [analyses, setAnalyses] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -35,35 +24,37 @@ const ImagenesMedicas = () => {
     setAnalyses(updatedAnalyses);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   //para poder buscar agrego aca ya sea nmbre o lo que sea
   const filteredAnalyses = analyses.filter((analysis) =>
-    analysis.testName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    analysis.testLasName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    analysis.testDate.toLowerCase().includes(searchTerm.toLowerCase())
+    analysis.NombrePaciente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    analysis.ExamTipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    analysis.ExamDate.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-<<<<<<< HEAD
     <Box className={styles.container}>
-        <h5 style={{marginTop:'1em', marginBottom:'1em'}}><b>IMAGENES MEDICAS</b></h5>
+      <Box sx={{flexDirection: "column", margin: "2em", width: "100%", height: "100vh"}}>
+        <div className={styles.cabecera}>
+        </div>
+        <h5 style={{marginTop:'1em', marginBottom:'1em'}}><b>RESULTADOS DEL LABORATORIO</b></h5>
         <div>
+          <div className={styles.cardlabel}>
+          <input
+              className={styles.inputlabal}
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              required
+            />
+            <div className={styles.labelline}>Buscar por nombre de análisis</div>
+          </div>
           <div className={styles.cardbody}>
             {filteredAnalyses.map((analysis, index) => (
               <ImpresionImagen
-=======
-    <div className={styles.container}>
-      <div className={styles.body}>
-        <div className={styles.cabecera}>
-          <h5 style={{marginTop:'80px'}}><b>MIS IMÁGENES MÉDICAS</b></h5>
-        </div>
-        <div className={styles.cardlabel}>
-            <input className={styles.inputlabal} type="text" required />
-            <div className={styles.labelline}>Buscar por nombre de análisis</div>
-          </div>
-        <div className={styles.cardbody}>
-            {imagen.map((imagen, index) => (
-              <ImagenesCard
->>>>>>> bd87ca4439eb30f959fd3c947ac381691339772b
                 key={index}
                 analysis={analysis}
                 onDelete={() => handleDeleteAnalysis(index)}
@@ -72,7 +63,7 @@ const ImagenesMedicas = () => {
           </div>
         </div>
         <div className={styles.footer}>
-          <Button variant="dark" className={styles.agregarImagen} onClick={handleShowModal}>Agregar y Editar Imagen medica</Button>
+          <Button variant="dark" className={styles.agregarImagen} onClick={handleShowModal}>Agregar y Editar Análisis</Button>
         </div>
 
       <AddInforImagenes
@@ -81,7 +72,7 @@ const ImagenesMedicas = () => {
         handleSave={handleSaveAnalysis}
         initialAnalysisData={analyses}
       />
-      
+      </Box>
     </Box>
   );
 };
