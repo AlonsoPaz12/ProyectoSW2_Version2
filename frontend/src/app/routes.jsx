@@ -10,6 +10,7 @@ import ProximasCitas from './ProximasCitas/page.jsx';
 import HistorialCitas from './HistorialCitas/page.jsx';
 import Laboratorio from './LabAnalisis/page.jsx';
 import Perfil from './VisualizacionDePerfil/page.jsx';
+import AgendarCitaEDoctores from './AgendarCitaElegirDoctor/page.jsx';
 
 
 const AppRoutes = () => {
@@ -24,6 +25,7 @@ const AppRoutes = () => {
         <Route path="/HistorialCitas" element={<HistorialCitas />} />
         <Route path="/LabAnalisis" element={<Laboratorio />} />
         <Route path="/VisualizacionDePerfil" element={<Perfil />} />
+        <Route path="/AgendarCitaElegirDoctor" element={<AgendarCitaEDoctores />}></Route>
       </Routes>
     </Router>
   );

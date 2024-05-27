@@ -1,3 +1,6 @@
+import { OrdenMedica } from "src/ordenes-medicas/ordenes-medicas.entity";
+import { RecetaMedica } from "src/recetas-medicas/recetas-medicas.entity";
+
 export class CrearCitaDto{
     id: String;
     motivo: String;
@@ -5,5 +8,5 @@ export class CrearCitaDto{
     Observacion: String;
     IDpaciente: String;
     fecha: Date;
-    documentoMedico: any[];
+    documentoMedico: (RecetaMedica | OrdenMedica)[];
 }
