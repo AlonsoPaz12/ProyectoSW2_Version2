@@ -15,7 +15,7 @@ export class MedicamentosService {
         }
     ]
 
-    crearMedicamento(tipo: string, frecuencia: string, dosis: string){
+    crearMedicamento(tipo: String, frecuencia: String, dosis: String){
         const nuevoMedicamento = {
             id: v4(),
             tipo,
@@ -31,7 +31,7 @@ export class MedicamentosService {
         return this.medicamentos;
     }
 
-    eliminarMedicamento(id: string){
+    eliminarMedicamento(id: String){
         this.medicamentos = this.medicamentos.filter(medicamento => medicamento.id !== id)
     }
 

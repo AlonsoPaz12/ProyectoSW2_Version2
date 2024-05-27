@@ -29,12 +29,48 @@
 
 .body{
     flex-grow: 1;
+    margin: 5em;
 }
 
-.footer{
+.footer {
     background-color: #B8D0C7;
     height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: sticky; /* Mantiene el footer en la parte inferior */
+    flex-shrink: 0;
 }
+
+.availableTimes {
+    display: flex;
+    flex-wrap: wrap;
+}
+  
+.timeButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+  
+.timeButton:hover {
+    background-color: #0056b3;
+}
+  
+.selectedTime {
+    background-color: #28a745 !important;
+}
+  
+.datePicker {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+  

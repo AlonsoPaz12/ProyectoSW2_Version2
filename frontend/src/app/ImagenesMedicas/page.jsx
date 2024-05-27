@@ -1,5 +1,13 @@
 'use client';
+<<<<<<< HEAD
 import ImagenesAnalisis from '@/app/LabAnalisis/ImagenesAnalisis/ImagenesAnalisis';
+=======
+
+import React, { useState } from 'react';
+import styles from './page.module.css';
+import Button from 'react-bootstrap/Button';
+import ImagenesCard from '@/components/ImagenesCard/ImagenesCard';
+>>>>>>> bd87ca4439eb30f959fd3c947ac381691339772b
 import AddInforImagenes from '@/components/AddInforImagenes/AddInforImagenes';
 import LeftBar from '@/components/LeftBar/LeftBar';
 import ProfileCard from '@/components/ProfileCard/ProfileCard';
@@ -35,12 +43,27 @@ const ImagenesMedicas = () => {
   );
 
   return (
+<<<<<<< HEAD
     <Box className={styles.container}>
         <h5 style={{marginTop:'1em', marginBottom:'1em'}}><b>IMAGENES MEDICAS</b></h5>
         <div>
           <div className={styles.cardbody}>
             {filteredAnalyses.map((analysis, index) => (
               <ImpresionImagen
+=======
+    <div className={styles.container}>
+      <div className={styles.body}>
+        <div className={styles.cabecera}>
+          <h5 style={{marginTop:'80px'}}><b>MIS IMÁGENES MÉDICAS</b></h5>
+        </div>
+        <div className={styles.cardlabel}>
+            <input className={styles.inputlabal} type="text" required />
+            <div className={styles.labelline}>Buscar por nombre de análisis</div>
+          </div>
+        <div className={styles.cardbody}>
+            {imagen.map((imagen, index) => (
+              <ImagenesCard
+>>>>>>> bd87ca4439eb30f959fd3c947ac381691339772b
                 key={index}
                 analysis={analysis}
                 onDelete={() => handleDeleteAnalysis(index)}
