@@ -11,7 +11,7 @@ export class CitasController {
         return this.citasService.CrearCita(nuevaCita.motivo, nuevaCita.IDmedico, nuevaCita.Observacion, nuevaCita.IDpaciente, nuevaCita.fecha, nuevaCita.documentoMedico)
     }
 
-    @Get('id:')
+    @Get(':id')
     LeerCita(@Param('id') id:String){
         return this.citasService.LeerCita(id);
     }
