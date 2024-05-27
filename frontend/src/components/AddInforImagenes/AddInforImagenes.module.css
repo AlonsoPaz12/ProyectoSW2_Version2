@@ -3,56 +3,56 @@
     max-width: 1500px; 
     margin-left: 5em;
     margin-right: 6em;
-    background-color: #fff; /* Fondo blanco para el modal */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
-    overflow: hidden; /* Para que no se desborde el contenido */
+    background-color: #fff; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    overflow: hidden; 
   }
   
   .customHeader {
     background-color: #333; 
-    color: #fff; /* Texto blanco para contraste */
-    padding: 15px 20px; /* Espaciado interno */
-    border-bottom: 2px solid #00916E; /* Línea de separación */
+    color: #fff;
+    padding: 15px 20px; 
+    border-bottom: 2px solid #00916E; 
   }
   
   .customBody {
     padding: 20px; 
-    background-color: #f8f9fa; /* Color de fondo claro */
+    background-color: #f8f9fa; 
   }
   
   .customFooter {
     background-color: #fff; 
     border-top: none; 
-    padding: 15px 20px; /* Espaciado interno */
+    padding: 15px 20px; 
     display: flex;
-    justify-content: space-between; /* Separación de botones */
+    justify-content: space-between; 
   }
   
   .tableResponsive {
     max-height: 400px; 
     overflow-y: auto; 
-    margin-top: 20px; /* Separación superior */
+    margin-top: 20px; 
   }
   
   .tableResponsive table {
     width: 100%; 
-    border-collapse: collapse; /* Colapsa los bordes de la tabla */
+    border-collapse: collapse; 
   }
   
   .tableResponsive th,
   .tableResponsive td {
-    padding: 12px 15px; /* Espaciado interno */
-    border: 1px solid #dee2e6; /* Bordes de las celdas */
+    padding: 12px 15px; 
+    border: 1px solid #dee2e6; 
   }
   
   .tableResponsive th {
-    background-color: #00916E; /* Fondo de encabezado */
-    color: #fff; /* Texto blanco */
+    background-color: #00916E; 
+    color: #fff; 
   }
   
   .tableResponsive tr:nth-child(even) {
-    background-color: #f8f9fa; /* Fondo de filas pares */
+    background-color: #f8f9fa; 
   }
   
   .addRowButton,
@@ -60,15 +60,15 @@
     margin-top: 20px; 
     background-color: #00916E;
     border-color: #00916E;
-    color: #fff; /* Texto blanco */
-    padding: 10px 20px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    transition: background-color 0.3s ease; /* Transición suave */
+    color: #fff; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
   }
   
   .addRowButton:hover,
   .addRowButtonSave:hover {
-    background-color: #007a5b; /* Color más oscuro al pasar el ratón */
+    background-color: #007a5b; 
   }
   
   .modalContent {

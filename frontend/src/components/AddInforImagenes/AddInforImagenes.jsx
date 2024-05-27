@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
 import styles from "./AddInforImagenes.module.css";
 
-const testReasons = [ // listados de los pacientes
+const testReasons = [ 
   { value: 'Dr. Juan Pérez', label: 'Dr. Juan Pérez' },
   { value: 'Dra. María González', label: 'Dra. María González' },
   { value: 'Dr. Luis Méndez', label: 'Dr. Luis Méndez' },
@@ -19,9 +19,9 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
     AnatomicasEstruc: '',
     NombreDoc: '',
     NotasMedic: '',
-    image: '', // Add an image field
+    image: '', 
   }]);
-  const [isDateValid, setIsDateValid] = useState(true); // Estado para verificar si la fecha es válida
+  const [isDateValid, setIsDateValid] = useState(true); 
 
   useEffect(() => {
     if (initialAnalysisData) {
@@ -46,7 +46,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
         AnatomicasEstruc: '',
         NombreDoc: '',
         NotasMedic: '',
-        image: '', // Add an image field
+        image: '', 
     }]);
   };
 
@@ -57,7 +57,6 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
   };
 
   const handleSubmit = () => {
-    // Validar si la fecha es válida antes de guardar
     const newData = analysisData.filter(data => data.NombrePaciente.trim() !== "" || data.ExamDate.trim() !== "" || data.ExamTipo.trim() !== "" || data.ParteCuerpo.trim() !== "" || data.indicaciones.trim() !== "" || data.AnatomicasEstruc.trim() !== "" ||  data.NombreDoc.trim() !== "" || data.NotasMedic.trim() !== "");
     if (newData.some(data => data.ExamDate.trim() === "")) {
       setIsDateValid(false);
@@ -103,7 +102,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                 <th>Indicaciones</th>
                 <th>Estructuras anatomicas</th>
                 <th>Notas Medicas</th>
-                <th>Imagen</th> {/* Add a column for the image */}
+                <th>Imagen</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -146,7 +145,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                       name="ExamDate"
                       value={analysis.ExamDate}
                       onChange={(e) => handleChange(e, index)}
-                      isInvalid={!isDateValid} // Marca la fecha como inválida si no está llena
+                      isInvalid={!isDateValid} 
                     />
                     <Form.Control.Feedback type="invalid">
                       La fecha es obligatoria.

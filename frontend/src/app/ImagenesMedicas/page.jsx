@@ -28,7 +28,6 @@ const ImagenesMedicas = () => {
     setSearchTerm(e.target.value);
   };
 
-  //para poder buscar agrego aca ya sea nmbre o lo que sea
   const filteredAnalyses = analyses.filter((analysis) =>
     analysis.NombrePaciente.toLowerCase().includes(searchTerm.toLowerCase()) ||
     analysis.ExamTipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
