@@ -84,7 +84,7 @@ export class MedicosService {
     LeerMedico(){
         return this.medicos;
     }
-    //Debatible
+    //Siguiente Sprint
     AgregarHorarioDisponible(){}
 
 
@@ -113,7 +113,12 @@ export class MedicosService {
         return m.citas.filter(cita => cita.asistio === false);
     }
 
-    AgregarImagenMedica(){}
+    AgregarImagenMedica(idcita: String, IDMedico: String, tipo: String, imagen: String, NombreP: String){
+        const nuevaImagen = new ImagenesMedicasService().crearResultado(tipo, imagen, NombreP)
+        let medicos = this.medicos.find(x => x.id == IDMedico)
+        let c = medicos.citas.filter(c => c.id === idcita)
+        c.map(x => x.documentoMedico = [{}, nuevaImagen])
+    }
 
     VisualizacionResultadosLaboratorio(IDpaciente:String, IDmedico: String){
         let m  = this.medicos.find(med => med.id === IDmedico);
@@ -123,7 +128,12 @@ export class MedicosService {
         return arrResultadosLab;
     }
 
-    AgregarResultadoLab(){}
+    AgregarResultadoLab(idcita: String, IDMedico: String, tipo: String, resultado: String, NombrePaciente: String){
+        const nuevoResultadoLab = new ResultadosLabService().crearResultado(tipo, resultado, NombrePaciente)
+        let medicos = this.medicos.find(x => x.id == IDMedico)
+        let c = medicos.citas.filter(c => c.id === idcita)
+        c.map(x => x.documentoMedico = [{},nuevoResultadoLab])
+    }
 
     EliminarRestultadoLab(){}
 
