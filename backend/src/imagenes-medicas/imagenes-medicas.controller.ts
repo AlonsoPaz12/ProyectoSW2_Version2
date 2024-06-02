@@ -6,14 +6,19 @@ import { CrearImagenMedicaDto } from './dto/imagenes-medicas.dto';
 export class ImagenesMedicasController {
     constructor(private imagenMedicaService: ImagenesMedicasService){}
 
+    @Get()
+    LeerResultados(){
+        return this.imagenMedicaService.LeerResultados();
+    }
+
     @Post()
     crearResultado(@Body() nuevaImagenMedica: CrearImagenMedicaDto){
         return this.imagenMedicaService.crearResultado(nuevaImagenMedica.tipo, nuevaImagenMedica.imagen, nuevaImagenMedica.nombrePaciente);
     }
 
     @Get(':id')
-    LeerResultado(@Param('id') id:String){
-        return this.imagenMedicaService.LeerResultado(id);
+    LeerResultadoPorId(@Param('id') id:String){
+        return this.imagenMedicaService.LeerResultadoPorId(id);
     }
 
     @Delete(':id')

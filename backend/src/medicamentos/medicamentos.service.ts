@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Medicamento } from './medicamentos.entity';
 import { v4 } from 'uuid';
-import { Console } from 'console';
 
 @Injectable()
 export class MedicamentosService {

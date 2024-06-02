@@ -7,14 +7,19 @@ export class ResultadosLabController {
 
     constructor(private resultadoLabService: ResultadosLabService){}
 
+    @Get()
+    LeerResultado(){
+        return this.resultadoLabService.LeerResultados();
+    }
+
     @Post()
     crearResultado(@Body() nuevoResultadoLab: CrearResultadoLabDto){
         return this.resultadoLabService.crearResultado(nuevoResultadoLab.tipo, nuevoResultadoLab.resultado, nuevoResultadoLab.Nombrepaciente);
     }
 
     @Get(':id')
-    LeerResultado(@Param('id') id:String){
-        return this.resultadoLabService.LeerResultado(id);
+    LeerResultadoPorId(@Param('id') id:String){
+        return this.resultadoLabService.LeerResultadoPorId(id);
     }
 
     @Delete(':id')

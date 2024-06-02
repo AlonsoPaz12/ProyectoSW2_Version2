@@ -15,6 +15,10 @@ export class ResultadosLabService implements ResultadoExamen{
             Nombrepaciente: 'Becerra'
         }
     ]
+    
+    LeerResultados() {
+        return this.resultadosLab;
+    }
 
     crearResultado(tipo: String, resultado: String, Nombrepaciente: String) {
         const nuevoResultadoLab = {
@@ -26,7 +30,7 @@ export class ResultadosLabService implements ResultadoExamen{
         this.resultadosLab.push(nuevoResultadoLab);
         return nuevoResultadoLab;
     }
-    LeerResultado(id: String) {
+    LeerResultadoPorId(id: String) {
         return this.resultadosLab.find(resultado => resultado.id === id);
     }
     EliminarResultado(id: String): void{

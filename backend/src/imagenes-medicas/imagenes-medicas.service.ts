@@ -14,6 +14,11 @@ export class ImagenesMedicasService implements ResultadoExamen{
             nombrePaciente: 'aaaaaa'
         }
     ]
+
+    LeerResultados(){
+        return this.imagenesMedicas;
+    }
+    
     crearResultado(tipo: String, imagen: String, nombrePaciente: String) {
         const nuevaImagenMedica = {
             id: v4(),
@@ -25,7 +30,7 @@ export class ImagenesMedicasService implements ResultadoExamen{
         return nuevaImagenMedica;
 
     }
-    LeerResultado(id: String) {
+    LeerResultadoPorId(id: String) {
         return this.imagenesMedicas.find( imagen => imagen.id === id );
     }
     EliminarResultado(id: String): void {

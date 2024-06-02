@@ -1,8 +1,10 @@
-import { ResultadoExamen } from "src/interfaces/ResultadoExamen";
+import { ImagenMedica } from "src/imagenes-medicas/imagenes-medicas.entity";
+import { ResultadoLab } from "src/resultados-lab/resultados-lab.entity";
+
 
 export class OrdenMedica {
     id: String;
-    resultadosExamen: any[];
+    resultadosExamen: (ResultadoLab|ImagenMedica)[];
     observacion: String;
     
 }

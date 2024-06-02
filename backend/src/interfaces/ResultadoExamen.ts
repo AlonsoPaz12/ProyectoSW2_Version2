@@ -1,7 +1,8 @@
 export interface ResultadoExamen{
 
+    LeerResultados();
     crearResultado(tipo: String, resultado: String, Nombrepaciente: String)
-    LeerResultado(id: String): any
+    LeerResultadoPorId(id: String): any
     EliminarResultado(id: String): void
 
 }

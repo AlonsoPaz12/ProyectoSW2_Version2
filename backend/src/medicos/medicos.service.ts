@@ -10,6 +10,7 @@ import { Medicamento } from 'src/medicamentos/medicamentos.entity';
 
 @Injectable()
 export class MedicosService {
+    /*Medicamento*/
     medicamento = [new MedicamentosService().crearMedicamento('Pastilla', 'Despues de cada comida', 'dos pastillas')]
     doc = new RecetasMedicasService().CrearDocumentoMedico(this.medicamento, 'No tomar en ayunas');
     
@@ -36,7 +37,7 @@ export class MedicosService {
                 {
                     id: '2',
                     motivo: 'Fractura de brazo',
-                    IDmedico: 'MED-1',
+                    IDmedico: 'MED-2',
                     Observacion: 'Fractura total',
                     IDpaciente: '1',
                     fecha: new Date('2024-02-20'),
@@ -46,7 +47,7 @@ export class MedicosService {
                 {
                     id: '3',
                     motivo: 'Chequeo anual',
-                    IDmedico: 'MED-1',
+                    IDmedico: 'MED-3',
                     Observacion: 'O+',
                     IDpaciente: '1',
                     fecha: new Date('2024-02-20'),
@@ -135,7 +136,13 @@ export class MedicosService {
         c.map(x => x.documentoMedico = [{},nuevoResultadoLab])
     }
 
-    EliminarRestultadoLab(){}
+    /*Funcion para Resultado Laboratorio y Imagen Medica*/ 
+    EliminarImagenMedica(IDMedico: String, idcita: String, idRE: String){
+        let medico = this.medicos.find(med => med.id === IDMedico);
+        let c = medico.citas.find(cita => cita.id === idcita);
+        let actualizacionResultado = c.documentoMedico[1].resultadosExamen.filter(x => x.id !== idRE);
+        this.medicos.find(med => med.id === IDMedico).citas.find(cita => cita.id === idcita).documentoMedico[1].resultadosExamen = actualizacionResultado;
+    }
 
 
 

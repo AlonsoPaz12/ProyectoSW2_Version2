@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
 import { OrdenMedica } from './ordenes-medicas.entity';
 import { v4 } from 'uuid';
-import { ResultadoExamen } from 'src/interfaces/ResultadoExamen';
 import { ResultadosLabService } from 'src/resultados-lab/resultados-lab.service';
+import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
+import { ImagenMedica } from 'src/imagenes-medicas/imagenes-medicas.entity';
 
 
 @Injectable()
@@ -18,7 +19,7 @@ export class OrdenesMedicasService implements DocumentoMedico{
     ]
 
     //Crea la orden medica
-    CrearDocumentoMedico(resultadosExamen: any[], observacion: String) {
+    CrearDocumentoMedico(resultadosExamen: (any)[], observacion: String) {
         const nuevaOrdenMedica = {
             id: v4(),
             resultadosExamen,
@@ -30,7 +31,7 @@ export class OrdenesMedicasService implements DocumentoMedico{
 
     
     LeerOrdenMedica(id: String){
-        return this.ordenesMedicas.find(orden => orden.id === id);navigator
+        return this.ordenesMedicas.find(orden => orden.id === id);
     }
     EliminarOrdenMedica(id: String): void{
         this.ordenesMedicas = this.ordenesMedicas.filter(orden => orden.id !== id)
