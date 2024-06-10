@@ -1,0 +1,81 @@
+.body {
+  background-color: #E7F6F1;
+  padding: 3em;
+}
+
+.titulo {
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.backButton {
+  background-color: #00916E;
+  font-size: small;
+  border: none;
+  color: white;
+  padding: 0.5em 2em;
+  cursor: pointer;
+  margin-bottom: 1em;
+  border-radius: 20px;
+}
+
+.citaInfo {
+  margin-bottom: 2em;
+  background-color: white;
+  padding: 2em;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);}
+
+.pacienteInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.pacienteFoto {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 1em;
+}
+
+.citaDetalle {
+  display: flex;
+  flex-direction: column;
+}
+
+.editButton {
+  background-color: #888888;
+  border: none;
+  font-size: small;
+  color: white;
+  padding: 0.5em 2em;
+  cursor: pointer;
+  margin-bottom: 1em;
+  border-radius: 20px;
+}
+
+.recetaMedica, .ordenMedica {
+  margin-bottom: 1em;
+}
+
+.addButton {
+  background-color: #5ED2B7;
+  border: none;
+  color: white;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+.asistio {
+  color: green;
+}
+
+.noAsistio {
+  color: red;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}

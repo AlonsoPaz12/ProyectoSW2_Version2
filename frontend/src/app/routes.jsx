@@ -20,6 +20,9 @@ import Calendario from './Calendario/page.jsx';
 import Vacunas from './Vacunas/page.jsx';
 import GenerarInforme from './GenerarInformes/page.jsx';
 
+import ProximasCitasDoctor from './ProximasCitasDoctor/page.jsx';
+import HistorialCitasDoctor from './HistorialCitasDoctor/page.jsx';
+import DetallesPaciente from './DetallesPaciente/page.jsx';
 
 const AppRoutes = () => {
   return (
@@ -42,6 +45,10 @@ const AppRoutes = () => {
         <Route path="/Calendario" element={<Calendario />} />
         <Route path="/Vacunas" element={<Vacunas />} />
         <Route path="/GenerarInforme" element={<GenerarInforme />} />
+        
+        <Route path="/ProximasCitasDoctor" element={<ProximasCitasDoctor />} />
+        <Route path="/HistorialCitasDoctor" element={<HistorialCitasDoctor />} />
+        <Route path="/DetallesPaciente/:id" element={<DetallesPaciente />} />
       </Routes>
     </Router>
   );

@@ -1,0 +1,43 @@
+.container{
+    background-color: #E7F6F1;
+    display: flex;
+}
+
+.body{
+    height: 100vh;
+    flex-grow: 1;
+}
+
+.cabecera{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cardbody {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.agregarCita{
+    background-color: black;
+    border-color: black;
+    width: 200px;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 20px;
+}
+
+@media (max-width: 450px) {
+    .cardbody {
+        margin-right: 7em;
+        overflow-x: auto;
+    }
+}
