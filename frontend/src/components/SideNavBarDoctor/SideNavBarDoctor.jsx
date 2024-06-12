@@ -184,7 +184,7 @@ export default function SideNavBar() {
               disablePadding
               sx={{ display: "block" }}
               onClick={() => {
-                navigate("/Calendario");
+                navigate("/CalendarioDoctor");
               }}
             >
               <ListItemButton

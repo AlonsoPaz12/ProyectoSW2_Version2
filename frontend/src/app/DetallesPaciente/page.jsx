@@ -1,77 +1,165 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
-import styles from './page.module.css';
+import medicosData from "@/data/doctors.JSON";
+import styles from "./page.module.css";
+
 import { TiArrowBack } from "react-icons/ti";
-import { FaEdit } from "react-icons/fa";
 
 const DetallesPaciente = () => {
   const { id } = useParams();
-  const [cita, setCita] = useState(null);
   const [paciente, setPaciente] = useState(null);
+  const [citas, setCitas] = useState([]);
+  const [futureCitas, setFutureCitas] = useState([]);
+  const [lastPastCita, setLastPastCita] = useState(null);
 
   useEffect(() => {
-    const fetchCita = async () => {
-      // Buscar la cita por ID
-      const citaData = citasData.find(cita => cita.id === id);
-      if (!citaData) {
-        // Manejar el caso en que no se encuentre ninguna cita con el ID proporcionado
-        console.log(`No se encontró ninguna cita con el ID ${id}`);
+    const fetchDetails = async () => {
+      // Find the patient by ID
+      const pacienteData = pacientesData.find((paciente) => paciente.id === id);
+      if (!pacienteData) {
+        console.log(`No se encontró ningún paciente con el ID ${id}`);
         return;
       }
-      // Buscar el paciente correspondiente al ID de la cita
-      const pacienteData = pacientesData.find(paciente => paciente.id === citaData.IDpaciente);
-      setCita(citaData);
+
+      // Find all appointments for the patient
+      const citasDataForPaciente = citasData.filter(
+        (cita) => cita.IDpaciente === pacienteData.id
+      );
+
+      // Separate future and past appointments
+      const now = new Date();
+      const futureCitas = citasDataForPaciente.filter(
+        (cita) => new Date(cita.fecha) > now
+      );
+      const pastCitas = citasDataForPaciente.filter(
+        (cita) => new Date(cita.fecha) <= now
+      );
+
+      // Sort pastCitas by date in descending order
+      pastCitas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+      const lastPastCita = pastCitas.length > 0 ? pastCitas[0] : null;
+
       setPaciente(pacienteData);
+      setCitas(citasDataForPaciente);
+      setFutureCitas(futureCitas);
+      setLastPastCita(lastPastCita);
     };
 
     if (id) {
-      fetchCita();
+      fetchDetails();
     }
   }, [id]);
 
-  if (!cita || !paciente) {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const getDoctorInfo = (IDmedico) => {
+    const doctor = medicosData.find(
+      (medico) => medico.id === parseInt(IDmedico)
+    );
+    return doctor
+      ? `${doctor.nombre} - ${doctor.especialidad}`
+      : "Información del médico no disponible";
+  };
+
+  if (!paciente || citas.length === 0) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.body}>
       <div className={styles.cabecera}>
-        <button onClick={() => history.back()} className={styles.backButton}><TiArrowBack size={"20px"} /> Regresar</button>
+        <button onClick={() => history.back()} className={styles.backButton}>
+          <TiArrowBack size={"20px"} /> Regresar
+        </button>
       </div>
-      <h5 className={styles.titulo}>DETALLES DE LA CITA</h5>
-      <div className={styles.citaInfo}>
-        <div className={styles.pacienteInfo}>
-          <img src="/path/to/patient-photo.jpg" alt="Paciente" className={styles.pacienteFoto} />
-          <p><strong>Paciente
-          </strong>: {paciente.nombres} {paciente.apePaterno} {paciente.apeMaterno}</p>
-          <p><strong>Edad:</strong> {new Date().getFullYear() - new Date(paciente.fechaNacimiento).getFullYear()} años</p>
-          <p><strong>Estado:</strong> <span className={cita.asistio ? styles.asistio : styles.noAsistio}>{cita.asistio ? 'Asistió' : 'No Asistió'}</span></p>
-          <p><strong>Fecha:</strong> {new Date(cita.fecha).toLocaleDateString()}</p>
-          <p><strong>Hora:</strong> {new Date(cita.fecha).toLocaleTimeString()}</p>
-        </div>
-        <div className={styles.citaDetalle}>
-          <p><strong>Motivo de la Cita:</strong> {cita.motivo}</p>
-          <p><strong>Diagnóstico:</strong> {cita.diagnostico || 'No disponible'}</p>
-        </div>
-        <button className={styles.editButton}><FaEdit size={"20px"} /> Editar</button>
+
+      <h5 className={styles.titulo}>INFORMACIÓN DEL PACIENTE</h5>
+      <div className={styles.patientDetails}>
+        <p>
+          <strong>Nombre:</strong> {paciente.nombres} {paciente.apePaterno}{" "}
+          {paciente.apeMaterno}
+        </p>
+        <p>
+          <strong>Documento:</strong> {paciente.numeroDocumento}
+        </p>
+        <p>
+          <strong>Fecha de Nacimiento:</strong>{" "}
+          {formatDate(paciente.fechaNacimiento)}
+        </p>
+        <p>
+          <strong>Género:</strong> {paciente.genero}
+        </p>
+        <p>
+          <strong>Correo Electrónico:</strong> {paciente.correoElectronico}
+        </p>
+        <p>
+          <strong>Número de Celular:</strong> {paciente.numCelular}
+        </p>
       </div>
-      <div className={styles.recetaMedica}>
-        <h5 className={styles.titulo}>RECETA MÉDICA</h5>
-        <p>No se ha agregado ninguna receta médica</p>
-        <button className={styles.addButton}>Agregar receta médica</button>
+
+      <div className={styles.vacunacionDetalles}>
+        <h5 className={styles.titulo2}>ESQUEMA DE VACUNACIÓN</h5>
+        {/* Add vaccination details here */}
       </div>
-      <div className={styles.ordenMedica}>
-        <h5 className={styles.titulo}>ORDEN MÉDICA</h5>
-        <p>No se ha agregado ninguna orden médica</p>
-        <button className={styles.addButton}>Agregar orden médica</button>
+
+      <div className={styles.proximasCitasDetalles}>
+        <h5 className={styles.titulo2}>PRÓXIMAS CITAS</h5>
+        {lastPastCita && (
+          <p>
+            <strong>Fecha última cita:</strong> {formatDate(lastPastCita.fecha)}{" "}
+            - {getDoctorInfo(lastPastCita.IDmedico)}
+          </p>
+        )}
+        <p>
+          <strong>Próximas citas:</strong>
+        </p>
+        {futureCitas.length > 0 ? (
+          futureCitas.map((cita) => (
+            <p key={cita.id}>
+              {formatDate(cita.fecha)} - {getDoctorInfo(cita.IDmedico)}
+            </p>
+          ))
+        ) : (
+          <p>No hay próximas citas programadas.</p>
+        )}
+      </div>
+
+      <div className={styles.appointmentDetails}>
+        <h5 className={styles.titulo2}>HISTORIAL MÉDICO</h5>
+        {citas.map((cita) => (
+          <div key={cita.id} className={styles.cita}>
+            <p>
+              <strong>Motivo:</strong> {cita.motivo}
+            </p>
+            <p>
+              <strong>Observación:</strong> {cita.Observacion}
+            </p>
+            <p>
+              <strong>Fecha:</strong> {formatDate(cita.fecha)}
+            </p>
+            <p>
+              <strong>Asistió:</strong> {cita.asistio ? "Sí" : "No"}
+            </p>
+            <p>
+              <strong>Documentos Médicos:</strong>{" "}
+              {cita.documentoMedico.join(", ")}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
 export default DetallesPaciente;
-

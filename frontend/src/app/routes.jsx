@@ -22,7 +22,10 @@ import GenerarInforme from './GenerarInformes/page.jsx';
 
 import ProximasCitasDoctor from './ProximasCitasDoctor/page.jsx';
 import HistorialCitasDoctor from './HistorialCitasDoctor/page.jsx';
+import DetallesCita from './DetallesCita/page.jsx';
 import DetallesPaciente from './DetallesPaciente/page.jsx';
+import Pacientes from './Pacientes/page.jsx';
+import CalendarioDoctor from './CalendarioDoctor/page.jsx';
 
 const AppRoutes = () => {
   return (
@@ -48,7 +51,11 @@ const AppRoutes = () => {
         
         <Route path="/ProximasCitasDoctor" element={<ProximasCitasDoctor />} />
         <Route path="/HistorialCitasDoctor" element={<HistorialCitasDoctor />} />
+        <Route path="/DetallesCita/:id" element={<DetallesCita />} />
+        <Route path="/Pacientes" element={<Pacientes />} />
         <Route path="/DetallesPaciente/:id" element={<DetallesPaciente />} />
+        <Route path="/CalendarioDoctor" element={<CalendarioDoctor />} />
+
       </Routes>
     </Router>
   );

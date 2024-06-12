@@ -1,0 +1,26 @@
+.cabecera {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.titulo {
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.containerTabla {
+  overflow-x: auto;
+}
+
+@media (max-width: 860px) {
+  .containerTabla {
+    overflow-x: auto;
+    margin-right: 7em;
+  }
+  .cabecera {
+    margin-right: 7em;
+    width: auto;
+  }
+}

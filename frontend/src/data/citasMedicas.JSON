@@ -7,7 +7,7 @@
     "IDpaciente": "P001",
     "fecha": "2024-06-15T10:00:00Z",
     "documentoMedico": ["doc1.pdf", "doc2.pdf"],
-    "asistio": true
+    "asistio": false
   },
   {
     "id": "2",
@@ -27,6 +27,28 @@
     "IDpaciente": "P003",
     "fecha": "2024-08-05T11:00:00Z",
     "documentoMedico": ["doc4.pdf", "doc5.pdf"],
+    "asistio": true
+  },
+
+  {
+    "id": "4",
+    "motivo": "Consulta general",
+    "IDmedico": "1",
+    "Observacion": "Paciente se queja de dolor de cabeza persistente",
+    "IDpaciente": "P001",
+    "fecha": "2024-10-15T10:00:00Z",
+    "documentoMedico": ["doc1.pdf", "doc2.pdf"],
+    "asistio": false
+  },
+
+  {
+    "id": "5",
+    "motivo": "Consulta general",
+    "IDmedico": "1",
+    "Observacion": "Paciente se queja de dolor de cabeza persistente",
+    "IDpaciente": "P001",
+    "fecha": "2024-10-11T10:00:00Z",
+    "documentoMedico": ["doc1.pdf", "doc2.pdf"],
     "asistio": true
   }
 ]

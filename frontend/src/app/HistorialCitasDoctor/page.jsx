@@ -33,7 +33,7 @@ const HistorialCitasDoctor = () => {
   };
 
   const handleVerDetallesClick = (id) => {
-    navigate(`/DetallesPaciente/${id}`); // Navegar a DetallesPaciente con el ID del paciente
+    navigate(`/DetallesCita/${id}`); // Navegar a DetallesPaciente con el ID del paciente
   };
 
   return (

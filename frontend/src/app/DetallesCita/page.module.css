@@ -9,13 +9,6 @@
   margin-bottom: 1em;
 }
 
-.titulo2 {
-  font-weight: bold;
-  margin-bottom: 1em;
-  color: #014433;
-  font-size: large;
-}
-
 .backButton {
   background-color: #00916E;
   font-size: small;
@@ -27,11 +20,46 @@
   border-radius: 14px;
 }
 
-.patientDetails, .appointmentDetails, .vacunacionDetalles, .proximasCitasDetalles {
+.citaInfo, .recetaInfo, .ordenInfo {
   margin-bottom: 2em;
   background-color: white;
   padding: 2em;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.recetaInfo, .ordenInfo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pacienteInfo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.columna2, .columna3 {
+  margin-left: 3em;
+}
+
+.columna4 {
+  align-content: end;
+}
+
+.pacienteFoto {
+  width: 10em;
+  margin-bottom: 1em;
+}
+
+.texto {
+  margin-bottom: 1em !important;
+  white-space: wrap;
+}
+
+.citaDetalle {
+  display: flex;
+  flex-direction: column;
 }
 
 .editButton {
@@ -42,6 +70,10 @@
   padding: 0.5em 2em;
   cursor: pointer;
   border-radius: 14px;
+}
+
+.recetaMedica, .ordenMedica {
+  margin-bottom: 1em;
 }
 
 .addButton {
@@ -67,4 +99,23 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
+}
+
+@media (max-width: 925px) {
+  .columna2, .columna3 {
+    margin-left: 0.5em;
+  }
+}
+
+@media (max-width: 845px) {
+  .pacienteInfo {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 699px) {
+  .addButton {
+    margin-top: 1em;
+    margin-left: 0;
+  }
 }
