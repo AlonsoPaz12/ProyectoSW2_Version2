@@ -6,6 +6,7 @@ import { CrearResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto'
 
 @Controller('medicos')
 export class MedicosController {
+    /*
     constructor(private medicoService: MedicosService){}
 
     @Get()
@@ -54,5 +55,5 @@ export class MedicosController {
     ){
         return this.medicoService.AgregarResultadoLab(idcita, IDMedico, nuevoRes.tipo, nuevoRes.resultado, nuevoRes.Nombrepaciente)
     }
-
+*/
 }

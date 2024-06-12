@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Delete, Put } from '@nestjs/common';
 import { ImagenesMedicasService } from './imagenes-medicas.service';
-import { CrearImagenMedicaDto } from './dto/imagenes-medicas.dto';
+import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';
 
 @Controller('imagenes-medicas')
 export class ImagenesMedicasController {
@@ -13,16 +13,21 @@ export class ImagenesMedicasController {
 
     @Post()
     crearResultado(@Body() nuevaImagenMedica: CrearImagenMedicaDto){
-        return this.imagenMedicaService.crearResultado(nuevaImagenMedica.tipo, nuevaImagenMedica.imagen, nuevaImagenMedica.nombrePaciente);
+        return this.imagenMedicaService.crearResultado(nuevaImagenMedica);
     }
 
     @Get(':id')
-    LeerResultadoPorId(@Param('id') id:String){
+    LeerResultadoPorId(@Param('id') id:number){
         return this.imagenMedicaService.LeerResultadoPorId(id);
     }
 
+    @Put(':id')
+    ActualizarResultado(@Param('id') id:number, @Body() actualizarImagenMedica: ActualizarImagenMedicaDto ){
+        return this.imagenMedicaService.ActualizarResultado(id, actualizarImagenMedica);
+    }
+
     @Delete(':id')
-    EliminarResultado(@Param('id') id:String){
+    EliminarResultado(@Param('id') id:number){
         this.imagenMedicaService.EliminarResultado(id);
         return "Imagen eliminada"
     }

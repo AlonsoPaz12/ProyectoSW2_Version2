@@ -1,9 +1,11 @@
-import { ImagenMedica } from "src/imagenes-medicas/imagenes-medicas.entity";
-import { ResultadoLab } from "src/resultados-lab/resultados-lab.entity";
-
-
 export class CrearOrdenMedicaDto{
-    id: String;
-    resultadosExamen: (ResultadoLab|ImagenMedica)[];
+    resultadoLabId?: number;
+    imagenMedicasId?: number;
     observacion: String;
+}
+
+export class ActualizarOrdenMedicaDto{
+    resultadoLabId?: number;
+    imagenMedicasId?: number;
+    observacion?: String;
 }
