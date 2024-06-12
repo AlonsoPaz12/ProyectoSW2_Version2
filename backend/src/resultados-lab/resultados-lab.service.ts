@@ -2,42 +2,56 @@ import { Injectable } from '@nestjs/common';
 import { ResultadoExamen } from 'src/interfaces/ResultadoExamen';
 import { ResultadoLab } from './resultados-lab.entity';
 import { v4 } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CrearResultadoLabDto, ActualizarResultadoLabDto } from './dto/resultados-lab.dto';
+import { OrdenesMedicasService } from 'src/ordenes-medicas/ordenes-medicas.service';
 
 
 @Injectable()
 export class ResultadosLabService implements ResultadoExamen{
 
-    private resultadosLab: ResultadoLab[] = [
-        {
-            id: '1',
-            tipo: 'VIH',
-            resultado: 'positivo',
-            Nombrepaciente: 'Becerra'
-        }
-    ]
+    constructor(
+        @InjectRepository(ResultadoLab)
+        private labRepository: Repository<ResultadoLab>,
+        private readonly ordenService: OrdenesMedicasService
+    ){}
     
     LeerResultados() {
-        return this.resultadosLab;
+        return this.labRepository.find()
     }
 
-    crearResultado(tipo: String, resultado: String, Nombrepaciente: String) {
-        const nuevoResultadoLab = {
-            id: v4(),
-            tipo,
-            resultado,
-            Nombrepaciente  
+    async crearResultado(crearResultadoDto: CrearResultadoLabDto) {
+        const { tipo, resultado, nombrePaciente, ordenmedicaId } = crearResultadoDto;
+
+        const orden = await this.ordenService.LeerOrdenMedicaPorId(ordenmedicaId)
+
+        if (!orden) {
+            throw new Error(`No se encontró ninguna orden medica con el ID ${ordenmedicaId}`);
         }
-        this.resultadosLab.push(nuevoResultadoLab);
-        return nuevoResultadoLab;
-    }
-    LeerResultadoPorId(id: String) {
-        return this.resultadosLab.find(resultado => resultado.id === id);
-    }
-    EliminarResultado(id: String): void{
-        this.resultadosLab = this.resultadosLab.filter(resultado => resultado.id !== id);
+
+        const labR = new ResultadoLab();
+        labR.tipo = tipo;
+        labR.resultado = resultado;
+        labR.nombrePaciente = nombrePaciente;
+        labR.orden = orden;
+
+        return this.labRepository.save(labR);
     }
 
+    LeerResultadoPorId(id: number) {
+        return this.labRepository.findOne({where: {id: id}});
+    }
 
-    
+    async ActualizarResultado(id: number, actualizarResultadoLabDto: ActualizarResultadoLabDto) {
+        const labR = await this.labRepository.findOne({where: {id: id}});
+        this.labRepository.merge(labR, actualizarResultadoLabDto);
+        return this.labRepository.save(labR);
+    }
+
+    EliminarResultado(id: number){
+        this.labRepository.delete(id);
+        return true;
+    }
 
 }

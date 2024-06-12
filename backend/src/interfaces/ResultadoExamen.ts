@@ -1,8 +1,9 @@
 export interface ResultadoExamen{
 
     LeerResultados();
-    crearResultado(tipo: String, resultado: String, Nombrepaciente: String)
-    LeerResultadoPorId(id: String): any
-    EliminarResultado(id: String): void
+    crearResultado(objeto: any);
+    LeerResultadoPorId(id: number);
+    ActualizarResultado(id: number, objeto: any);
+    EliminarResultado(id: number)
 
 }

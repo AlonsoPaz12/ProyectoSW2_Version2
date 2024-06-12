@@ -10,7 +10,9 @@ import { Medicamento } from 'src/medicamentos/medicamentos.entity';
 
 @Injectable()
 export class MedicosService {
+    
     /*Medicamento*/
+    /*
     medicamento = [new MedicamentosService().crearMedicamento('Pastilla', 'Despues de cada comida', 'dos pastillas')]
     doc = new RecetasMedicasService().CrearDocumentoMedico(this.medicamento, 'No tomar en ayunas');
     
@@ -109,6 +111,7 @@ export class MedicosService {
         return null
     }
 */
+/*
     VisualizacionProximasCitas(IDmedico: String){
         let m = this.medicos.find(m => m.id === IDmedico);
         return m.citas.filter(cita => cita.asistio === false);
@@ -137,13 +140,14 @@ export class MedicosService {
     }
 
     /*Funcion para Resultado Laboratorio y Imagen Medica*/ 
+    /*
     EliminarImagenMedica(IDMedico: String, idcita: String, idRE: String){
         let medico = this.medicos.find(med => med.id === IDMedico);
         let c = medico.citas.find(cita => cita.id === idcita);
         let actualizacionResultado = c.documentoMedico[1].resultadosExamen.filter(x => x.id !== idRE);
         this.medicos.find(med => med.id === IDMedico).citas.find(cita => cita.id === idcita).documentoMedico[1].resultadosExamen = actualizacionResultado;
     }
-
-
+*/
+  
 
 }

@@ -1,40 +1,56 @@
 import { Injectable } from '@nestjs/common';
 import { ResultadoExamen } from 'src/interfaces/ResultadoExamen';
 import { ImagenMedica } from './imagenes-medicas.entity';
-import { v4 } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import {CrearImagenMedicaDto, ActualizarImagenMedicaDto} from './dto/imagenes-medicas.dto';
+import { OrdenesMedicasService } from 'src/ordenes-medicas/ordenes-medicas.service';
 
 @Injectable()
 export class ImagenesMedicasService implements ResultadoExamen{
 
-    private imagenesMedicas: ImagenMedica[] = [
-        {
-            id: '1',
-            tipo: 'GAAAAA',
-            imagen: 'RAAAA',
-            nombrePaciente: 'aaaaaa'
-        }
-    ]
+    constructor(
+        @InjectRepository(ImagenMedica)
+        private imagenRepository: Repository<ImagenMedica>,
+        private readonly ordenService: OrdenesMedicasService
+    ){}
 
     LeerResultados(){
-        return this.imagenesMedicas;
+        return this.imagenRepository.find();
     }
     
-    crearResultado(tipo: String, imagen: String, nombrePaciente: String) {
-        const nuevaImagenMedica = {
-            id: v4(),
-            tipo,
-            imagen,
-            nombrePaciente
-        }
-        this.imagenesMedicas.push(nuevaImagenMedica);
-        return nuevaImagenMedica;
+    async crearResultado(crearImagenDto: CrearImagenMedicaDto) {
+        const { tipo, imagen, nombrePaciente, ordenmedicaId } = crearImagenDto;
+
+        const orden = await this.ordenService.LeerOrdenMedicaPorId(ordenmedicaId);
+        
+        if (!orden) {
+            throw new Error(`No se encontró ninguna orden medica con el ID ${ordenmedicaId}`);
+          }
+
+        const imagenM = new ImagenMedica();
+        imagenM.tipo = tipo;
+        imagenM.imagen = imagen;
+        imagenM.nombrePaciente = nombrePaciente;
+        imagenM.orden = orden; 
+
+        return this.imagenRepository.save(imagenM);
 
     }
-    LeerResultadoPorId(id: String) {
-        return this.imagenesMedicas.find( imagen => imagen.id === id );
+
+    LeerResultadoPorId(id: number) {
+        return this.imagenRepository.findOne({where: {id: id}});
     }
-    EliminarResultado(id: String): void {
-        this.imagenesMedicas = this.imagenesMedicas.filter(imagen => imagen.id !== id);
+
+    async ActualizarResultado(id: number, actualizarImagenDto: ActualizarImagenMedicaDto) {
+        const imagenM = await this.imagenRepository.findOne({where: {id: id}});
+        this.imagenRepository.merge(imagenM,actualizarImagenDto);
+        return this.imagenRepository.save(imagenM);
+    }
+
+    EliminarResultado(id: number) {
+        this.imagenRepository.delete(id);
+        return true;
     }
 
 }
