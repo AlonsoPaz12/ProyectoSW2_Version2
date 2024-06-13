@@ -16,6 +16,6 @@ export class ResultadoLab{
     nombrePaciente: String;
 
     @OneToOne(() => OrdenMedica, orden => orden.resultadoLaboratorio)
-    @JoinColumn()
+    @JoinColumn({ name: 'orden_medica_id' })
     orden: OrdenMedica;
 }

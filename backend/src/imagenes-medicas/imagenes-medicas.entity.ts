@@ -16,7 +16,7 @@ export class ImagenMedica{
     nombrePaciente: String;
 
     @OneToOne(() => OrdenMedica, orden => orden.imagenMedica)
-    @JoinColumn()
+    @JoinColumn({ name: 'orden_medica_id' })
     orden: OrdenMedica;
 
 }

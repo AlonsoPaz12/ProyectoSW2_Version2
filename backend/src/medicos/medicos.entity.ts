@@ -1,8 +1,23 @@
 import { Cita } from "src/citas/citas.entity";
+import { RecetaMedica } from "src/recetas-medicas/recetas-medicas.entity";
 import { Usuario } from "src/usuarios/usuario.entity";
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Medico extends Usuario{
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    especialidad: string;
+
+    @Column()
+    centroMedico: string;
+
+    @OneToMany(() => Cita, (date) => date.medico)
     citas: Cita[];
-    especialidad: String;
-    centroMedico: String;
+
+    @OneToMany(() => RecetaMedica, (receta) => receta.medico)
+    recetas: RecetaMedica[];
+
 }

@@ -1,3 +1,5 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
 export enum GeneroUsuario{
     MASCULINO = 'MASCULINO',
     FEMENINO = 'FEMENINO'
@@ -8,18 +10,42 @@ export enum RolUsuario{
     PACIENTE = 'PACIENTE'
 }
 
+@Entity()
 export class Usuario{
-    id: String
-    numeroDocumento: String
-    nombres: String
-    apePaterno: String
-    apeMaterno: String
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    numeroDocumento: string;
+    
+    @Column()
+    nombres: string;
+    
+    @Column()
+    apePaterno: string;
+    
+    @Column()
+    apeMaterno: string;
+    
+    @Column()
     fechaNacimiento: Date
-    numCelular: String
-    correoElectronico: String
-    contrasena: String
-    repContrasena: String
-    genero: GeneroUsuario
-    rol: RolUsuario
+    
+    @Column()
+    numCelular: string;
+    
+    @Column()
+    correoElectronico: string;
+    
+    @Column()
+    contrasena: string;
+    
+    @Column()
+    repContrasena: string;
+    
+    @Column()
+    genero: GeneroUsuario;
+    
+    @Column()
+    rol: RolUsuario;
 }
 
