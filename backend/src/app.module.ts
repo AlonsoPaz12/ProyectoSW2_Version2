@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from '../src/database/data-source';
+import { dataSourceOptions } from '../database/data-source';
 import { PacientesModule } from './pacientes/pacientes.module';
 import { MedicosModule } from './medicos/medicos.module';
 import { CitasModule } from './citas/citas.module';
