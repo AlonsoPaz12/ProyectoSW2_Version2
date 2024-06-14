@@ -7,7 +7,7 @@ export class OrdenesMedicasController {
     constructor(private ordenesMedicasService: OrdenesMedicasService){}
     @Post()
     CrearDocumentoMedico(@Body() nuevaOrdenMedica: CrearOrdenMedicaDto){
-        return this.ordenesMedicasService.CrearDocumentoMedico(nuevaOrdenMedica);
+        return this.ordenesMedicasService.crearDocumentoMedico(nuevaOrdenMedica);
     }
 
     @Get()

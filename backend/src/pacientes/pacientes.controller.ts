@@ -1,38 +1,57 @@
-import { Body, Controller, Delete, Param, Post, Get } from '@nestjs/common';
+// pacientes.controller.ts
+
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { PacientesService } from './pacientes.service';
-import { CrearCitaDto } from 'src/citas/dto/citas.dto';
+import { CrearPacienteDto, ActualizarPacienteDto } from './dto/paciente.dto';
 
 @Controller('pacientes')
 export class PacientesController {
-    constructor(private pacienteService: PacientesService){}
+    constructor(private readonly pacientesService: PacientesService) {}
+
+    @Post()
+    async crearPaciente(@Body() crearPacienteDto: CrearPacienteDto) {
+        return this.pacientesService.crearPaciente(crearPacienteDto);
+    }
+
+    @Put(':id')
+    async actualizarPaciente(@Param('id') id: number, @Body() actualizarPacienteDto: ActualizarPacienteDto) {
+        return this.pacientesService.actualizarPaciente(id, actualizarPacienteDto);
+    }
 
     @Get()
-    LeerPaciente(){
-        return this.pacienteService.LeerPaciente();
+    async verPacientes() {
+        return this.pacientesService.verPacientes();
     }
 
-    @Post(':IDpaciente')
-    registrarCita(@Body() nuevaCita: CrearCitaDto){
-        return this.pacienteService.registrarCita(nuevaCita.motivo, nuevaCita.IDmedico, nuevaCita.Observacion, nuevaCita.IDpaciente, nuevaCita.fecha, nuevaCita.documentoMedico);
+    @Get(':id')
+    async obtenerPacientePorId(@Param('id') id: number) {
+        return this.pacientesService.obtenerPacientePorId(id);
     }
 
-    @Delete(':id/:idpac')
-    anularCita(@Param('id') id: String, @Param('idpac') idpac:String){
-        this.pacienteService.anularCita(id, idpac);
+    @Post('citas')
+    async registrarCita(@Body() body: any) {
+        const { motivo, IDmedico, observacion, IDpaciente, fecha, documentoMedico } = body;
+        return this.pacientesService.registrarCita(motivo, IDmedico, observacion, IDpaciente, fecha, documentoMedico);
     }
 
-    @Get(':idpac')
-    visualizarHistorialCitas(@Param('idpac') idpac:String){
-        return this.pacienteService.visualizarHistorialCitas(idpac);
+    @Delete('citas/:idCita/pacientes/:idPaciente')
+    async anularCita(@Param('idCita') idCita: number, @Param('idPaciente') idPaciente: number) {
+        return this.pacientesService.anularCita(idCita, idPaciente);
     }
 
-    @Get(':id/:idpac')
-    visualizarMedicamentos(@Param('id') id:String, @Param('idpac') idpac:String){
-        return this.pacienteService.visualizarMedicamentos(id,idpac);
+    @Get(':id/historial-citas')
+    async visualizarHistorialCitas(@Param('id') id: number) {
+        return this.pacientesService.visualizarHistorialCitas(id);
     }
 
-    @Get('recetas/medicas/:idpac')
-    visualizarRecetasMedicas(@Param('idpac') idpac:String){
-        return this.pacienteService.visualizarRecetasMedicas(idpac);
+    @Get(':id/medicamentos/:idcita')
+    async visualizarMedicamentos(@Param('id') id: number, @Param('idcita') idcita: number) {
+        return this.pacientesService.visualizarMedicamentos(id, idcita);
+    }
+
+    @Get(':id/recetas-medicas')
+    async visualizarRecetasMedicas(@Param('id') id: number) {
+        return this.pacientesService.visualizarRecetasMedicas(id);
     }
 }
+

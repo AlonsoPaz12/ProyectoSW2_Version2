@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UsuariosModule } from './usuarios/usuarios.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from '../src/database/data-source';
 import { PacientesModule } from './pacientes/pacientes.module';
@@ -14,7 +13,6 @@ import { ImagenesMedicasModule } from './imagenes-medicas/imagenes-medicas.modul
 @Module({
   imports: [
     TypeOrmModule.forRoot(dataSourceOptions),
-    UsuariosModule, 
     PacientesModule, 
     MedicosModule, 
     CitasModule, 
