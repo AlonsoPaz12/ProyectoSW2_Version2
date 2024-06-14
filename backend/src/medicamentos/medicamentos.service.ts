@@ -1,37 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Medicamento } from './medicamentos.entity';
-import { v4 } from 'uuid';
+import { CrearMedicamentoDto } from './dto/medicamento.dto';
 
 @Injectable()
 export class MedicamentosService {
+    constructor(
+        @InjectRepository(Medicamento)
+        private medicamentoRepository: Repository<Medicamento>,
+    ) { }
 
-    private medicamentos: Medicamento[] = [
-        {
-            id: '1',
-            tipo: 'a',
-            frecuencia: 'b',
-            dosis: 'c'
+    async crearMedicamento(medicamento: CrearMedicamentoDto) {
+        return this.medicamentoRepository.save(medicamento);
+    }
+
+    async verMedicamentoPorId(id: number) {
+        const medicamento = await this.medicamentoRepository.findOne({ where: { id: id } });
+        if (!medicamento) {
+            throw new NotFoundException(`Medicamento con ID ${id} no encontrado.`);
         }
-    ]
-
-    crearMedicamento(tipo: String, frecuencia: String, dosis: String){
-        const nuevoMedicamento = {
-            id: v4(),
-            tipo,
-            frecuencia,
-            dosis
-        }
-        this.medicamentos.push(nuevoMedicamento);
-
-        return nuevoMedicamento;
+        return medicamento;
     }
 
-    verMedicamento(){
-        return this.medicamentos;
+    async verMedicamentos() {
+        return this.medicamentoRepository.find();
     }
 
-    eliminarMedicamento(id: String){
-        this.medicamentos = this.medicamentos.filter(medicamento => medicamento.id !== id)
+    async eliminarMedicamento(id: number) {
+        await this.medicamentoRepository.delete(id);
     }
 
+    async actualizarMedicamento(id: number, medicamento: Medicamento) {
+        await this.medicamentoRepository.update(id, medicamento);
+        return this.verMedicamentoPorId(id);
+    }
+
+    async buscarMedicamentoPorNombre(nombre: string) {
+        return this.medicamentoRepository.find({
+            where: { nombre },
+        });
+    }
 }

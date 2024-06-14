@@ -1,5 +1,6 @@
 export class CrearMedicamentoDto{
-    tipo: string
-    frecuencia: string
-    dosis: string
+    nombre: string;
+    tipo: string;
+    frecuencia: string;
+    dosis: string;
 }

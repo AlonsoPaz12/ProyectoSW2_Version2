@@ -1,3 +1,4 @@
+//imagenes-medicas.entity
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
 
@@ -7,13 +8,13 @@ export class ImagenMedica{
     id: number;
 
     @Column()
-    tipo: String;
+    tipo: string;
 
     @Column()
-    imagen: String;
+    imagen: string;
 
     @Column()
-    nombrePaciente: String;
+    nombrePaciente: string;
 
     @OneToOne(() => OrdenMedica, orden => orden.imagenMedica)
     @JoinColumn({ name: 'orden_medica_id' })

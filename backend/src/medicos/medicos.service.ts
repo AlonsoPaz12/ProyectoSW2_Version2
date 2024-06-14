@@ -1,153 +1,173 @@
-import { Injectable } from '@nestjs/common';
+//medicos.service.ts
+
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { Medico } from './medicos.entity';
-import { GeneroUsuario, RolUsuario } from 'src/usuarios/usuario.entity';
-import { MedicamentosService } from 'src/medicamentos/medicamentos.service';
+
+import { CrearMedicoDto } from '../medicos/dto/medicos.dto';
+import { CrearRecetaMedicaDto } from 'src/recetas-medicas/dto/recetas-medicas.dto';
+import { CrearImagenMedicaDto } from 'src/imagenes-medicas/dto/imagenes-medicas.dto';
+import { CrearResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto';
+
 import { RecetasMedicasService } from 'src/recetas-medicas/recetas-medicas.service';
+import { MedicamentosService } from 'src/medicamentos/medicamentos.service';
+import { CitasService } from 'src/citas/citas.service';
+import { ResultadosLabService } from 'src/resultados-lab/resultados-lab.service';
 import { ImagenesMedicasService } from 'src/imagenes-medicas/imagenes-medicas.service';
 import { OrdenesMedicasService } from 'src/ordenes-medicas/ordenes-medicas.service';
-import { ResultadosLabService } from 'src/resultados-lab/resultados-lab.service';
-import { Medicamento } from 'src/medicamentos/medicamentos.entity';
 
 @Injectable()
 export class MedicosService {
-    
-    /*Medicamento*/
-    /*
-    medicamento = [new MedicamentosService().crearMedicamento('Pastilla', 'Despues de cada comida', 'dos pastillas')]
-    doc = new RecetasMedicasService().CrearDocumentoMedico(this.medicamento, 'No tomar en ayunas');
-    
-    imagen = [new ImagenesMedicasService().crearResultado('rayos x', 'pimba', 'Sebastian')]
-    docIm = new OrdenesMedicasService().CrearDocumentoMedico(this.imagen,'Fractura transversal en el codo XD')
-    
-    reLab = [new ResultadosLabService().crearResultado('Analisi de Sangre', 'O+', 'Sebastian')]
-    docLab = new OrdenesMedicasService().CrearDocumentoMedico(this.reLab,'Hemoglobina baja')
+    constructor(
+        @InjectRepository(Medico)
+        private medicoRepository: Repository<Medico>,
+        private readonly recetasMedicasService: RecetasMedicasService,
+        private readonly citasService: CitasService,
+        private readonly medicamentosService: MedicamentosService,
+        private readonly ordenesMedicasService: OrdenesMedicasService,
+        private readonly imagenesMedicasService: ImagenesMedicasService,
+        private readonly resultadosLabService: ResultadosLabService,
+    ) { }
 
+    async crearMedico(crearMedicoDto: CrearMedicoDto) {
+        const nuevoMedico = this.medicoRepository.create(crearMedicoDto);
+        return this.medicoRepository.save(nuevoMedico);
+    }
 
-    private medicos: Medico[] = [
-        {
-            citas: [
-                {
-                    id: '1',
-                    motivo: 'Dolor de panza',
-                    IDmedico: 'MED-1',
-                    Observacion: 'Llegar Puntual, y con muestra de heces',
-                    IDpaciente: '1',
-                    fecha: new Date('2024-02-20'),
-                    documentoMedico: [this.doc , {}],
-                    asistio: true
-                },
-                {
-                    id: '2',
-                    motivo: 'Fractura de brazo',
-                    IDmedico: 'MED-2',
-                    Observacion: 'Fractura total',
-                    IDpaciente: '1',
-                    fecha: new Date('2024-02-20'),
-                    documentoMedico: [{} , this.docIm],
-                    asistio: false
-                },
-                {
-                    id: '3',
-                    motivo: 'Chequeo anual',
-                    IDmedico: 'MED-3',
-                    Observacion: 'O+',
-                    IDpaciente: '1',
-                    fecha: new Date('2024-02-20'),
-                    documentoMedico: [{} , this.reLab],
-                    asistio: false
-                },
-                {
-                    id: '4',
-                    motivo: 'Inflamación ocular',
-                    IDmedico: 'MED-1',
-                    Observacion: 'O+',
-                    IDpaciente: '1',
-                    fecha: new Date('2024-02-20'),
-                    documentoMedico: [{} , {}],
-                    asistio: true
-                }
-            ],
-            especialidad: 'Cardiologia',
-            centroMedico: 'La victoria',
-            id: 'MED-1',
-            numeroDocumento: '33333',
-            nombres: 'Gustavo',
-            apePaterno: 'Pimba',
-            apeMaterno: 'skibidi',
-            fechaNacimiento: new Date('1990-09-23'),
-            numCelular: '999888999',
-            correoElectronico: 'doctor1@gmail.com',
-            contrasena: 'soydoctor',
-            repContrasena: 'soydoctor',
-            genero: GeneroUsuario.MASCULINO,
-            rol: RolUsuario.MEDICO
+    async obtenerMedicoPorId(id: number) {
+        const medico = await this.medicoRepository.findOne({
+            where: { id: id },
+        });
+
+        if (!medico) {
+            throw new NotFoundException(`Medico con ID ${id} no encontrado`);
         }
-    ]
-
-    LeerMedico(){
-        return this.medicos;
-    }
-    //Siguiente Sprint
-    AgregarHorarioDisponible(){}
-
-
-    VisualizarRecetasMedicas(IDpaciente:String, IDmedico: String){
-        let m = this.medicos.find(med => med.id === IDmedico);
-        let c = m.citas.filter(cita => cita.IDpaciente === IDpaciente)
-        let arrRecetasMedicas = []
-        c.map(x => arrRecetasMedicas.push(x.documentoMedico[0]))
-        return arrRecetasMedicas;
+        return medico;
     }
 
-    AgregarRecetaMedica(obs: String, medicina: Medicamento [],idcita: String, IDmedico: String){
-        const nuevaReceta = new RecetasMedicasService().CrearDocumentoMedico(medicina,obs)
-        let medicos = this.medicos.find(x => x.id === IDmedico)
-        let c = medicos.citas.filter(c => c.id === idcita)
-        c.map(x => x.documentoMedico = [nuevaReceta,{}])
-    }
-/*
-    AgregarMedicamento(tipo: String, frecuencia: String, dosis: String): Medicamento[]{
-        let medicina = new MedicamentosService().crearMedicamento(tipo,frecuencia,dosis)
-        return null
-    }
-*/
-/*
-    VisualizacionProximasCitas(IDmedico: String){
-        let m = this.medicos.find(m => m.id === IDmedico);
-        return m.citas.filter(cita => cita.asistio === false);
+    async eliminarMedico(id: number) {
+        const result = await this.medicoRepository.delete(id);
+        if (result.affected === 0) {
+            throw new NotFoundException(`Medico con ID ${id} no encontrado`);
+        }
     }
 
-    AgregarImagenMedica(idcita: String, IDMedico: String, tipo: String, imagen: String, NombreP: String){
-        const nuevaImagen = new ImagenesMedicasService().crearResultado(tipo, imagen, NombreP)
-        let medicos = this.medicos.find(x => x.id == IDMedico)
-        let c = medicos.citas.filter(c => c.id === idcita)
-        c.map(x => x.documentoMedico = [{}, nuevaImagen])
+    async verMedicos() {
+        return this.medicoRepository.find();
     }
 
-    VisualizacionResultadosLaboratorio(IDpaciente:String, IDmedico: String){
-        let m  = this.medicos.find(med => med.id === IDmedico);
-        let c = m.citas.filter(cita => cita.IDpaciente === IDpaciente);
-        let arrResultadosLab = []
-        c.map(x => arrResultadosLab.push(x.documentoMedico[1]))
-        return arrResultadosLab;
+    async obtenerRecetasDelMedico(idMedico: number) {
+        try {
+            const medico = await this.medicoRepository.findOne({
+                where: { id: idMedico },
+                relations: ['recetas'],
+            });
+
+            if (!medico) {
+                throw new NotFoundException(`Médico con ID ${idMedico} no encontrado`);
+            }
+
+            return medico.recetas;
+        } catch (error) {
+            throw new NotFoundException(`No se encontraron recetas médicas para el médico con ID ${idMedico}`);
+        }
     }
 
-    AgregarResultadoLab(idcita: String, IDMedico: String, tipo: String, resultado: String, NombrePaciente: String){
-        const nuevoResultadoLab = new ResultadosLabService().crearResultado(tipo, resultado, NombrePaciente)
-        let medicos = this.medicos.find(x => x.id == IDMedico)
-        let c = medicos.citas.filter(c => c.id === idcita)
-        c.map(x => x.documentoMedico = [{},nuevoResultadoLab])
+    async agregarRecetaACita(idMedico: number, idCita: number, recetaDto: CrearRecetaMedicaDto) {
+        const medico = await this.medicoRepository.findOne({
+            where: { id: idMedico },
+        });
+
+        if (!medico) {
+            throw new NotFoundException(`Médico con ID ${idMedico} no encontrado.`);
+        }
+
+        return this.recetasMedicasService.agregarRecetaACita(idCita, recetaDto);
     }
 
-    /*Funcion para Resultado Laboratorio y Imagen Medica*/ 
-    /*
-    EliminarImagenMedica(IDMedico: String, idcita: String, idRE: String){
-        let medico = this.medicos.find(med => med.id === IDMedico);
-        let c = medico.citas.find(cita => cita.id === idcita);
-        let actualizacionResultado = c.documentoMedico[1].resultadosExamen.filter(x => x.id !== idRE);
-        this.medicos.find(med => med.id === IDMedico).citas.find(cita => cita.id === idcita).documentoMedico[1].resultadosExamen = actualizacionResultado;
-    }
-*/
-  
+    async agregarMedicamentoAReceta(recetaId: number, medicamentoId: number) {
+        const receta = await this.recetasMedicasService.obtenerRecetaPorId(recetaId);
+        if (!receta) {
+            throw new NotFoundException(`Receta médica con ID ${recetaId} no encontrada.`);
+        }
 
+        const medicamento = await this.medicamentosService.verMedicamentoPorId(medicamentoId);
+
+        receta.medicamentos.push(medicamento);
+
+        return this.recetasMedicasService.actualizarReceta(recetaId, receta);
+    }
+
+    async visualizacionProximasCitas(idMedico: number) {
+        return this.citasService.obtenerProximasCitasMedico(idMedico);
+    }
+
+    async agregarImagenMedicaACita(idCita: number, crearImagenDto: CrearImagenMedicaDto) {
+        const cita = await this.citasService.obtenerCitaPorId(idCita);
+        
+        if (!cita) {
+            throw new NotFoundException(`Cita con ID ${idCita} no encontrada.`);
+        }
+
+        try {
+            const nuevaImagen = await this.imagenesMedicasService.crearResultado({
+                ...crearImagenDto,
+                ordenmedicaId: cita.ordenMedica.id,
+            });
+
+            cita.ordenMedica.imagenMedica = nuevaImagen;
+            await this.citasService.actualizarCita(cita.id, cita);
+
+            return nuevaImagen;
+        } catch (error) {
+            throw new Error(`Error al agregar imagen médica a la cita: ${error.message}`);
+        }
+    }
+
+    async agregarResultadoLabACita(idCita: number, crearResultadoLabDto: CrearResultadoLabDto) {
+        const cita = await this.citasService.obtenerCitaPorId(idCita);
+        
+        if (!cita) {
+            throw new NotFoundException(`Cita con ID ${idCita} no encontrada.`);
+        }
+
+        try {
+            const nuevoResultadoLab = await this.resultadosLabService.crearResultado(crearResultadoLabDto);
+
+            cita.ordenMedica.resultadoLaboratorio = nuevoResultadoLab;
+            await this.citasService.actualizarCita(cita.id, cita);
+
+            return nuevoResultadoLab;
+        } catch (error) {
+            throw new Error(`Error al agregar resultado de laboratorio a la cita: ${error.message}`);
+        }
+    }
+
+
+    async eliminarImagenMedica(idImagenMedica: number) {
+        const imagenMedica = await this.imagenesMedicasService.LeerResultadoPorId(idImagenMedica);
+
+        if (!imagenMedica) {
+            throw new NotFoundException(`Imagen médica con ID ${idImagenMedica} no encontrada.`);
+        }
+
+        const ordenMedica = imagenMedica.orden; 
+
+        if (!ordenMedica) {
+            throw new NotFoundException(`No se encontró la orden médica asociada a la imagen médica con ID ${idImagenMedica}.`);
+        }
+
+        try {
+            await this.imagenesMedicasService.EliminarResultado(idImagenMedica);
+            
+            ordenMedica.imagenMedica = null; 
+            await this.ordenesMedicasService.ActualizarOrdenMedica(ordenMedica.id, ordenMedica);
+
+            return true; 
+        } catch (error) {
+            throw new Error(`Error al eliminar la imagen médica con ID ${idImagenMedica}: ${error.message}`);
+        }
+    }
 }

@@ -1,3 +1,5 @@
+//usuario.entity.ts
+
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum GeneroUsuario{

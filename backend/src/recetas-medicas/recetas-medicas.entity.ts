@@ -1,3 +1,4 @@
+//recetas-medicas.entity
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Medicamento } from "src/medicamentos/medicamentos.entity";
 import { Medico } from 'src/medicos/medicos.entity';

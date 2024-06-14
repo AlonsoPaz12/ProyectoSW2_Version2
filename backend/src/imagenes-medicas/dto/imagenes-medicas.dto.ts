@@ -1,13 +1,14 @@
-export class CrearImagenMedicaDto{
-    tipo: String
-    imagen: String
-    nombrePaciente: String
-    ordenmedicaId: number
+//imagenes-medicas.dto
+export class CrearImagenMedicaDto {
+    tipo: string;
+    imagen: string;
+    nombrePaciente: string;
+    ordenmedicaId: number;
 }
 
-export class ActualizarImagenMedicaDto{
-    tipo: String
-    imagen: String
-    nombrePaciente: String
-    ordenmedicaId: number
+export class ActualizarImagenMedicaDto {
+    tipo?: string;
+    imagen?: string;
+    nombrePaciente?: string;
+    ordenmedicaId?: number;
 }

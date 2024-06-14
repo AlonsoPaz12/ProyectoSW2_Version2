@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+//imagenes-medicas.service
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ResultadoExamen } from 'src/interfaces/ResultadoExamen';
 import { ImagenMedica } from './imagenes-medicas.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {CrearImagenMedicaDto, ActualizarImagenMedicaDto} from './dto/imagenes-medicas.dto';
+import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';
 import { OrdenesMedicasService } from 'src/ordenes-medicas/ordenes-medicas.service';
 
 @Injectable()
@@ -15,7 +16,7 @@ export class ImagenesMedicasService implements ResultadoExamen{
         private readonly ordenService: OrdenesMedicasService
     ){}
 
-    LeerResultados(){
+    async LeerResultados(){
         return this.imagenRepository.find();
     }
     
@@ -28,17 +29,16 @@ export class ImagenesMedicasService implements ResultadoExamen{
             throw new Error(`No se encontró ninguna orden medica con el ID ${ordenmedicaId}`);
           }
 
-        const imagenM = new ImagenMedica();
-        imagenM.tipo = tipo;
-        imagenM.imagen = imagen;
-        imagenM.nombrePaciente = nombrePaciente;
-        imagenM.orden = orden; 
+        const nuevaImagen = new ImagenMedica();
+        nuevaImagen.tipo = tipo;
+        nuevaImagen.imagen = imagen;
+        nuevaImagen.nombrePaciente = nombrePaciente;
+        nuevaImagen.orden = orden; 
 
-        return this.imagenRepository.save(imagenM);
-
+        return this.imagenRepository.save(nuevaImagen);
     }
 
-    LeerResultadoPorId(id: number) {
+    async LeerResultadoPorId(id: number) {
         return this.imagenRepository.findOne({where: {id: id}});
     }
 
@@ -48,7 +48,7 @@ export class ImagenesMedicasService implements ResultadoExamen{
         return this.imagenRepository.save(imagenM);
     }
 
-    EliminarResultado(id: number) {
+    async EliminarResultado(id: number) {
         this.imagenRepository.delete(id);
         return true;
     }

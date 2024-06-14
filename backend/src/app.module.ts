@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { dataSourceOptions } from '../src/database/data-source';
 import { PacientesModule } from './pacientes/pacientes.module';
 import { MedicosModule } from './medicos/medicos.module';
 import { CitasModule } from './citas/citas.module';
@@ -10,7 +12,18 @@ import { ResultadosLabModule } from './resultados-lab/resultados-lab.module';
 import { ImagenesMedicasModule } from './imagenes-medicas/imagenes-medicas.module';
 
 @Module({
-  imports: [UsuariosModule, PacientesModule, MedicosModule, CitasModule, RecetasMedicasModule, MedicamentosModule, OrdenesMedicasModule, ResultadosLabModule, ImagenesMedicasModule],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOptions),
+    UsuariosModule, 
+    PacientesModule, 
+    MedicosModule, 
+    CitasModule, 
+    RecetasMedicasModule, 
+    MedicamentosModule, 
+    OrdenesMedicasModule, 
+    ResultadosLabModule, 
+    ImagenesMedicasModule,
+  ],
 })
 
-export class AppModule {}
+export class AppModule { }

@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
 import { OrdenMedica } from './ordenes-medicas.entity';
 import { ResultadosLabService } from 'src/resultados-lab/resultados-lab.service';
-import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
-import { ImagenMedica } from 'src/imagenes-medicas/imagenes-medicas.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CrearOrdenMedicaDto, ActualizarOrdenMedicaDto } from './dto/ordenes-medicas.dto';
@@ -20,7 +18,7 @@ export class OrdenesMedicasService implements DocumentoMedico{
         private readonly imagenMedService: ImagenesMedicasService
     ){}
 
-    async CrearDocumentoMedico(crearDocumentoDto: CrearOrdenMedicaDto) {
+    async crearDocumentoMedico(crearDocumentoDto: CrearOrdenMedicaDto) {
         const {resultadoLabId, imagenMedicasId, observacion} = crearDocumentoDto;
 
         const resLab = await this.resultLabService.LeerResultadoPorId(resultadoLabId);

@@ -1,84 +1,158 @@
-import { Injectable, Body } from '@nestjs/common';
-import { UsuariosService } from 'src/usuarios/usuarios.service';
-import { Paciente } from './pacientes.entity';
-import { GeneroUsuario, RolUsuario } from 'src/usuarios/usuario.entity';
+//pacientees.service.ts
+
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CitasService } from 'src/citas/citas.service';
-import { RecetasMedicasService } from 'src/recetas-medicas/recetas-medicas.service';
 import { MedicamentosService } from 'src/medicamentos/medicamentos.service';
-import { CitasController } from 'src/citas/citas.controller';
+import { RecetasMedicasService } from 'src/recetas-medicas/recetas-medicas.service';
+
+import { Paciente } from './pacientes.entity';
 import { RecetaMedica } from "src/recetas-medicas/recetas-medicas.entity";
 
+import { CrearPacienteDto, ActualizarPacienteDto } from './dto/paciente.dto';
+
 @Injectable()
-export class PacientesService extends UsuariosService{
+export class PacientesService {
 
-    medicamento = [new MedicamentosService().crearMedicamento('Pastilla', 'Despues de cada comida', 'dos pastillas')]
-    doc = new RecetasMedicasService().CrearDocumentoMedico(this.medicamento, 'No tomar en ayunas');
-    private pacientes: Paciente[] = [
-        {
-            Citas: [
-                {
-                    id: '1',
-                    motivo: 'Dolor de panza',
-                    IDmedico: 'MED-1',
-                    Observacion: 'Llegar Puntual, y con muestra de heces',
-                    IDpaciente: '1',
-                    fecha: new Date('2024-02-20'),
-                    documentoMedico: [this.doc , {}],
-                    asistio: true
-                }
-            ],
-            id: '1',
-            numeroDocumento: '12345',
-            nombres: 'Sebastian',
-            apePaterno: 'Guzman',
-            apeMaterno: 'Soto',
-            fechaNacimiento: new Date('2003-04-18'),
-            numCelular: '9999999',
-            correoElectronico: 'espantaviejas@gmail.com',
-            contrasena: 'asdf1234',
-            repContrasena: 'asdf1234',
-            genero: GeneroUsuario.MASCULINO,
-            rol: RolUsuario.PACIENTE
+    constructor(
+        @InjectRepository(Paciente)
+        private pacienteRepository: Repository<Paciente>,
+        private readonly recetasMedicasService: RecetasMedicasService,
+        private readonly citasService: CitasService,
+        private readonly medicamentosService: MedicamentosService,
+    ) {}
+
+    async crearPaciente(crearPacienteDto: CrearPacienteDto) {
+        const nuevoPaciente = this.pacienteRepository.create(crearPacienteDto);
+        return this.pacienteRepository.save(nuevoPaciente);
+    }
+
+    async actualizarPaciente(idPaciente: number, actualizarPacienteDto: ActualizarPacienteDto) {
+        let paciente = await this.pacienteRepository.findOne({
+            where: { id: idPaciente },
+            relations: ['citas']
+        });
+
+        if (!paciente) {
+            throw new NotFoundException(`Paciente con ID ${idPaciente} no encontrado.`);
         }
-    ]
 
-    LeerPaciente(){
-        return this.pacientes;
+        Object.assign(paciente, actualizarPacienteDto);
+
+        return this.pacienteRepository.save(paciente);
     }
 
-    registrarCita(motivo: String, IDmedico: String, Observacion: String, IDpaciente: String, fecha: Date, documentoMedico: any[]){
-
-        const nuevaC = new CitasService().CrearCita(motivo, IDmedico, Observacion, IDpaciente, fecha, documentoMedico);
-        this.pacientes.find(pac => pac.id === IDpaciente).Citas.push(nuevaC);
-        return nuevaC;
-
+    async verPacientes() {
+        return this.pacienteRepository.find();
     }
 
-    anularCita(idCita: String, IDpaciente: String){
-        const pacienteFiltrado = this.pacientes.find(pac => pac.id === IDpaciente)
-        const citasActualizadas = pacienteFiltrado.Citas.filter(cita => cita.id !== idCita);
-        this.pacientes.find(pac => pac.id === IDpaciente).Citas = citasActualizadas;
-        console.log(this.pacientes);
-        return new CitasService().EliminarCita(idCita);
+    async obtenerPacientePorId(id: number) {
+        return this.pacienteRepository.findOne({
+            where: { id },
+            relations: ['citas']
+        });
     }
 
-    visualizarHistorialCitas(IDpaciente:String){
-        let p = this.pacientes.find(pac => pac.id === IDpaciente);
-        return p.Citas.filter(cita => cita.asistio === true);
+    async registrarCita(motivo: string, IDmedico: number, observacion: string, IDpaciente: number, fecha: Date, documentoMedico: (RecetaMedica | any)[]) {
+        const nuevaCita = await this.citasService.crearCita({
+            motivo,
+            IDmedico,
+            observacion,
+            IDpaciente,
+            fecha,
+            documentoMedico,
+        });
+
+        try {
+            let paciente = await this.pacienteRepository.findOne({
+                where: { id: IDpaciente },
+                relations: ['citas']
+            });
+
+            if (!paciente) {
+                throw new Error(`No se encontró al paciente con ID ${IDpaciente}`);
+            }
+
+            paciente.citas.push(nuevaCita);
+            await this.pacienteRepository.save(paciente);
+            return nuevaCita;
+        } catch (error) {
+            throw new Error(`Error al registrar la cita: ${error.message}`);
+        }
     }
 
-    visualizarMedicamentos(IDpaciente:String, idcita: String){
-        let p = this.pacientes.find(pac => pac.id === IDpaciente);
-        let c = p.Citas.find(c => c.id === idcita);
-        return c.documentoMedico[0].medicamento;
+
+    async anularCita(idCita: number, IDpaciente: number) {
+        try {
+            let paciente = await this.pacienteRepository
+                .createQueryBuilder('paciente')
+                .leftJoinAndSelect('paciente.citas', 'cita')
+                .where('paciente.id = :id', { id: IDpaciente })
+                .getOneOrFail();
+
+            paciente.citas = paciente.citas.filter(cita => cita.id !== idCita);
+            await this.pacienteRepository.save(paciente);
+            await this.citasService.eliminarCita(idCita);
+        } catch (error) {
+            throw new Error(`No se pudo encontrar al paciente con ID ${IDpaciente}`);
+        }
     }
 
-    visualizarRecetasMedicas(IDpaciente:String){
-        let p = this.pacientes.find(pac => pac.id === IDpaciente);
-        let c = p.Citas
-        let arrRecetasMedicas = []
-        c.map(x => arrRecetasMedicas.push(x.documentoMedico[0]))
-        return arrRecetasMedicas;
+    async visualizarHistorialCitas(IDpaciente: number) {
+        try {
+            const paciente = await this.pacienteRepository.findOneOrFail({
+                where: { id: IDpaciente },
+                relations: ['citas'],
+            });
+            return paciente.citas.filter(cita => cita.asistio === true);
+        } catch (error) {
+            throw new Error(`No se pudo encontrar al paciente con ID ${IDpaciente}`);
+        }
+    }
+
+    async visualizarMedicamentos(IDpaciente: number, idcita: number) {
+        try {
+            const paciente = await this.pacienteRepository.findOneOrFail({
+                where: { id: IDpaciente },
+                relations: ['citas'],
+            });
+
+            const cita = paciente.citas.find(c => c.id === idcita);
+
+            if (!cita) {
+                throw new Error(`No se encontró la cita con ID ${idcita} para el paciente con ID ${IDpaciente}`);
+            }
+
+            return cita.receta.medicamentos;
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error al obtener los medicamentos: ${error.message}`);
+            }
+            throw new Error(`No se pudo encontrar al paciente con ID ${IDpaciente} o la cita con ID ${idcita}`);
+        }
+    }
+
+
+    async visualizarRecetasMedicas(IDpaciente: number) {
+        try {
+            const paciente = await this.pacienteRepository.findOneOrFail({
+                where: { id: IDpaciente },
+                relations: ['citas'],
+            });
+    
+            const recetasMedicas: RecetaMedica[] = [];
+            paciente.citas.forEach(cita => {
+                if (cita.receta) {
+                    recetasMedicas.push(cita.receta);
+                }
+            });
+    
+            return recetasMedicas;
+        } catch (error) {
+            throw new Error(`No se pudo encontrar al paciente con ID ${IDpaciente}`);
+        }
     }
 
 }

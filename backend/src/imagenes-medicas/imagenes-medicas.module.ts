@@ -1,3 +1,4 @@
+//imagenes-medicas.module
 import { Module } from '@nestjs/common';
 import { ImagenesMedicasController } from './imagenes-medicas.controller';
 import { ImagenesMedicasService } from './imagenes-medicas.service';

@@ -5,10 +5,10 @@ export const dataSourceOptions: DataSourceOptions = {
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "postgres",
-    "database": "merkaltokedb",
+    "password": "gianella",
+    "database": "medcontroldb",
     "entities": ["dist/**/*.entity.js"],
-    "migrations": ["dist/db/migrations/*.js"],
+    "migrations": ["dist/database/migrations/*.js"],
 }
 
 const dataSource = new DataSource(dataSourceOptions)

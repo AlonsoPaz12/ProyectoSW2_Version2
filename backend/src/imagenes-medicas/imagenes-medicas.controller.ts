@@ -1,3 +1,4 @@
+//imagenes-medicas.controller
 import { Body, Controller, Get, Param, Post, Delete, Put } from '@nestjs/common';
 import { ImagenesMedicasService } from './imagenes-medicas.service';
 import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';

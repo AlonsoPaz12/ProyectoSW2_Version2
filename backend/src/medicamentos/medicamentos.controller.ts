@@ -1,25 +1,39 @@
-import { Body, Controller, Get, Param, Post, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Medicamento } from './medicamentos.entity';
 import { MedicamentosService } from './medicamentos.service';
 import { CrearMedicamentoDto } from './dto/medicamento.dto';
 
 @Controller('medicamentos')
 export class MedicamentosController {
+  constructor(private readonly medicamentosService: MedicamentosService) {}
 
-    constructor(private medicamentosService: MedicamentosService){};
+  @Post('create')
+  async crearMedicamento(@Body() medicamento: CrearMedicamentoDto) {
+    return this.medicamentosService.crearMedicamento(medicamento);
+  }
 
-    @Get()
-    obtenerMedicamentos(){
-        return this.medicamentosService.verMedicamento();
-    }
+  @Get(':id')
+  async verMedicamentoPorId(@Param('id') id: number) {
+    return this.medicamentosService.verMedicamentoPorId(id);
+  }
 
-    @Post()
-    crearMedicamento(@Body() nuevoMedicamento: CrearMedicamentoDto){
-        return this.medicamentosService.crearMedicamento(nuevoMedicamento.tipo, nuevoMedicamento.frecuencia, nuevoMedicamento.dosis)
-    }
+  @Get()
+  async verMedicamentos() {
+    return this.medicamentosService.verMedicamentos();
+  }
 
-    @Delete(':id')
-    eliminarMedicamento(@Param('id') id:String){
-        this.medicamentosService.eliminarMedicamento(id)
-    }
+  @Delete(':id')
+  async eliminarMedicamento(@Param('id') id: number) {
+    return this.medicamentosService.eliminarMedicamento(id);
+  }
 
+  @Put(':id')
+  async actualizarMedicamento(@Param('id') id: number, @Body() medicamento: Medicamento) {
+    return this.medicamentosService.actualizarMedicamento(id, medicamento);
+  }
+
+  @Get('buscar/:nombre')
+  async buscarMedicamentoPorNombre(@Param('nombre') nombre: string) {
+    return this.medicamentosService.buscarMedicamentoPorNombre(nombre);
+  }
 }
