@@ -1,3 +1,4 @@
+//recetas-medicas.modules.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecetaMedica } from './recetas-medicas.entity';
@@ -7,6 +8,7 @@ import { MedicamentosModule } from 'src/medicamentos/medicamentos.module';
 import { CitasModule } from 'src/citas/citas.module';
 import { PacientesModule } from 'src/pacientes/pacientes.module';
 import { MedicosModule } from 'src/medicos/medicos.module';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([RecetaMedica]),
