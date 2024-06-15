@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import citasData from "@/data/citasMedicas.JSON";
@@ -8,6 +6,8 @@ import medicosData from "@/data/doctors.JSON";
 import styles from "./page.module.css";
 import vacunasData from "@/data/vacunas.JSON";
 import { TiArrowBack } from "react-icons/ti";
+import VaccinationScheduleTable from "@/components/VaccinationScheduleTable/VaccinationScheduleTable";
+import { Button } from "react-bootstrap";
 
 const DetallesPaciente = () => {
   const { id } = useParams();
@@ -15,23 +15,21 @@ const DetallesPaciente = () => {
   const [citas, setCitas] = useState([]);
   const [futureCitas, setFutureCitas] = useState([]);
   const [lastPastCita, setLastPastCita] = useState(null);
-  const [vacunas, setVacunas] = useState(null);
+  const [vacunas, setVacunas] = useState([]);
+  const [newVacuna, setNewVacuna] = useState(null);
 
   useEffect(() => {
     const fetchDetails = async () => {
-      // Find the patient by ID
       const pacienteData = pacientesData.find((paciente) => paciente.id === id);
       if (!pacienteData) {
         console.log(`No se encontró ningún paciente con el ID ${id}`);
         return;
       }
 
-      // Find all appointments for the patient
       const citasDataForPaciente = citasData.filter(
         (cita) => cita.IDpaciente === pacienteData.id
       );
 
-      // Separate future and past appointments
       const now = new Date();
       const futureCitas = citasDataForPaciente.filter(
         (cita) => new Date(cita.fecha) > now
@@ -40,22 +38,18 @@ const DetallesPaciente = () => {
         (cita) => new Date(cita.fecha) <= now
       );
 
-      // Sort pastCitas by date in descending order
       pastCitas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
       const lastPastCita = pastCitas.length > 0 ? pastCitas[0] : null;
-
 
       const vacunasDataForPaciente = vacunasData.filter(
         (vacuna) => vacuna.IDpaciente === pacienteData.id
-      );            
-
+      );
 
       setPaciente(pacienteData);
       setCitas(citasDataForPaciente);
       setFutureCitas(futureCitas);
       setLastPastCita(lastPastCita);
-      setVacunas(vacunasDataForPaciente)
+      setVacunas(vacunasDataForPaciente);
     };
 
     if (id) {
@@ -63,10 +57,19 @@ const DetallesPaciente = () => {
     }
   }, [id]);
 
+  const addEmptyVaccineRecord = () => {
+    setNewVacuna({ VacunaNombre: '', fecha: '', Dosis: '', Fabricante: '', Lugar: '' });
+  };
+
+  const saveNewVaccineRecord = (updatedRecord) => {
+    setVacunas([...vacunas, updatedRecord]);
+    setNewVacuna(null);
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
@@ -118,28 +121,29 @@ const DetallesPaciente = () => {
 
       <div className={styles.vacunacionDetalles}>
         <h5 className={styles.titulo2}>ESQUEMA DE VACUNACIÓN</h5>
-        <table className={styles.vacunasTable}>
-          <thead>
-            <tr>
-              <th>Vacuna Administrada</th>
-              <th>Fecha de Vacunación</th>
-              <th>Dosis</th>
-              <th>Fabricante</th>
-              <th>Lugar de vacunación</th>
-            </tr>
-          </thead>
-          <tbody>
-            {vacunasData.map((vacuna, index) => (
-              <tr key={index}>
-                <td>{vacuna.VacunaNombre}</td>
-                <td>{formatDate(vacuna.fecha)}</td>
-                <td>{vacuna.Dosis}</td>
-                <td>{vacuna.Fabricante}</td>
-                <td>{vacuna.Lugar}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <VaccinationScheduleTable 
+          vacunas={vacunas} 
+          newVacuna={newVacuna}
+          setNewVacuna={setNewVacuna}
+          saveNewVaccineRecord={saveNewVaccineRecord} 
+        />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button 
+            variant="success" 
+            style={{ 
+              borderRadius: '100px', 
+              width: '50px',
+              height: '50px',
+              fontSize: '24px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onClick={addEmptyVaccineRecord}
+          >
+            +
+          </Button>
+        </div> 
       </div>
 
       <div className={styles.proximasCitasDetalles}>
