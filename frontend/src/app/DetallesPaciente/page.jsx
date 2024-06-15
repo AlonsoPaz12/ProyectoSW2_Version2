@@ -6,7 +6,7 @@ import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
 import medicosData from "@/data/doctors.JSON";
 import styles from "./page.module.css";
-
+import vacunasData from "@/data/vacunas.JSON";
 import { TiArrowBack } from "react-icons/ti";
 
 const DetallesPaciente = () => {
@@ -15,6 +15,7 @@ const DetallesPaciente = () => {
   const [citas, setCitas] = useState([]);
   const [futureCitas, setFutureCitas] = useState([]);
   const [lastPastCita, setLastPastCita] = useState(null);
+  const [vacunas, setVacunas] = useState(null);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -44,10 +45,17 @@ const DetallesPaciente = () => {
 
       const lastPastCita = pastCitas.length > 0 ? pastCitas[0] : null;
 
+
+      const vacunasDataForPaciente = vacunasData.filter(
+        (vacuna) => vacuna.IDpaciente === pacienteData.id
+      );            
+
+
       setPaciente(pacienteData);
       setCitas(citasDataForPaciente);
       setFutureCitas(futureCitas);
       setLastPastCita(lastPastCita);
+      setVacunas(vacunasDataForPaciente)
     };
 
     if (id) {
@@ -110,7 +118,28 @@ const DetallesPaciente = () => {
 
       <div className={styles.vacunacionDetalles}>
         <h5 className={styles.titulo2}>ESQUEMA DE VACUNACIÓN</h5>
-        {/* Add vaccination details here */}
+        <table className={styles.vacunasTable}>
+          <thead>
+            <tr>
+              <th>Vacuna Administrada</th>
+              <th>Fecha de Vacunación</th>
+              <th>Dosis</th>
+              <th>Fabricante</th>
+              <th>Lugar de vacunación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vacunasData.map((vacuna, index) => (
+              <tr key={index}>
+                <td>{vacuna.VacunaNombre}</td>
+                <td>{formatDate(vacuna.fecha)}</td>
+                <td>{vacuna.Dosis}</td>
+                <td>{vacuna.Fabricante}</td>
+                <td>{vacuna.Lugar}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div className={styles.proximasCitasDetalles}>
