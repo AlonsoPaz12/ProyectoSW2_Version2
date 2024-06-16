@@ -1,10 +1,26 @@
 //medicos.dto.ts
-
 import { GeneroUsuario } from '../../usuarios/usuario.entity';
 
+export class AgregarMedicamentoDto{
+    nombre: string;
+    tipo: string;
+    frecuencia: string;
+    dosis: string;
+    idMedicamento: number;
+    idReceta: number;
+}
+
+export class EliminarImagenMedicaDto {
+    ordenMedicaId: number;
+}
+
+export class EliminarResultadoLabDto {
+    ordenMedicaId: number;
+}
+
 export class CrearMedicoDto{
-    especialidad: string;
     centroMedico: string;
+    imageurl: string;
     numeroDocumento: string;
     nombres: string;
     apePaterno: string;
@@ -18,7 +34,6 @@ export class CrearMedicoDto{
 }
 
 export class ActualizarMedicoDto{
-    especialidad?: string;
     centroMedico?: string;
     numeroDocumento?: string;
     nombres?: string;

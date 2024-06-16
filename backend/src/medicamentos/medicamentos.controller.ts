@@ -1,39 +1,38 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { Medicamento } from './medicamentos.entity';
-import { MedicamentosService } from './medicamentos.service';
-import { CrearMedicamentoDto } from './dto/medicamento.dto';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, HttpStatus } from '@nestjs/common';
+import { MedicamentoService } from './medicamentos.service';
+import { CrearMedicamentoDto, ActualizarMedicamentoDto } from './dto/medicamento.dto';
 
 @Controller('medicamentos')
-export class MedicamentosController {
-  constructor(private readonly medicamentosService: MedicamentosService) {}
+export class MedicamentoController {
+    constructor(private readonly medicamentoService: MedicamentoService) {}
 
-  @Post('create')
-  async crearMedicamento(@Body() medicamento: CrearMedicamentoDto) {
-    return this.medicamentosService.crearMedicamento(medicamento);
-  }
+    @Post()
+    async crearMedicamento(@Body() crearMedicamentoDto: CrearMedicamentoDto) {
+        try {
+            const medicamento = await this.medicamentoService.crearMedicamento(crearMedicamentoDto);
+            return { medicamento };
+        } catch (error) {
+            throw new NotFoundException(error.message);
+        }
+    }
 
-  @Get(':id')
-  async verMedicamentoPorId(@Param('id') id: number) {
-    return this.medicamentosService.verMedicamentoPorId(id);
-  }
+    @Put(':id')
+    async editarMedicamento(@Param('id') id: number, @Body() actualizarMedicamentoDto: ActualizarMedicamentoDto) {
+        try {
+            const medicamento = await this.medicamentoService.editarMedicamento(id, actualizarMedicamentoDto);
+            return { medicamento };
+        } catch (error) {
+            throw new NotFoundException(error.message);
+        }
+    }
 
-  @Get()
-  async verMedicamentos() {
-    return this.medicamentosService.verMedicamentos();
-  }
-
-  @Delete(':id')
-  async eliminarMedicamento(@Param('id') id: number) {
-    return this.medicamentosService.eliminarMedicamento(id);
-  }
-
-  @Put(':id')
-  async actualizarMedicamento(@Param('id') id: number, @Body() medicamento: Medicamento) {
-    return this.medicamentosService.actualizarMedicamento(id, medicamento);
-  }
-
-  @Get('buscar/:nombre')
-  async buscarMedicamentoPorNombre(@Param('nombre') nombre: string) {
-    return this.medicamentosService.buscarMedicamentoPorNombre(nombre);
-  }
+    @Delete(':id')
+    async eliminarMedicamento(@Param('id') id: number) {
+        try {
+            await this.medicamentoService.eliminarMedicamento(id);
+            return { message: 'Medicamento eliminado correctamente' };
+        } catch (error) {
+            throw new NotFoundException(error.message);
+        }
+    }
 }

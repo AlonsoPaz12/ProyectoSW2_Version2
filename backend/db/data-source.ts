@@ -8,7 +8,7 @@ export const dataSourceOptions: DataSourceOptions = {
     "password": "gianella",
     "database": "medcontroldb",
     "entities": ["dist/**/*.entity.js"],
-    "migrations": ["dist/database/migrations/*.js"],
+    "migrations": ["dist/db/migrations/*.js"],
 }
 
 const dataSource = new DataSource(dataSourceOptions)

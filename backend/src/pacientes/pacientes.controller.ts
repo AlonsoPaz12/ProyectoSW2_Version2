@@ -1,57 +1,60 @@
 // pacientes.controller.ts
-
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
-import { PacientesService } from './pacientes.service';
-import { CrearPacienteDto, ActualizarPacienteDto } from './dto/paciente.dto';
+import { Controller, Get, Post, Delete, Body, Param, ParseIntPipe, NotFoundException } from '@nestjs/common'; // Asegúrate de importar NotFoundException aquí
+import { PacienteService } from './paciente.service';
+import { CrearPacienteDto, CrearCitaDto } from './dto/paciente.dto';
 
 @Controller('pacientes')
-export class PacientesController {
-    constructor(private readonly pacientesService: PacientesService) {}
+export class PacienteController {
+  constructor(private readonly pacienteService: PacienteService) {}
 
-    @Post()
-    async crearPaciente(@Body() crearPacienteDto: CrearPacienteDto) {
-        return this.pacientesService.crearPaciente(crearPacienteDto);
-    }
+  @Post()
+  async crearPaciente(@Body() crearPacienteDto: CrearPacienteDto) {
+    const pacienteCreado = await this.pacienteService.crearPaciente(crearPacienteDto);
+    return { message: 'Paciente creado correctamente', paciente: pacienteCreado };
+  }
 
-    @Put(':id')
-    async actualizarPaciente(@Param('id') id: number, @Body() actualizarPacienteDto: ActualizarPacienteDto) {
-        return this.pacientesService.actualizarPaciente(id, actualizarPacienteDto);
-    }
+  @Get()
+  async mostrarPacientes() {
+    const pacientes = await this.pacienteService.mostrarPacientes();
+    return { pacientes };
+  }
 
-    @Get()
-    async verPacientes() {
-        return this.pacientesService.verPacientes();
+  @Get(':id')
+  async encontrarPacienteId(@Param('id', ParseIntPipe) id: number) {
+    const paciente = await this.pacienteService.encontrarPacienteId(id);
+    if (!paciente) {
+      throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
     }
+    return { paciente };
+  }
 
-    @Get(':id')
-    async obtenerPacientePorId(@Param('id') id: number) {
-        return this.pacientesService.obtenerPacientePorId(id);
-    }
+  @Delete(':id')
+  async eliminarPaciente(@Param('id', ParseIntPipe) id: number) {
+    await this.pacienteService.eliminarPaciente(id);
+    return { message: 'Paciente eliminado correctamente' };
+  }
 
-    @Post('citas')
-    async registrarCita(@Body() body: any) {
-        const { motivo, IDmedico, observacion, IDpaciente, fecha, documentoMedico } = body;
-        return this.pacientesService.registrarCita(motivo, IDmedico, observacion, IDpaciente, fecha, documentoMedico);
-    }
+  @Post('agendar-cita')
+  async agendarCita(@Body() crearCitaDto: CrearCitaDto) {
+    const citaAgendada = await this.pacienteService.agendarCita(crearCitaDto);
+    return { message: 'Cita agendada correctamente', cita: citaAgendada };
+  }
 
-    @Delete('citas/:idCita/pacientes/:idPaciente')
-    async anularCita(@Param('idCita') idCita: number, @Param('idPaciente') idPaciente: number) {
-        return this.pacientesService.anularCita(idCita, idPaciente);
-    }
+  @Post('anular-cita/:idCita')
+  async anularCita(@Param('idCita', ParseIntPipe) idCita: number) {
+    await this.pacienteService.anularCita(idCita);
+    return { message: 'Cita anulada correctamente' };
+  }
 
-    @Get(':id/historial-citas')
-    async visualizarHistorialCitas(@Param('id') id: number) {
-        return this.pacientesService.visualizarHistorialCitas(id);
-    }
+  @Get(':idPaciente/citas')
+  async visualizarCitas(@Param('idPaciente', ParseIntPipe) idPaciente: number) {
+    const citas = await this.pacienteService.visualizarCitas(idPaciente);
+    return { citas };
+  }
 
-    @Get(':id/medicamentos/:idcita')
-    async visualizarMedicamentos(@Param('id') id: number, @Param('idcita') idcita: number) {
-        return this.pacientesService.visualizarMedicamentos(id, idcita);
-    }
-
-    @Get(':id/recetas-medicas')
-    async visualizarRecetasMedicas(@Param('id') id: number) {
-        return this.pacientesService.visualizarRecetasMedicas(id);
-    }
+  @Get('cita/:idCita/receta')
+  async visualizarRecetaMedicaPorCita(@Param('idCita', ParseIntPipe) idCita: number) {
+    const receta = await this.pacienteService.visualizarRecetaMedicaPorCita(idCita);
+    return { receta };
+  }
 }
-

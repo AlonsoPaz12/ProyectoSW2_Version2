@@ -1,11 +1,10 @@
 export class CrearOrdenMedicaDto{
-    resultadoLabId?: number;
-    imagenMedicasId?: number;
-    observacion: String;
+    observacion: string;
+    citaId: number;
 }
 
 export class ActualizarOrdenMedicaDto{
     resultadoLabId?: number;
     imagenMedicasId?: number;
-    observacion?: String;
+    observacion?: string;
 }

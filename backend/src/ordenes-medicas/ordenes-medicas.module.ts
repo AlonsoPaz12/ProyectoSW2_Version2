@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdenMedica } from './ordenes-medicas.entity';
-import { OrdenesMedicasController } from './ordenes-medicas.controller';
-import { OrdenesMedicasService } from './ordenes-medicas.service';
-import { ResultadosLabModule } from '../resultados-lab/resultados-lab.module';
-import { ImagenesMedicasModule } from '../imagenes-medicas/imagenes-medicas.module';
+import { CitaModule } from 'src/citas/citas.module';
+import { OrdenMedicaController } from './ordenes-medicas.controller';
+import { OrdenMedicaService } from './ordenes-medicas.service';
+import { Cita } from 'src/citas/citas.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([OrdenMedica]),
-    ResultadosLabModule,
-    ImagenesMedicasModule,
-  ],
-  controllers: [OrdenesMedicasController],
-  providers: [OrdenesMedicasService],
-  exports: [OrdenesMedicasService], 
+    imports: [
+        TypeOrmModule.forFeature([OrdenMedica, Cita]), 
+        CitaModule,
+    ],
+    controllers: [OrdenMedicaController],
+    providers: [OrdenMedicaService],
+    exports: [OrdenMedicaService]
 })
-
 export class OrdenesMedicasModule {}

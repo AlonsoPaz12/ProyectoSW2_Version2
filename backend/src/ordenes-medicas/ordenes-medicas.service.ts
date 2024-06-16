@@ -1,54 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
-import { OrdenMedica } from './ordenes-medicas.entity';
-import { ResultadosLabService } from 'src/resultados-lab/resultados-lab.service';
+// orden-medica.service.ts
+
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CrearOrdenMedicaDto, ActualizarOrdenMedicaDto } from './dto/ordenes-medicas.dto';
-import { ImagenesMedicasService } from 'src/imagenes-medicas/imagenes-medicas.service';
 
+import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
+import { OrdenMedica } from './ordenes-medicas.entity';
+import { Cita } from '../citas/citas.entity';
+
+import { CrearOrdenMedicaDto } from './dto/ordenes-medicas.dto';
 
 @Injectable()
-export class OrdenesMedicasService implements DocumentoMedico{
-
+export class OrdenMedicaService implements DocumentoMedico {
     constructor(
         @InjectRepository(OrdenMedica)
-        private ordenRepository: Repository<OrdenMedica>,
-        private readonly resultLabService: ResultadosLabService,
-        private readonly imagenMedService: ImagenesMedicasService
-    ){}
+        private readonly ordenMedicaRepository: Repository<OrdenMedica>,
+        
+        @InjectRepository(Cita)
+        private readonly citaRepository: Repository<Cita>,
+    ) {}
 
-    async crearDocumentoMedico(crearDocumentoDto: CrearOrdenMedicaDto) {
-        const {resultadoLabId, imagenMedicasId, observacion} = crearDocumentoDto;
+    async crearDocumentoMedico(crearOrdenMedicaDto: CrearOrdenMedicaDto): Promise<OrdenMedica> {
+        const { observacion, citaId } = crearOrdenMedicaDto;
 
-        const resLab = await this.resultLabService.LeerResultadoPorId(resultadoLabId);
-        const imgMed = await this.imagenMedService.LeerResultadoPorId(imagenMedicasId);
+        // Crear nueva orden médica
+        const nuevaOrden = new OrdenMedica();
+        nuevaOrden.observacion = observacion;
 
-        const orden = new OrdenMedica();
-        orden.resultadoLaboratorio = resLab;
-        orden.imagenMedica = imgMed;
-        orden.observacion = observacion;
+        // Si se proporciona citaId, buscar la cita y asociarla
+        if (citaId) {
+            const cita = await this.citaRepository.findOne({
+                where: { id: citaId }
+            });
+            if (!cita) {
+                throw new NotFoundException(`No se encontró la cita con ID ${citaId}`);
+            }
+            nuevaOrden.cita = cita;
+        }
 
-        return this.ordenRepository.save(orden);
-
+        // Guardar la orden médica en la base de datos
+        return await this.ordenMedicaRepository.save(nuevaOrden);
     }
-
-    LeerOrdenMedica(){
-        return this.ordenRepository.find();
-    }
-
-    LeerOrdenMedicaPorId(id: number){
-        return this.ordenRepository.findOne({where: {id: id}})
-    }
-
-    async ActualizarOrdenMedica(id: number, actualizarOrdenMedicaDto: ActualizarOrdenMedicaDto){
-        const orden = await this.ordenRepository.findOne({where: {id: id}});
-        this.ordenRepository.merge(orden, actualizarOrdenMedicaDto);
-        return this.ordenRepository.save(orden);
-    }
-
-    EliminarOrdenMedica(id: number){
-        this.ordenRepository.delete(id);
-    }
-    
 }

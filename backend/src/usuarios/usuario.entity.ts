@@ -16,6 +16,9 @@ export enum RolUsuario{
 export class Usuario{
     @PrimaryGeneratedColumn()
     id: number;
+    
+    @Column()
+    imageurl: string;
 
     @Column()
     numeroDocumento: string;
@@ -46,8 +49,6 @@ export class Usuario{
     
     @Column()
     genero: GeneroUsuario;
-    
-    @Column()
-    rol: RolUsuario;
+
 }
 

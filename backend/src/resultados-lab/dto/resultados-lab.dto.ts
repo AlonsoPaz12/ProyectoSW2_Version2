@@ -6,8 +6,8 @@ export class CrearResultadoLabDto{
 }
 
 export class ActualizarResultadoLabDto{
-    tipo: String
-    resultado: String
-    nombrePaciente: String
-    ordenmedicaId: number
+    tipo?: String
+    resultado?: String
+    nombrePaciente?: String
+    ordenmedicaId?: number
 }

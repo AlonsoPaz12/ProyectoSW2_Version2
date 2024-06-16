@@ -2,8 +2,8 @@
 import { Medicamento } from "src/medicamentos/medicamentos.entity"
 
 export class CrearRecetaMedicaDto{
-    medicamento: Medicamento[];
     observacion: string;
+    citaId: number;
 }
 
 export class ActualizarRecetaMedicaDto{

@@ -1,173 +1,292 @@
-//medicos.service.ts
+// medicos.service.ts
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, MoreThan } from 'typeorm';
 
 import { Medico } from './medicos.entity';
+import { Cita } from '../citas/citas.entity';
+import { Medicamento } from 'src/medicamentos/medicamentos.entity';
+import { HoraDisponible } from 'src/horario-disponible/hora-disponible.entity';
+import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
+import { ResultadoLab } from '../resultados-lab/resultados-lab.entity';
+import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
+import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
 
-import { CrearMedicoDto } from '../medicos/dto/medicos.dto';
+import { AgregarMedicamentoDto, CrearMedicoDto } from './dto/medicos.dto';
+import { CrearHoraDisponibleDto } from 'src/horario-disponible/dto/horario-disponible.dto';
+import { EliminarImagenMedicaDto, EliminarResultadoLabDto } from './dto/medicos.dto';
 import { CrearRecetaMedicaDto } from 'src/recetas-medicas/dto/recetas-medicas.dto';
-import { CrearImagenMedicaDto } from 'src/imagenes-medicas/dto/imagenes-medicas.dto';
-import { CrearResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto';
+import { CrearOrdenMedicaDto } from 'src/ordenes-medicas/dto/ordenes-medicas.dto';
 
-import { RecetasMedicasService } from 'src/recetas-medicas/recetas-medicas.service';
-import { MedicamentosService } from 'src/medicamentos/medicamentos.service';
-import { CitasService } from 'src/citas/citas.service';
-import { ResultadosLabService } from 'src/resultados-lab/resultados-lab.service';
-import { ImagenesMedicasService } from 'src/imagenes-medicas/imagenes-medicas.service';
-import { OrdenesMedicasService } from 'src/ordenes-medicas/ordenes-medicas.service';
+import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
+import { OrdenMedicaService } from 'src/ordenes-medicas/ordenes-medicas.service';
+
+
 
 @Injectable()
-export class MedicosService {
+export class MedicoService {
     constructor(
         @InjectRepository(Medico)
-        private medicoRepository: Repository<Medico>,
-        private readonly recetasMedicasService: RecetasMedicasService,
-        private readonly citasService: CitasService,
-        private readonly medicamentosService: MedicamentosService,
-        private readonly ordenesMedicasService: OrdenesMedicasService,
-        private readonly imagenesMedicasService: ImagenesMedicasService,
-        private readonly resultadosLabService: ResultadosLabService,
+        private readonly medicoRepository: Repository<Medico>,
+
+        @InjectRepository(RecetaMedica)
+        private readonly recetaMedicaRepository: Repository<RecetaMedica>,
+
+        @InjectRepository(Cita)
+        private readonly citaRepository: Repository<Cita>,
+
+        @InjectRepository(Medicamento)
+        private readonly medicamentoRepository: Repository<Medicamento>,
+
+        @InjectRepository(HoraDisponible)
+        private readonly horaDisponibleRepository: Repository<HoraDisponible>,
+
+        @InjectRepository(OrdenMedica)
+        private readonly ordenMedicaRepository: Repository<OrdenMedica>,
+
+        @InjectRepository(ResultadoLab)
+        private readonly resultadoLabRepository: Repository<ResultadoLab>,
+
+        @InjectRepository(ImagenMedica)
+        private readonly imagenMedicaRepository: Repository<ImagenMedica>,
+
+        private readonly recetaService: RecetaService,
+
+        private readonly ordenService: OrdenMedicaService,
     ) { }
 
     async crearMedico(crearMedicoDto: CrearMedicoDto) {
         const nuevoMedico = this.medicoRepository.create(crearMedicoDto);
-        return this.medicoRepository.save(nuevoMedico);
+        return await this.medicoRepository.save(nuevoMedico);
     }
 
-    async obtenerMedicoPorId(id: number) {
-        const medico = await this.medicoRepository.findOne({
-            where: { id: id },
-        });
-
-        if (!medico) {
-            throw new NotFoundException(`Medico con ID ${id} no encontrado`);
-        }
-        return medico;
-    }
-
-    async eliminarMedico(id: number) {
-        const result = await this.medicoRepository.delete(id);
-        if (result.affected === 0) {
-            throw new NotFoundException(`Medico con ID ${id} no encontrado`);
-        }
-    }
-
-    async verMedicos() {
+    async mostrarMedicos() {
         return this.medicoRepository.find();
-    }
+      }
 
-    async obtenerRecetasDelMedico(idMedico: number) {
-        try {
-            const medico = await this.medicoRepository.findOne({
-                where: { id: idMedico },
-                relations: ['recetas'],
-            });
-
-            if (!medico) {
-                throw new NotFoundException(`Médico con ID ${idMedico} no encontrado`);
-            }
-
-            return medico.recetas;
-        } catch (error) {
-            throw new NotFoundException(`No se encontraron recetas médicas para el médico con ID ${idMedico}`);
-        }
-    }
-
-    async agregarRecetaACita(idMedico: number, idCita: number, recetaDto: CrearRecetaMedicaDto) {
-        const medico = await this.medicoRepository.findOne({
-            where: { id: idMedico },
+    async crearOrdenMedica(idCita: number, crearOrdenMedicaDto: CrearOrdenMedicaDto) {
+        const cita = await this.citaRepository.findOne({
+            where: { id: idCita },
         });
 
-        if (!medico) {
-            throw new NotFoundException(`Médico con ID ${idMedico} no encontrado.`);
+        if (!cita) {
+            throw new NotFoundException(`No se encontró la cita con ID ${idCita}`);
         }
 
-        return this.recetasMedicasService.agregarRecetaACita(idCita, recetaDto);
+        // Crear la orden médica utilizando OrdenService
+        return await this.ordenService.crearDocumentoMedico({
+            ...crearOrdenMedicaDto,
+            citaId: idCita,
+        });
     }
 
-    async agregarMedicamentoAReceta(recetaId: number, medicamentoId: number) {
-        const receta = await this.recetasMedicasService.obtenerRecetaPorId(recetaId);
-        if (!receta) {
-            throw new NotFoundException(`Receta médica con ID ${recetaId} no encontrada.`);
+    async crearRecetaMedica(idCita: number, crearRecetaMedicaDto: CrearRecetaMedicaDto) {
+        const cita = await this.citaRepository.findOne({
+            where: { id: idCita },
+        });
+
+        if (!cita) {
+            throw new NotFoundException(`No se encontró la cita con ID ${idCita}`);
         }
 
-        const medicamento = await this.medicamentosService.verMedicamentoPorId(medicamentoId);
+        // Crear la receta médica utilizando RecetaService
+        return await this.recetaService.crearDocumentoMedico({
+            ...crearRecetaMedicaDto,
+            citaId: idCita,
+        });
+    }
 
+    async agregarMedicamentoAReceta(
+        idReceta: number,
+        agregarMedicamentoDto: AgregarMedicamentoDto
+    ) {
+
+        const { idMedicamento } = agregarMedicamentoDto;
+
+        //Buscar Receta por su ID
+        const receta = await this.recetaMedicaRepository.findOne({
+            where: { id: idReceta },
+            relations: ['medicamentos'],
+        });
+
+        if (!receta) {
+            throw new NotFoundException(`No se encontró la receta médica con ID ${idReceta}`);
+        }
+
+        //Buscar medicamento por su ID
+        const medicamento = await this.medicamentoRepository.findOne({
+            where: { id: idMedicamento },
+        });
+
+        if (!medicamento) {
+            throw new Error(`No se encontró ningún medicamento con el ID ${idMedicamento}`);
+        }
+
+        //Verificar si el medicamento ya está asociado a la receta
+        const existeMedicamento = receta.medicamentos.some(med => med.id === medicamento.id);
+        if (existeMedicamento) {
+            throw new Error(`El medicamento con ID ${medicamento.id} ya está asociado a la receta`);
+        }
+
+        //Agregar el medicamento a la receta médica
         receta.medicamentos.push(medicamento);
 
-        return this.recetasMedicasService.actualizarReceta(recetaId, receta);
+        //Guardar la receta médica actualizada
+        return await this.recetaMedicaRepository.save(receta);
     }
 
-    async visualizacionProximasCitas(idMedico: number) {
-        return this.citasService.obtenerProximasCitasMedico(idMedico);
+    async agregarHoraDisponible(medicoId: number, crearHoraDisponibleDto: CrearHoraDisponibleDto) {
+        const { fecha, horaInicio, horaFin } = crearHoraDisponibleDto;
+
+        // Buscar al médico por su ID
+        const medico = await this.medicoRepository.findOne({
+            where: { id: medicoId },
+        });
+
+        if (!medico) {
+            throw new NotFoundException(`Médico con ID ${medicoId} no encontrado`);
+        }
+
+        // Crear una nueva instancia de HoraDisponible
+        const nuevaHoraDisponible = new HoraDisponible();
+        nuevaHoraDisponible.fecha = fecha;
+        nuevaHoraDisponible.horaInicio = horaInicio;
+        nuevaHoraDisponible.horaFin = horaFin;
+        nuevaHoraDisponible.medico = medico;
+
+        // Guardar el nuevo horario disponible asociado al médico
+        return await this.horaDisponibleRepository.save(nuevaHoraDisponible);
     }
 
-    async agregarImagenMedicaACita(idCita: number, crearImagenDto: CrearImagenMedicaDto) {
-        const cita = await this.citasService.obtenerCitaPorId(idCita);
-        
+    async verRecetaDeCita(citaId: number) {
+        const cita = await this.citaRepository.findOne({
+            where: { id: citaId },
+            relations: ['recetaMedica'], // Asumiendo que la entidad Cita tiene una relación con RecetaMedica
+        });
+
         if (!cita) {
-            throw new NotFoundException(`Cita con ID ${idCita} no encontrada.`);
+            throw new NotFoundException(`Cita con ID ${citaId} no encontrada`);
         }
 
-        try {
-            const nuevaImagen = await this.imagenesMedicasService.crearResultado({
-                ...crearImagenDto,
-                ordenmedicaId: cita.ordenMedica.id,
-            });
+        const receta = await this.recetaMedicaRepository.findOne({
+            where: { cita: { id: citaId } },
+            relations: ['medico', 'paciente', 'medicamentos'], // Cargar relaciones relevantes
+        });
 
-            cita.ordenMedica.imagenMedica = nuevaImagen;
-            await this.citasService.actualizarCita(cita.id, cita);
-
-            return nuevaImagen;
-        } catch (error) {
-            throw new Error(`Error al agregar imagen médica a la cita: ${error.message}`);
+        if (!receta) {
+            throw new NotFoundException(`No se encontró receta médica para la cita con ID ${citaId}`);
         }
+
+        return receta;
     }
 
-    async agregarResultadoLabACita(idCita: number, crearResultadoLabDto: CrearResultadoLabDto) {
-        const cita = await this.citasService.obtenerCitaPorId(idCita);
-        
-        if (!cita) {
-            throw new NotFoundException(`Cita con ID ${idCita} no encontrada.`);
+    async verProximasCitas(medicoId: number) {
+        // Buscar al médico por su ID
+        const medico = await this.medicoRepository.findOne({
+            where: { id: medicoId },
+        });
+
+        if (!medico) {
+            throw new NotFoundException(`Médico con ID ${medicoId} no encontrado`);
         }
 
-        try {
-            const nuevoResultadoLab = await this.resultadosLabService.crearResultado(crearResultadoLabDto);
+        // Buscar las próximas citas del médico
+        const proximasCitas = await this.citaRepository.find({
+            where: { medico: { id: medicoId }, fecha: MoreThan(new Date()) },
+            relations: ['paciente'],
+            order: { fecha: 'ASC' },
+        });
 
-            cita.ordenMedica.resultadoLaboratorio = nuevoResultadoLab;
-            await this.citasService.actualizarCita(cita.id, cita);
-
-            return nuevoResultadoLab;
-        } catch (error) {
-            throw new Error(`Error al agregar resultado de laboratorio a la cita: ${error.message}`);
-        }
+        return proximasCitas;
     }
 
+    async agregarResultadoLaboratorio(idOrdenMedica: number, idResultadoLab: number) {
 
-    async eliminarImagenMedica(idImagenMedica: number) {
-        const imagenMedica = await this.imagenesMedicasService.LeerResultadoPorId(idImagenMedica);
-
-        if (!imagenMedica) {
-            throw new NotFoundException(`Imagen médica con ID ${idImagenMedica} no encontrada.`);
-        }
-
-        const ordenMedica = imagenMedica.orden; 
+        const ordenMedica = await this.ordenMedicaRepository.findOne({
+            where: { id: idOrdenMedica },
+            relations: ['resultadoLaboratorio'],
+        });
 
         if (!ordenMedica) {
-            throw new NotFoundException(`No se encontró la orden médica asociada a la imagen médica con ID ${idImagenMedica}.`);
+            throw new NotFoundException(`No se encontró la orden médica con ID ${idOrdenMedica}`);
         }
 
-        try {
-            await this.imagenesMedicasService.EliminarResultado(idImagenMedica);
-            
-            ordenMedica.imagenMedica = null; 
-            await this.ordenesMedicasService.ActualizarOrdenMedica(ordenMedica.id, ordenMedica);
+        const resultadoLab = await this.resultadoLabRepository.findOne({
+            where: { id: idResultadoLab },
+        });
 
-            return true; 
-        } catch (error) {
-            throw new Error(`Error al eliminar la imagen médica con ID ${idImagenMedica}: ${error.message}`);
+        if (!resultadoLab) {
+            throw new NotFoundException(`No se encontró el resultado de laboratorio con ID ${idResultadoLab}`);
         }
+
+        ordenMedica.resultadoLaboratorio = resultadoLab;
+
+        return await this.ordenMedicaRepository.save(ordenMedica);
     }
+
+    async agregarImagenMedica(idOrdenMedica: number, idImagenMedica: number) {
+        const ordenMedica = await this.ordenMedicaRepository.findOne({
+            where: { id: idOrdenMedica },
+            relations: ['imagenMedica'],
+        });
+
+        if (!ordenMedica) {
+            throw new NotFoundException(`No se encontró la orden médica con ID ${idOrdenMedica}`);
+        }
+
+        const imagenMedica = await this.imagenMedicaRepository.findOne({
+            where: { id: idImagenMedica },
+        });
+
+        if (!imagenMedica) {
+            throw new NotFoundException(`No se encontró la imagen médica con ID ${idImagenMedica}`);
+        }
+
+        ordenMedica.imagenMedica = imagenMedica;
+
+        return await this.ordenMedicaRepository.save(ordenMedica);
+    }
+
+    async eliminarImagenMedica(eliminarImagenMedicaDto: EliminarImagenMedicaDto): Promise<OrdenMedica> {
+        const { ordenMedicaId } = eliminarImagenMedicaDto;
+
+        const ordenMedica = await this.ordenMedicaRepository.findOne({
+            where: { id: ordenMedicaId },
+            relations: ['imagenMedica'],
+        });
+
+        if (!ordenMedica) {
+            throw new NotFoundException(`No se encontró la orden médica con ID ${ordenMedicaId}`);
+        }
+
+        if (!ordenMedica.imagenMedica) {
+            throw new NotFoundException(`No se encontró una imagen médica asociada a la orden médica con ID ${ordenMedicaId}`);
+        }
+
+        ordenMedica.imagenMedica = null;
+        return await this.ordenMedicaRepository.save(ordenMedica);
+    }
+
+    // Método para eliminar el resultado de laboratorio de una orden médica
+    async eliminarResultadoLab(eliminarResultadoLabDto: EliminarResultadoLabDto): Promise<OrdenMedica> {
+        const { ordenMedicaId } = eliminarResultadoLabDto;
+
+        const ordenMedica = await this.ordenMedicaRepository.findOne({
+            where: { id: ordenMedicaId },
+            relations: ['resultadoLaboratorio'],
+        });
+
+        if (!ordenMedica) {
+            throw new NotFoundException(`No se encontró la orden médica con ID ${ordenMedicaId}`);
+        }
+
+        if (!ordenMedica.resultadoLaboratorio) {
+            throw new NotFoundException(`No se encontró un resultado de laboratorio asociado a la orden médica con ID ${ordenMedicaId}`);
+        }
+
+        ordenMedica.resultadoLaboratorio = null;
+        return await this.ordenMedicaRepository.save(ordenMedica);
+    }
+
 }

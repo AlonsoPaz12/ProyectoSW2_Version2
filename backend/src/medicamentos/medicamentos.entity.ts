@@ -20,4 +20,5 @@ export class Medicamento{
     @ManyToMany(() => RecetaMedica, receta => receta.medicamentos)
     @JoinTable()
     recetas: RecetaMedica[];
+    
 }
