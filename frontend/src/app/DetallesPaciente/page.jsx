@@ -126,6 +126,7 @@ const DetallesPaciente = () => {
           newVacuna={newVacuna}
           setNewVacuna={setNewVacuna}
           saveNewVaccineRecord={saveNewVaccineRecord} 
+          setVacunas={setVacunas}
         />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button 
