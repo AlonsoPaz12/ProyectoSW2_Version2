@@ -34,10 +34,17 @@ export class PacienteController {
     return { message: 'Paciente eliminado correctamente' };
   }
 
-  @Post('agendar-cita')
+  @Post('citas')
   async agendarCita(@Body() crearCitaDto: CrearCitaDto) {
-    const citaAgendada = await this.pacienteService.agendarCita(crearCitaDto);
-    return { message: 'Cita agendada correctamente', cita: citaAgendada };
+    try {
+      const cita = await this.pacienteService.agendarCita(crearCitaDto);
+      return cita;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new Error('Error al agendar la cita');
+    }
   }
 
   @Post('anular-cita/:idCita')

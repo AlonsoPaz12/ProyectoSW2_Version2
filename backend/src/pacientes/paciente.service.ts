@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Paciente } from './pacientes.entity';
 import { Cita } from 'src/citas/citas.entity';
 import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
+import { Medico } from '../medicos/medicos.entity';
 
 import { CrearPacienteDto, CrearCitaDto } from './dto/paciente.dto';
 
@@ -16,6 +17,9 @@ export class PacienteService {
 
     @InjectRepository(Cita)
     private readonly citaRepository: Repository<Cita>,
+
+    @InjectRepository(Medico)
+    private readonly medicoRepository: Repository<Medico>,
 
     @InjectRepository(RecetaMedica)
     private readonly recetaMedicaRepository: Repository<RecetaMedica>,
@@ -44,7 +48,27 @@ export class PacienteService {
   }
 
   async agendarCita(crearCitaDto: CrearCitaDto) {
-    const nuevaCita = this.citaRepository.create(crearCitaDto);
+    const { IDpaciente, IDmedico } = crearCitaDto;
+
+    // Verificar si existe el paciente
+    const paciente = await this.pacienteRepository.findOne({ where: { id: IDpaciente } });
+    if (!paciente) {
+      throw new NotFoundException(`Paciente con ID ${IDpaciente} no encontrado`);
+    }
+
+    // Verificar si existe el médico (doctor)
+    const medico = await this.medicoRepository.findOne({ where: { id: IDmedico } });
+    if (!medico) {
+      throw new NotFoundException(`Médico con ID ${IDmedico} no encontrado`);
+    }
+
+    // Crear la nueva cita asociando paciente y médico
+    const nuevaCita = this.citaRepository.create({
+      ...crearCitaDto,
+      paciente,
+      medico,
+    });
+
     return await this.citaRepository.save(nuevaCita);
   }
 

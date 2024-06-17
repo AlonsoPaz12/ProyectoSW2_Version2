@@ -31,6 +31,7 @@ export class CrearMedicoDto{
     contrasena: string;
     repContrasena: string;
     genero: GeneroUsuario;
+    especialidadID: number;
 }
 
 export class ActualizarMedicoDto{

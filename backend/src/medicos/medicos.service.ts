@@ -12,6 +12,7 @@ import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
 import { ResultadoLab } from '../resultados-lab/resultados-lab.entity';
 import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
 import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
+import { Especialidad } from 'src/especialidades/especialidades.entity';
 
 import { AgregarMedicamentoDto, CrearMedicoDto } from './dto/medicos.dto';
 import { CrearHoraDisponibleDto } from 'src/horario-disponible/dto/horario-disponible.dto';
@@ -51,19 +52,38 @@ export class MedicoService {
         @InjectRepository(ImagenMedica)
         private readonly imagenMedicaRepository: Repository<ImagenMedica>,
 
+        @InjectRepository(Especialidad)
+        private readonly especialidadRepository: Repository<Especialidad>,
+
         private readonly recetaService: RecetaService,
 
         private readonly ordenService: OrdenMedicaService,
     ) { }
 
     async crearMedico(crearMedicoDto: CrearMedicoDto) {
-        const nuevoMedico = this.medicoRepository.create(crearMedicoDto);
+        const { especialidadID, ...medicoData } = crearMedicoDto;
+
+        // Verificar si la especialidad existe
+        const especialidad = await this.especialidadRepository.findOne({
+            where: { id_especialidad: especialidadID },
+        });
+
+        if (!especialidad) {
+            throw new NotFoundException(`Especialidad con ID ${especialidadID} no encontrada`);
+        }
+
+        // Crear instancia de Medico con la relación a Especialidad
+        const nuevoMedico = this.medicoRepository.create({
+            ...medicoData,
+            especialidad, // Asociación con la especialidad encontrada
+        });
+
         return await this.medicoRepository.save(nuevoMedico);
     }
 
     async mostrarMedicos() {
         return this.medicoRepository.find();
-      }
+    }
 
     async crearOrdenMedica(idCita: number, crearOrdenMedicaDto: CrearOrdenMedicaDto) {
         const cita = await this.citaRepository.findOne({

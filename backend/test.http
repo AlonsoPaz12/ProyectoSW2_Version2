@@ -1,33 +1,66 @@
-### POST /medicos - Crear un nuevo médico ###
+### POST /especialidades - Crear una nueva especialidad ###
 
-POST http://localhost:3000/Medicos/crear
+POST http://localhost:3000/especialidades
 Content-Type: application/json
 
 {
-    "centroMedico": "Nombre del Centro Médico",
+    "nombre_especialidad": "Cardiología",
+    "color": "#FF5733",
+    "icono": "heart"
+}
+
+### POST /medicos - Crear un nuevo médico con especialidad ###
+
+POST http://localhost:3000/medicos
+Content-Type: application/json
+
+{
+    "centroMedico": "Centro Médico Principal",
     "imageurl": "https://ejemplo.com/imagen.jpg",
     "numeroDocumento": "12345678",
     "nombres": "Juan",
     "apePaterno": "Pérez",
     "apeMaterno": "Gómez",
-    "fechaNacimiento": "1985-06-15T00:00:00.000Z",
+    "fechaNacimiento": "1985-06-15",
     "numCelular": "987654321",
     "correoElectronico": "juan.perez@example.com",
     "contrasena": "password123",
     "repContrasena": "password123",
-    "genero": "Masculino"
+    "genero": "Masculino",
+    "especialidadID": 1
 }
+
+
+### POST /pacientes - Crear un nuevo paciente ###
+
+POST http://localhost:3000/pacientes
+Content-Type: application/json
+
+{
+    "imageurl": "https://ejemplo.com/imagen.jpg",
+    "numeroDocumento": "12345678",
+    "nombres": "María",
+    "apePaterno": "González",
+    "apeMaterno": "Pérez",
+    "fechaNacimiento": "1990-03-15",
+    "numCelular": "987654321",
+    "correoElectronico": "maria.gonzalez@example.com",
+    "contrasena": "password123",
+    "repContrasena": "password123",
+    "genero": "Femenino"
+}
+
 
 ### POST /citas - Agendar una nueva cita ###
 
-POST http://localhost:3000/pacientes/agendar-cita
+POST http://localhost:3000/pacientes/citas
 Content-Type: application/json
 
 {
     "motivo": "Consulta de rutina",
     "observacion": "Paciente con historial de hipertensión",
     "IDmedico": 1,
-    "IDpaciente": 123,
+    "IDpaciente": 1,
     "fecha": "2024-06-20",
     "hora": "10:00",
     "diagnostico": "tos"
