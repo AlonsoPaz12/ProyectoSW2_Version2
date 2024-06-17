@@ -12,7 +12,7 @@ import { CrearOrdenMedicaDto } from 'src/ordenes-medicas/dto/ordenes-medicas.dto
 export class MedicoController {
     constructor(private readonly medicoService: MedicoService) { }
 
-    @Post('crear')
+    @Post()
     async crearMedico(@Body() crearMedicoDto: CrearMedicoDto) {
         try {
             const medicoCreado = await this.medicoService.crearMedico(crearMedicoDto);

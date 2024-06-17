@@ -1,0 +1,34 @@
+### POST /medicos - Crear un nuevo médico ###
+
+POST http://localhost:3000/Medicos/crear
+Content-Type: application/json
+
+{
+    "centroMedico": "Nombre del Centro Médico",
+    "imageurl": "https://ejemplo.com/imagen.jpg",
+    "numeroDocumento": "12345678",
+    "nombres": "Juan",
+    "apePaterno": "Pérez",
+    "apeMaterno": "Gómez",
+    "fechaNacimiento": "1985-06-15T00:00:00.000Z",
+    "numCelular": "987654321",
+    "correoElectronico": "juan.perez@example.com",
+    "contrasena": "password123",
+    "repContrasena": "password123",
+    "genero": "Masculino"
+}
+
+### POST /citas - Agendar una nueva cita ###
+
+POST http://localhost:3000/pacientes/agendar-cita
+Content-Type: application/json
+
+{
+    "motivo": "Consulta de rutina",
+    "observacion": "Paciente con historial de hipertensión",
+    "IDmedico": 1,
+    "IDpaciente": 123,
+    "fecha": "2024-06-20",
+    "hora": "10:00",
+    "diagnostico": "tos"
+}
