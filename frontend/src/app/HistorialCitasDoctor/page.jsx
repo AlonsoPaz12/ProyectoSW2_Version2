@@ -14,11 +14,12 @@ import { LuPlus } from "react-icons/lu";
 const HistorialCitasDoctor = () => {
   const [citas, setCitas] = useState([]);
   const [pacientes, setPacientes] = useState([]);
-  const [selectedCita, setSelectedCita] = useState(null);
+  const [searchName, setSearchName] = useState("");
+  const [searchDate, setSearchDate] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Cargar datos de citas y pacientes
+  
     setCitas(citasData);
     setPacientes(pacientesData);
   }, []);
@@ -28,13 +29,18 @@ const HistorialCitasDoctor = () => {
     return paciente ? `${paciente.nombres} ${paciente.apePaterno} ${paciente.apeMaterno}` : 'Desconocido';
   };
 
-  const handleCitaClick = (cita) => {
-    setSelectedCita(cita);
+  const handleVerDetallesClick = (id) => {
+    navigate(`/DetallesCita/${id}`); 
   };
 
-  const handleVerDetallesClick = (id) => {
-    navigate(`/DetallesCita/${id}`); // Navegar a DetallesPaciente con el ID del paciente
-  };
+  const filteredCitas = citas.filter(cita => {
+    const nombrePaciente = getNombrePaciente(cita.IDpaciente).toLowerCase();
+    const fechaCita = new Date(cita.fecha).toLocaleDateString('en-CA');
+    return (
+      (!searchName || nombrePaciente.includes(searchName.toLowerCase())) &&
+      (!searchDate || fechaCita === searchDate)
+    );
+  });
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
@@ -43,37 +49,64 @@ const HistorialCitasDoctor = () => {
         <div className={styles.cabecera}>
           <UserMenu />
         </div>
-        <h5 className={styles.titulo}>HISTORIAL DE CITAS</h5>
+        <h3 className={styles.titulo}><b>HISTORIAL DE CITAS</b></h3>
+        <div className={styles.searchContainer}>
+          <input 
+            type="text" 
+            placeholder="Buscar por nombre de paciente" 
+            className={styles.searchInput1} 
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+          />
+          <input 
+            type="date" 
+            placeholder="Buscar por Fecha" 
+            className={styles.searchInput2} 
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+          />
+          <Button 
+            variant="contained" 
+            className={styles.searchButton}
+            onClick={() => { setSearchName(""); setSearchDate(""); }}
+          >
+            Limpiar
+          </Button>
+        </div>
         <div className={styles.containerTabla}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table className={styles.table}>
             <thead>
               <tr>
-                <th style={{ border: "1px solid #014433", padding: "8px", backgroundColor: "#5ED2B7" }}>Fecha</th>
-                <th style={{ border: "1px solid #014433", padding: "8px", backgroundColor: "#5ED2B7" }}>Hora</th>
-                <th style={{ border: "1px solid #014433", padding: "8px", backgroundColor: "#5ED2B7" }}>Paciente</th>
-                <th style={{ border: "1px solid #014433", padding: "8px", backgroundColor: "#5ED2B7" }}>Estado</th>
-                <th style={{ border: "1px solid #014433", padding: "8px", backgroundColor: "#5ED2B7" }}>Más Detalles</th>
+                <th className={styles.tableHeader}>Fecha</th>
+                <th className={styles.tableHeader}>Hora</th>
+                <th className={styles.tableHeader}>Paciente</th>
+                <th className={styles.tableHeader}>Estado</th>
+                <th className={styles.tableHeader}>Más Detalles</th>
               </tr>
             </thead>
             <tbody>
-              {citas.map((cita) => (
-                <tr key={cita.id} onClick={() => handleCitaClick(cita)}>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{new Date(cita.fecha).toLocaleDateString()}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{new Date(cita.fecha).toLocaleTimeString()}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{getNombrePaciente(cita.IDpaciente)}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.asistio ? 'Asistió' : 'No Asistió'}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>
+              {filteredCitas.map((cita) => (
+                <tr key={cita.id} className={styles.tableRow}>
+                  <td className={styles.tableCell}>{new Date(cita.fecha).toLocaleDateString()}</td>
+                  <td className={styles.tableCell}>{new Date(cita.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                  <td className={styles.tableCell}>{getNombrePaciente(cita.IDpaciente)}</td>
+                  <td className={styles.tableCell}>
+                    <span className={cita.asistio ? styles.asistio : styles.noAsistio}>
+                      {cita.asistio ? 'Asistió' : 'No Asistió'}
+                    </span>
+                  </td>
+                  <td className={styles.tableCell}>
                     <Button
-                      onClick={() => handleVerDetallesClick(cita.id)} // Pasar el ID del paciente al hacer clic en "Ver más"
-                      sx={{ my: 2, color:"black"}}
+                      onClick={() => handleVerDetallesClick(cita.id)} 
+                      className={styles.verMasButton}
                     >
-                      Ver más <LuPlus />
+                      <span className={styles.verMasText}>Ver más <LuPlus /></span>
                     </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table> 
+          </table>
         </div>
       </Box>
     </Box>
@@ -81,4 +114,3 @@ const HistorialCitasDoctor = () => {
 };
 
 export default HistorialCitasDoctor;
-

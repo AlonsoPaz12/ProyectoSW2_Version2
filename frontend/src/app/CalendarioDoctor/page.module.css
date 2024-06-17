@@ -1,0 +1,79 @@
+/* page.module.css */
+
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E7F6F1;
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .contentContainer {
+    width: 90%;
+    margin: 2em auto;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .calendarContainer {
+    padding: 1em;
+    text-align: center;
+  }
+  
+  .calendarTitle {
+    margin-bottom: 1em;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1em;
+  }
+  
+  .navButton {
+    color: #1976d2;
+  }
+  
+  .navButton:hover {
+    color: #155a9a;
+  }
+  
+  .calendarYear {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+  }
+  
+  .detailsContainer {
+    padding: 1em;
+  }
+  
+  .detailsTitle {
+    margin-bottom: 1em;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .citaItem {
+    margin-bottom: 1em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .citaFecha {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+  
+  .citaHora, .citaPaciente {
+    margin-bottom: 0.5em;
+  }
+  
