@@ -1,26 +1,124 @@
 .cabecera {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   width: 100%;
 }
 
 .titulo {
+  margin: 20px 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+.searchContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.searchInput1 {
+  flex: 2.4;
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #014433;
+  background-color: #FFFFFF;
+}
+
+.searchInput2 {
+  flex: 1;
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #014433;
+  background-color: #FFFFFF;
+}
+
+
+.searchButton {
+  background-color: #014433;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-transform: none;
   font-weight: bold;
-  margin-top: 1em;
-  margin-bottom: 1em;
 }
 
 .containerTabla {
+  width: 100%;
   overflow-x: auto;
+  padding: 20px;
+  border-radius: 10px;
 }
 
-@media (max-width: 860px) {
-  .containerTabla {
-    overflow-x: auto;
-    margin-right: 7em;
-  }
-  .cabecera {
-    margin-right: 7em;
-    width: auto;
-  }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHeader {
+  border: 1px solid #014433;
+  padding: 10px;
+  background-color: #5ED2B7;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tableRow {
+  cursor: pointer;
+}
+
+.tableCell {
+  border: 1px solid #014433;
+  background-color: #FFFFFF;
+  padding: 10px;
+  text-align: center;
+}
+
+.asistio, .noAsistio {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.asistio {
+  color: #14A44D;
+  background-color: #E7F6F1;
+  border: 2px solid #14A44D;
+  padding: 8px 16px; /* Ajusta el padding según sea necesario */
+  width: 120px; /* Ancho deseado */
+  height: 40px; /* Altura deseada */
+}
+
+.noAsistio {
+  color: #DC4C64;
+  background-color: #FDEDED;
+  border: 2px solid #DC4C64;
+  padding: 8px 16px; /* Ajusta el padding según sea necesario */
+  width: 120px; /* Ancho deseado */
+  height: 40px; /* Altura deseada */
+}
+
+.verMasButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #014433;
+  color: #014433;
+  font-weight: bold;
+  text-transform: none;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.verMasButton:hover .verMasText {
+  text-decoration: underline;
 }
