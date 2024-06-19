@@ -19,10 +19,9 @@ import Registro from './Registro/page.jsx';
 import Calendario from './Calendario/page.jsx';
 import Vacunas from './Vacunas/page.jsx';
 import GenerarInforme from './GenerarInformes/page.jsx';
-
+import DetallesCita from './DetallesCita/page.jsx'
 import ProximasCitasDoctor from './ProximasCitasDoctor/page.jsx';
 import HistorialCitasDoctor from './HistorialCitasDoctor/page.jsx';
-import DetallesCita from './DetallesCita/page.jsx';
 import DetallesPaciente from './DetallesPaciente/page.jsx';
 import Pacientes from './Pacientes/page.jsx';
 import CalendarioDoctor from './CalendarioDoctor/page.jsx';
