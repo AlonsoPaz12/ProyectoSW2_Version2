@@ -3,8 +3,8 @@
       "id": "1",
       "citaId": "1",
       "medicamento": [
-        { "nombre": "Paracetamol", "dosis": "500mg", "frecuencia": "Cada 8 horas" },
-        { "nombre": "Ibuprofeno", "dosis": "200mg", "frecuencia": "Cada 6 horas" }
+        { "id": 1, "nombre": "Paracetamol", "dosis": "500mg", "frecuencia": "Cada 8 horas" },
+        { "id": 2, "nombre": "Ibuprofeno", "dosis": "200mg", "frecuencia": "Cada 6 horas" }
       ],
       "observacion": "Tomar con alimentos para evitar malestar estomacal."
     },
@@ -12,7 +12,8 @@
       "id": "2",
       "citaId": "2",
       "medicamento": [
-        { "nombre": "Amoxicilina", "dosis": "250mg", "frecuencia": "Cada 8 horas" }
+        { "id": 1, "nombre": "Amoxicilina", "dosis": "250mg", "frecuencia": "Cada 8 horas" },
+        { "id": 2,"nombre": "Paracetamol", "dosis": "150mg", "frecuencia": "Cada 8 horas" }
       ],
       "observacion": "Completar el tratamiento completo de 7 días."
     }

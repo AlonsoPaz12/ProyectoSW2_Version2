@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
+import recetasData from "@/data/recetaMedica.JSON";
 import styles from './page.module.css';
 import { TiArrowBack } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
+import { FaTrashAlt } from "react-icons/fa";
 
 const DetallesPaciente = () => {
   const { id } = useParams();
@@ -19,6 +21,7 @@ const DetallesPaciente = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editablePaciente, setEditablePaciente] = useState({ nombres: '', apePaterno: '', apeMaterno: '', fechaNacimiento: '', id: '' });
   const [editableCita, setEditableCita] = useState({ asistio: false, fecha: Date(), motivo: '', Observacion: '' });
+  const [ receta, setReceta] = useState({})
 
  
   const fetchPaciente = async (pacienteId) => {
@@ -43,18 +46,26 @@ const DetallesPaciente = () => {
     }
     setCita(citaData);
     setEditableCita({ ...citaData });
-    await fetchPaciente(citaData.IDpaciente);
+    fetchPaciente(citaData.IDpaciente);
+    fetchReceta(citaData.id);
   };
 
   const fetchCitasFromPaciente = async (paciente) => {
-    if (!paciente || !paciente.id) {
-      return [];
-    }
     const pacienteId = paciente.id;
     // citas that are after the current date and from the same patient
     const citasDataFromPaciente = citasData.filter(cita => cita.IDpaciente === pacienteId && new Date(cita.fecha) > new Date());
     setCitas(citasDataFromPaciente);    
+
   };
+
+  const fetchReceta = async (citaId) => {
+    const recetaAux = recetasData.find(receta => receta.citaId == citaId);
+    if (!recetaAux) {
+      console.log(`No se encontró ninguna receta con el ID de la cita ${citaId}`);
+      return;
+    }
+    setReceta(recetaAux);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +104,17 @@ const DetallesPaciente = () => {
     }));
   };
 
+  const handleEditMedicamentoClick = (e) => {
+    console.log('Editando medicamento');
+  };
+
+  // delete the medicamento from the receta with the id
+  const handleDeleteMedicamentoClick = (medicamentoId) => {
+    console.log('Eliminando medicamento con id:', medicamentoId);
+    const medicamentos = receta.medicamento.filter(medicamento => medicamento.id !== medicamentoId);
+    setReceta({ ...receta, medicamento: medicamentos });
+  };
+
   if (notFound) {
     return (
       <div className={styles.body}>
@@ -113,7 +135,7 @@ const DetallesPaciente = () => {
       <div className={styles.citaInfo}>
         <div className={styles.pacienteInfo}>
           <div className={styles.columna1}>
-            <img src="https://play-lh.googleusercontent.com/A9kmwxo2f7DyIa3c6QCq3-mCQ3MenMPzQ5w8BBmdXs2KJEH1WIchR2ncM9uSACdXinn6" alt="Paciente" className={styles.pacienteFoto} />
+            <img src={paciente.imageurl} alt="Paciente" className={styles.pacienteFoto} />
           </div>
           <div className={styles.columna2}>
             {isEditing ? (
@@ -212,6 +234,45 @@ const DetallesPaciente = () => {
         </div>
       </div>
       <div className={styles.recetaMedica}>
+        <h5 className={styles.titulo}>RECETAS</h5>
+        <div className={styles.recetaInfo}>
+          <div className={styles.receta}>
+          {
+            receta && receta.id ? (
+              <div className={styles.receta}>
+                <div className={styles.receta__head}>
+                  <p className={styles.receta__title}>Nro RECETA: <span className={styles.receta__text}>{receta.id}</span></p>
+                  <p className={styles.receta__title}>NOTAS ADICIONALES: <span className={styles.receta__text}>{receta.observacion}</span></p>
+                </div>
+                <div className={styles.medicamentos}>
+                  {
+                    receta.medicamento && receta.medicamento.length > 0 &&
+                    receta.medicamento.map(medicamento => (
+                      <div key={medicamento.id} className={styles.card}>
+                        <p className={styles.texto}><strong>Nombre:</strong> {medicamento.nombre}</p>
+                        <p className={styles.texto}><strong>Dosis:</strong> {medicamento.dosis}</p>
+                        <p className={styles.texto}><strong>Frencuencia:</strong> {medicamento.frecuencia}</p>
+                        <div className={styles.medicamento__buttons}>
+                          <button 
+                          className={styles.editButton}
+                          onClick={handleEditMedicamentoClick}
+                          ><FaEdit size={"20px"} /></button>
+                          <button className={styles.editButton}
+                          onClick={() => handleDeleteMedicamentoClick(medicamento.id)}
+                          ><FaTrashAlt size={"20px"} /></button>
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            ) : <p>No se ha encontrado receta</p>
+          }
+          </div>
+         
+        </div>
+      </div>
+      <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>PRÓXIMAS CITAS</h5>
         <div className={styles.recetaInfo}>
           <div className={styles.proximas_citas}>
@@ -224,7 +285,7 @@ const DetallesPaciente = () => {
                   </p>
                 </div>
               ))
-            ) : <p>No se ha agregado ninguna receta médica</p>
+            ) : <p>No se han encontrado proximas citas</p>
           }
           </div>
          
