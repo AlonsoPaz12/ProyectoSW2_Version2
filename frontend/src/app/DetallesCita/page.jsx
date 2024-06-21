@@ -10,6 +10,8 @@ import { TiArrowBack } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { FaTrashAlt } from "react-icons/fa";
+import EditMedicamentoDialog from "./EditMedicamentoDialog";
+import { Edit } from '@mui/icons-material';
 
 const DetallesPaciente = () => {
   const { id } = useParams();
@@ -21,9 +23,11 @@ const DetallesPaciente = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editablePaciente, setEditablePaciente] = useState({ nombres: '', apePaterno: '', apeMaterno: '', fechaNacimiento: '', id: '' });
   const [editableCita, setEditableCita] = useState({ asistio: false, fecha: Date(), motivo: '', Observacion: '' });
-  const [ receta, setReceta] = useState({})
+  const [receta, setReceta] = useState({});
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [currentMedicamento, setCurrentMedicamento] = useState({ id: '', nombre: '', dosis: '', frecuencia: '' });
 
- 
   const fetchPaciente = async (pacienteId) => {
     const pacienteData = pacientesData.find(paciente => paciente.id === pacienteId);
     if (!pacienteData) {
@@ -31,8 +35,6 @@ const DetallesPaciente = () => {
       return;
     }
     setPaciente(pacienteData);
-    console.log(pacienteData);
-
     setEditablePaciente({ ...pacienteData });
     await fetchCitasFromPaciente(pacienteData);
   };
@@ -52,10 +54,8 @@ const DetallesPaciente = () => {
 
   const fetchCitasFromPaciente = async (paciente) => {
     const pacienteId = paciente.id;
-    // citas that are after the current date and from the same patient
     const citasDataFromPaciente = citasData.filter(cita => cita.IDpaciente === pacienteId && new Date(cita.fecha) > new Date());
     setCitas(citasDataFromPaciente);    
-
   };
 
   const fetchReceta = async (citaId) => {
@@ -65,7 +65,7 @@ const DetallesPaciente = () => {
       return;
     }
     setReceta(recetaAux);
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,10 +73,8 @@ const DetallesPaciente = () => {
         await fetchCita();
       }
     };
-
     fetchData();
   }, [id]);
-
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -104,15 +102,54 @@ const DetallesPaciente = () => {
     }));
   };
 
-  const handleEditMedicamentoClick = (e) => {
-    console.log('Editando medicamento');
+  const handleEditMedicamentoClick = (medicamento) => {
+    console.log(medicamento);
+    setCurrentMedicamento(medicamento);
+    console.log(currentMedicamento)
+    setIsDialogOpen(true);
   };
 
-  // delete the medicamento from the receta with the id
+  const handleCreateMedicamentoClick = () => {
+    console.log('Create medicamento');
+    setIsCreateDialogOpen(true);
+  };
+
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleCreateDialogSave = (newMedicamento) => {
+    console.log(newMedicamento);
+    const medicamentos = receta.medicamento;
+
+    if (medicamentos.length > 0) {
+      newMedicamento.id = medicamentos[medicamentos.length - 1].id + 1;
+    } else {
+      newMedicamento.id = 1;
+    }
+
+    medicamentos.push(newMedicamento);
+    setReceta({ ...receta, medicamento: medicamentos });
+    setIsCreateDialogOpen(false);
+  };
+
+  const handleDialogSave = (updatedMedicamento) => {
+    console.log(updatedMedicamento);
+    const updatedMedicamentos = receta.medicamento.map(med => 
+      med.id === updatedMedicamento.id ? updatedMedicamento : med
+    );
+    setReceta({ ...receta, medicamento: updatedMedicamentos });
+    setIsDialogOpen(false);
+  };
+
   const handleDeleteMedicamentoClick = (medicamentoId) => {
-    console.log('Eliminando medicamento con id:', medicamentoId);
     const medicamentos = receta.medicamento.filter(medicamento => medicamento.id !== medicamentoId);
     setReceta({ ...receta, medicamento: medicamentos });
+  };
+
+  const handleCreateDialogClose = () => {
+    setIsCreateDialogOpen(false);
   };
 
   if (notFound) {
@@ -251,11 +288,11 @@ const DetallesPaciente = () => {
                       <div key={medicamento.id} className={styles.card}>
                         <p className={styles.texto}><strong>Nombre:</strong> {medicamento.nombre}</p>
                         <p className={styles.texto}><strong>Dosis:</strong> {medicamento.dosis}</p>
-                        <p className={styles.texto}><strong>Frencuencia:</strong> {medicamento.frecuencia}</p>
+                        <p className={styles.texto}><strong>Frecuencia:</strong> {medicamento.frecuencia}</p>
                         <div className={styles.medicamento__buttons}>
                           <button 
                           className={styles.editButton}
-                          onClick={handleEditMedicamentoClick}
+                          onClick={() => handleEditMedicamentoClick(medicamento)}  // Pass the medicamento object
                           ><FaEdit size={"20px"} /></button>
                           <button className={styles.editButton}
                           onClick={() => handleDeleteMedicamentoClick(medicamento.id)}
@@ -265,6 +302,8 @@ const DetallesPaciente = () => {
                     ))
                   }
                 </div>
+                <button className={styles.addButton}  onClick={handleCreateMedicamentoClick}><IoMdAdd size={"20px"}
+                /> Agregar Medicamento</button>
               </div>
             ) : <p>No se ha encontrado receta</p>
           }
@@ -291,7 +330,20 @@ const DetallesPaciente = () => {
          
         </div>
       </div>
+      <EditMedicamentoDialog 
+        open={isDialogOpen} 
+        onClose={handleDialogClose} 
+        medicamento={currentMedicamento} 
+        onSave={handleDialogSave} 
+      />
+      <EditMedicamentoDialog
+      open={isCreateDialogOpen}
+      onClose={handleCreateDialogClose}
+      onSave={handleCreateDialogSave}
+      medicamento={ { id: '', nombre: '', dosis: '', frecuencia: '' } }
+    />
     </div>
+    
   );
 };
 
