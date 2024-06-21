@@ -76,6 +76,7 @@
 .footer{
     display: flex;
     justify-content: center;
+    gap: 1em;
     align-items: center;
     height: 200px;
 }
@@ -83,6 +84,17 @@
 .agregarImagen{
     background-color: black;
     border-color: black;
+    width: 250px;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 20px;
+    width: 300px; 
+}
+
+.agregarBotonImg{
+    background-color: black;
+    border-color: black;
+    margin-right: 100px;
     width: 250px;
     height: 50px;
     border-radius: 20px;
