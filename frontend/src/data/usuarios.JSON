@@ -1,45 +1,47 @@
 [
-    {
-      "id": "P001",
-      "numeroDocumento": "12345678",
-      "nombres": "Juan",
-      "apePaterno": "Pérez",
-      "apeMaterno": "García",
-      "fechaNacimiento": "1990-01-01",
-      "numCelular": "123456789",
-      "correoElectronico": "juan.perez@example.com",
-      "contrasena": "password123",
-      "repContrasena": "password123",
-      "genero": "Masculino",
-      "rol": "Paciente"
-    },
-    {
-      "id": "P002",
-      "numeroDocumento": "87654321",
-      "nombres": "Ana",
-      "apePaterno": "García",
-      "apeMaterno": "López",
-      "fechaNacimiento": "1995-05-10",
-      "numCelular": "987654321",
-      "correoElectronico": "ana.garcia@example.com",
-      "contrasena": "password456",
-      "repContrasena": "password456",
-      "genero": "Femenino",
-      "rol": "Paciente"
-    },
-    {
-      "id": "P003",
-      "numeroDocumento": "11223344",
-      "nombres": "Carlos",
-      "apePaterno": "López",
-      "apeMaterno": "Martínez",
-      "fechaNacimiento": "1985-07-20",
-      "numCelular": "112233445",
-      "correoElectronico": "carlos.lopez@example.com",
-      "contrasena": "password789",
-      "repContrasena": "password789",
-      "genero": "Masculino",
-      "rol": "Paciente"
-    }
-  ]
-  
+  {
+    "id": "P001",
+    "numeroDocumento": "12345678",
+    "nombres": "Juan",
+    "apePaterno": "Pérez",
+    "apeMaterno": "García",
+    "fechaNacimiento": "1990-01-01",
+    "numCelular": "123456789",
+    "correoElectronico": "juan.perez@example.com",
+    "contrasena": "password123",
+    "repContrasena": "password123",
+    "genero": "Masculino",
+    "rol": "Paciente",
+    "imageurl": "https://hbz.h-cdn.co/assets/17/10/980x980/square-1488819903-hbz-030217-mcm3-1.jpg"
+  },
+  {
+    "id": "P002",
+    "numeroDocumento": "87654321",
+    "nombres": "Ana",
+    "apePaterno": "García",
+    "apeMaterno": "López",
+    "fechaNacimiento": "1995-05-10",
+    "numCelular": "987654321",
+    "correoElectronico": "ana.garcia@example.com",
+    "contrasena": "password456",
+    "repContrasena": "password456",
+    "genero": "Femenino",
+    "rol": "Paciente",
+    "imageurl": "https://hbz.h-cdn.co/assets/17/10/980x980/square-1488819903-hbz-030217-mcm3-1.jpg"
+  },
+  {
+    "id": "P003",
+    "numeroDocumento": "11223344",
+    "nombres": "Carlos",
+    "apePaterno": "López",
+    "apeMaterno": "Martínez",
+    "fechaNacimiento": "1985-07-20",
+    "numCelular": "112233445",
+    "correoElectronico": "carlos.lopez@example.com",
+    "contrasena": "password789",
+    "repContrasena": "password789",
+    "genero": "Masculino",
+    "rol": "Paciente",
+    "imageurl": "https://hbz.h-cdn.co/assets/17/10/980x980/square-1488819903-hbz-030217-mcm3-1.jpg"
+  }
+]

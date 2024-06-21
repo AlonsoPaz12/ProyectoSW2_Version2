@@ -30,7 +30,7 @@
 .recetaInfo, .ordenInfo {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  width: 100%;
 }
 
 .pacienteInfo {
@@ -74,6 +74,7 @@
 
 .recetaMedica, .ordenMedica {
   margin-bottom: 1em;
+  width: 100%;
 }
 
 .addButton {
@@ -93,6 +94,14 @@
 
 .noAsistio {
   color: red;
+}
+
+.input {
+  border: 1px solid #00916E;
+  border-radius: 5px;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  margin: 0.5em;
 }
 
 .cabecera {
@@ -118,4 +127,75 @@
     margin-top: 1em;
     margin-left: 0;
   }
+}
+
+.proximas_citas {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.cita {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+
+.receta__title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1em;
+  color: #014433;
+}
+
+.receta__text {
+  color: black;
+  font-size: 0.9em;
+  margin-bottom: 1em;
+  font-weight: normal;
+}
+
+.receta__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3em;
+}
+
+.receta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.card {
+  width: 200px;
+  background-color: #b9b9b9;
+  padding: 1em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medicamento__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+}
+
+.medicamentos {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.addButton {
+  background-color: #00916E;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
 }
