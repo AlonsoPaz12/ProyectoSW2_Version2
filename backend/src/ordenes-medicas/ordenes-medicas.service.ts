@@ -74,4 +74,8 @@ export class OrdenMedicaService implements DocumentoMedico {
 
         return ordenGuardada;
     }
+
+    async obtenerTodasOrdenes(): Promise<OrdenMedica[]> {
+        return await this.ordenMedicaRepository.find();
+    }
 }
