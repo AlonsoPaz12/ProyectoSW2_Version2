@@ -5,3 +5,20 @@
   flex-wrap: wrap;
   padding: 0 !important;
 }
+
+.especialidadItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 2%;
+  width: 60vh;
+}
+
+.especialidadNombre {
+  font-size: 18px; 
+  width: 50%;
+}
+
+.searchContainer {
+  margin: 20px 40px 20px 40px;
+}

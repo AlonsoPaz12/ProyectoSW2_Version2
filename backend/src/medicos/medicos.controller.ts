@@ -24,8 +24,7 @@ export class MedicoController {
 
     @Get()
     async mostrarMedicos() {
-        const medicos = await this.medicoService.mostrarMedicos();
-        return { medicos };
+        return await this.medicoService.mostrarMedicos();
     }
 
     @Post('receta/:idCita')

@@ -62,10 +62,49 @@ const Registro = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Formulario enviado:', formData);
-        // Aquí puedes manejar el envío del formulario y de la imagen
+        console.log('Formulario enviado:', JSON.stringify(formData));
+
+        try{
+            const imageUrlToSend = profileImage || '/images/user-icon.png'; // URL predeterminada si no se selecciona una imagen
+
+            // Mostrar en la consola los datos que se enviarán al servidor
+            const dataToSend = {
+                imageurl: imageUrlToSend,
+                numeroDocumento: formData.documento,
+                nombres: formData.nombres,
+                apePaterno: formData.apellidoPaterno,
+                apeMaterno: formData.apellidoMaterno,
+                fechaNacimiento: formData.fechaDeNacimiento,
+                numCelular: formData.celular,
+                correoElectronico: formData.correo,
+                contrasena: formData.contrasena,
+                repContrasena: formData.repetirContrasena,
+                genero: formData.genero,
+            };
+            console.log('Datos a enviar:', dataToSend);
+
+            const response = await fetch('http://localhost:3000/pacientes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Usuario paciente registrado correctamente');
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+        } catch(error){
+            console.error('error al registrar el usuario paciente', error);
+            alert('Ocurrió un error al registrar paciente')
+        }
+
     };
 
     return (

@@ -271,7 +271,7 @@ const DetallesPaciente = () => {
         </div>
       </div>
       <div className={styles.recetaMedica}>
-        <h5 className={styles.titulo}>RECETA MÉDICA</h5>
+        <h5 className={styles.titulo}>RECETAS</h5>
         <div className={styles.recetaInfo}>
           <div className={styles.receta}>
           {
