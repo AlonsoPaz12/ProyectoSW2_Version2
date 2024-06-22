@@ -40,3 +40,8 @@ export class CrearCitaDto {
     diagnostico?: string;
     documentoMedico?: (RecetaMedica | OrdenMedica | null)[];
 }
+
+export class IniciarSesionDto{
+    correoElectronico: string;
+    contrasena: string;
+}

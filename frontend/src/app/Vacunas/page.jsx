@@ -26,7 +26,8 @@ const userData = {
   vacunas: [
     { vacuna: "Hepatitis B", fecha: "01-02-2020", dosis: "1ra", fabricante: "Sanofi", lugar: "Lima" },
     { vacuna: "Influenza", fecha: "15-03-2021", dosis: "2da", fabricante: "Pfizer", lugar: "Arequipa" },
-    // Añade más datos de ejemplo según sea necesario
+    { vacuna: "Influenza", fecha: "15-03-2021", dosis: "2da", fabricante: "Pfizer", lugar: "Arequipa" },
+    { vacuna: "Influenza", fecha: "15-03-2021", dosis: "2da", fabricante: "Pfizer", lugar: "Arequipa" },
   ]
 };
 
