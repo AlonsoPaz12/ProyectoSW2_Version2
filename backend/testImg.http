@@ -1,0 +1,38 @@
+# Prueba para crear una imagen médica
+POST http://localhost:3000/imagenes-medicas
+Content-Type: application/json
+
+{
+  "nombrePaciente": "John Doe",
+  "ExamDate": "2024-06-22",
+  "tipo": "X-ray",
+  "indicaciones": "N/A",
+  "NombreDoc": "Dr. Smith",
+  "NotasMedic": "Everything looks good",
+  "imagen": "image_url",
+  "ordenmedicaId": 1
+}
+
+### Prueba para obtener todas las imágenes médicas
+GET http://localhost:3000/imagenes-medicas
+
+### Prueba para obtener una imagen médica por ID
+GET http://localhost:3000/imagenes-medicas/1
+
+### Prueba para actualizar una imagen médica
+PUT http://localhost:3000/imagenes-medicas/1
+Content-Type: application/json
+
+{
+  "nombrePaciente": "Jane Doe",
+  "ExamDate": "2024-06-22",
+  "tipo": "MRI",
+  "indicaciones": "Updated indications",
+  "NombreDoc": "Dr. Smith",
+  "NotasMedic": "Updated notes",
+  "imagen": "new_image_url",
+  "ordenmedicaId": 1
+}
+
+### Prueba para eliminar una imagen médica
+DELETE http://localhost:3000/imagenes-medicas/1

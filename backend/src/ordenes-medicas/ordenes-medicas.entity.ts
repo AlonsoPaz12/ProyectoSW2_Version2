@@ -1,4 +1,4 @@
-import { ImagenMedica } from "src/imagenes-medicas/imagenes-medicas.entity";
+import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
 import { Paciente } from "src/pacientes/pacientes.entity";
 import { Medico } from "src/medicos/medicos.entity";
 import { ResultadoLab } from "src/resultados-lab/resultados-lab.entity";
@@ -17,7 +17,7 @@ export class OrdenMedica {
     @JoinColumn()
     resultadoLaboratorio: ResultadoLab;
 
-    @OneToOne(()=>ImagenMedica, {nullable: true})
+    @OneToOne(()=> ImagenMedica, {nullable: true})
     @JoinColumn()
     imagenMedica: ImagenMedica;
 

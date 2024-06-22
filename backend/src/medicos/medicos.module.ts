@@ -20,7 +20,7 @@ import { Especialidad } from 'src/especialidades/especialidades.entity';
 
 import { MedicamentoModule } from 'src/medicamentos/medicamento.module';
 import { ResultadoLabModule } from 'src/resultados-lab/resultados-lab.module';
-import { ImagenMedicaModule } from 'src/imagenes-medicas/imagenes-medica.module';
+import { ImagenMedicaModule } from '../imagenes-medicas/imagenes-medicas.module';
 import { RecetasMedicasModule } from 'src/recetas-medicas/recetas-medicas.module';
 import { PacienteModule } from 'src/pacientes/pacientes.module';
 import { CitaModule } from 'src/citas/citas.module';
