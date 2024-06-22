@@ -23,7 +23,7 @@ export class EspecialidadController {
         return await this.especialidadService.obtenerEspecialidadPorId(+id);
     }
 
-    @Get('buscar')
+    @Get()
     async buscarEspecialidadesPorNombre(@Query('nombre') nombre: string): Promise<Especialidad[]> {
         return await this.especialidadService.buscarEspecialidadesPorNombre(nombre);
     }

@@ -14,12 +14,12 @@ const DoctorCard = ({ doctor }) => {
   
   return (
     <div className={styles.contenido}>
-      <img className={styles.imagenDoctor} src={doctor.imagen} alt={doctor.nombre} />
+      <img className={styles.imagenDoctor} src={doctor.imageurl} />
       
       <div className={styles.informacion}>
         <div className={styles.datos}>
-          <h5>{doctor.nombre}</h5>
-          <p>{doctor.especialidad}</p>
+          <h5>{doctor.nombres}</h5>
+          <p>{doctor.especialidad.nombre_especialidad}</p>
         </div>
         <div className={styles.icon}>
           <IoDocumentAttachSharp onClick={handleOpen} size="1.5em"/>
@@ -45,19 +45,25 @@ const DoctorCard = ({ doctor }) => {
         p: 4}}>
           <div className={styles.contenidoModal}>
             <div className={styles.contenidoDatosImportantes}>
-              <img className={styles.imagenDoctorModal} src={doctor.imagen} alt={doctor.nombre} />
+              <img className={styles.imagenDoctorModal} src={doctor.imageurl}/>
               <div  className={styles.datosPersonales}>
                 <Typography sx={{ color: '#00916E', fontWeight: "bold", fontSize:'1.5em', lineHeight: '25px'}}>
-                  {doctor.nombre}
+                `${doctor.nombres} ${doctor.apePaterno} ${doctor.apeMaterno}`
                 </Typography>
                 <Typography id="modal-modal-especialidad" sx={{ mt: 1 }}>
-                  <span className={styles.subtitulo}>Especialidad:</span> {doctor.especialidad}
+                  <span className={styles.subtitulo}>Especialidad:</span> {doctor.especialidad.nombre_especialidad}
                 </Typography>
                 <Typography id="modal-modal-cmp" sx={{ mt: 1 }}>
                   <span className={styles.subtitulo}>CMP:</span> {doctor.cmp}
                 </Typography>
                 <Typography id="modal-modal-educacion" sx={{ mt: 1 }}>
-                  <span className={styles.subtitulo}>Universidad:</span> {doctor.uni}
+                  <span className={styles.subtitulo}>Centro Médico:</span> {doctor.centroMedico}
+                </Typography>
+                <Typography id="modal-modal-correo" sx={{ mt: 1 }}>
+                  <span className={styles.subtitulo}>Correo:</span> {doctor.centroMedico}
+                </Typography>
+                <Typography id="modal-modal-celular" sx={{ mt: 1 }}>
+                  <span className={styles.subtitulo}>Celular:</span> {doctor.centroMedico}
                 </Typography>
               </div>
             </div>
