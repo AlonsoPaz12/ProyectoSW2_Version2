@@ -7,7 +7,7 @@ import { Cita } from 'src/citas/citas.entity';
 import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
 import { Medico } from '../medicos/medicos.entity';
 
-import { CrearPacienteDto, CrearCitaDto } from './dto/paciente.dto';
+import { CrearPacienteDto, CrearCitaDto, IniciarSesionDto } from './dto/paciente.dto';
 
 @Injectable()
 export class PacienteService {
@@ -24,6 +24,19 @@ export class PacienteService {
     @InjectRepository(RecetaMedica)
     private readonly recetaMedicaRepository: Repository<RecetaMedica>,
   ) { }
+
+  async findOneByEmail(correoElectronico: string): Promise<Paciente | undefined> {
+    return this.pacienteRepository.findOne({ where: { correoElectronico } });
+  }
+  async validarPaciente(iniciarSesionDto: IniciarSesionDto): Promise<any> {
+    const {correoElectronico, contrasena} = iniciarSesionDto;
+    const paciente = await this.findOneByEmail(correoElectronico);
+    if (paciente &&  contrasena === paciente.contrasena) {
+      const { contrasena, ...result } = paciente;
+      return result; // Aquí devuelves el paciente sin incluir 'role'
+    }
+    return null;
+  }
 
   async crearPaciente(crearPacienteDto: CrearPacienteDto) {
     const paciente = this.pacienteRepository.create(crearPacienteDto);
