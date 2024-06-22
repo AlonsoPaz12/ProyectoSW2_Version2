@@ -1,8 +1,9 @@
-//app.module.ts
+// src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+
 import { dataSourceOptions } from '../db/data-source';
 
 import { EspecialidadModule } from './especialidades/especialidades.module'; 
@@ -16,6 +17,8 @@ import { ResultadoLabModule } from './resultados-lab/resultados-lab.module';
 import { ImagenMedicaModule } from './imagenes-medicas/imagenes-medica.module';
 import { ComponentesModule } from './componentes-resultado/componentes_resultado.module';
 import { MedicamentoModule } from './medicamentos/medicamento.module';
+
+import { InitialLoadService } from './initial-load/initial-load.service';
 
 @Module({
   imports: [
@@ -33,7 +36,6 @@ import { MedicamentoModule } from './medicamentos/medicamento.module';
     ResultadoLabModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, InitialLoadService],
 })
-export class AppModule { }
-
+export class AppModule {}

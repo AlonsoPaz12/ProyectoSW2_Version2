@@ -82,7 +82,7 @@ export class MedicoService {
     }
 
     async mostrarMedicos() {
-        return this.medicoRepository.find();
+        return await this.medicoRepository.find({ relations: ['especialidad'] });
     }
 
     async crearOrdenMedica(idCita: number, crearOrdenMedicaDto: CrearOrdenMedicaDto) {
