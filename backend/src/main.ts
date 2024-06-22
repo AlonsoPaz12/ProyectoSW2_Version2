@@ -1,22 +1,21 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Habilitar CORS
-  app.enableCors();
+  const corsOptions: CorsOptions = {
+    origin: 'http://localhost:3001',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  }
 
-  const config = new DocumentBuilder()
-    .setTitle('Med Control')
-    .setDescription('Med Control API description')
-    .setVersion('1.0')
-    .addTag('med')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  app.enableCors(corsOptions);
 
   await app.listen(3000);
 }
+
+
 bootstrap();

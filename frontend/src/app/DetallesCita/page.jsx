@@ -330,6 +330,27 @@ const DetallesPaciente = () => {
          
         </div>
       </div>
+
+      <div className={styles.recetaMedica}>
+        <h5 className={styles.titulo}>ORDEN MEDICA</h5>
+        <div className={styles.recetaInfo}>
+          <div className={styles.proximas_citas}>
+          {
+            citas.length > 0 ? (
+              citas.map(cita => (
+                <div key={cita.id} className={styles.cita}>
+                  <p>{new Date(cita.fecha).toLocaleDateString()} - {new Date(cita.fecha).toLocaleTimeString()}
+                    {` `}- {cita.motivo}
+                  </p>
+                </div>
+              ))
+            ) : <p>No se han encontrado ordenes medicas</p>
+          }
+          </div>
+         
+        </div>
+      </div>
+
       <EditMedicamentoDialog 
         open={isDialogOpen} 
         onClose={handleDialogClose} 

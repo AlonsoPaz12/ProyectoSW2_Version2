@@ -19,7 +19,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { CgCalendarNext } from "react-icons/cg";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineHistory } from "react-icons/md";
-import { SlChemistry } from "react-icons/sl";
 import { MdOutlineVaccines } from "react-icons/md";
 import { IoDocumentTextSharp } from "react-icons/io5";
 
@@ -177,35 +176,6 @@ export default function SideNavBar() {
                 <FaCalendarAlt size={25} />
                 </ListItemIcon>
                 <ListItemText primary="Calendario" sx={{opacity: open? 1 : 0}}/>
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/LabAnalisis")}}>
-              <ListItemButton
-                sx={{
-                  color: '#014433',
-                  margin:"10px",
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                  '&:hover': {
-                    backgroundColor: '#E7F6F1',
-                    borderRadius: "10px",
-                    
-                  }
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 1 : 'auto',
-                    justifyContent: 'center',
-                    color: 'inherit',
-                  }}
-                >
-                <SlChemistry size={25} />
-                </ListItemIcon>
-                <ListItemText primary="Laboratorio/Imágenes" sx={{opacity: open? 1 : 0}}/>
               </ListItemButton>
             </ListItem>
 
