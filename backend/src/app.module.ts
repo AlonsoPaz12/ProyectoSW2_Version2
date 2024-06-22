@@ -14,7 +14,7 @@ import { RecetasMedicasModule } from './recetas-medicas/recetas-medicas.module';
 import { HoraDisponibleModule } from './horario-disponible/horario-disponible.module';
 import { OrdenesMedicasModule } from './ordenes-medicas/ordenes-medicas.module';
 import { ResultadoLabModule } from './resultados-lab/resultados-lab.module';
-import { ImagenMedicaModule } from './imagenes-medicas/imagenes-medica.module';
+import { ImagenMedicaModule } from './imagenes-medicas/imagenes-medicas.module';
 import { ComponentesModule } from './componentes-resultado/componentes_resultado.module';
 import { MedicamentoModule } from './medicamentos/medicamento.module';
 import { JwtModule } from '@nestjs/jwt';
