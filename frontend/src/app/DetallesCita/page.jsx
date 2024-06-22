@@ -334,20 +334,18 @@ const DetallesPaciente = () => {
       <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>ORDEN MEDICA</h5>
         <div className={styles.recetaInfo}>
-          <div className={styles.proximas_citas}>
-          {
-            citas.length > 0 ? (
-              citas.map(cita => (
-                <div key={cita.id} className={styles.cita}>
-                  <p>{new Date(cita.fecha).toLocaleDateString()} - {new Date(cita.fecha).toLocaleTimeString()}
-                    {` `}- {cita.motivo}
-                  </p>
-                </div>
-              ))
-            ) : <p>No se han encontrado ordenes medicas</p>
-          }
+          <div className={styles.ordenMedica}>
+            <p><strong>Nº ORDEN:</strong> 123.456.789</p>
+            <h6>IMAGEN MÉDICA:</h6>
+            <div className={styles.imagenMedica}>
+              <h6>Resultados de Radiografía de Torax</h6>
+              <div className={styles.imagenContenedor}>
+                <img src="https://via.placeholder.com/150" alt="Resultados de Radiografía de Torax" />
+              </div>
+              <p><strong>Resultados e Interpretación:</strong> Se observan opacidades en el lóbulo superior del pulmón derecho, sugestivas de proceso inflamatorio. No se observan fracturas ni lesiones óseas.</p>
+              <p><strong>Observaciones/Comentarios:</strong> El paciente no presenta síntomas respiratorios en este momento.</p>
+            </div>
           </div>
-         
         </div>
       </div>
 
