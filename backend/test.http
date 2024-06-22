@@ -78,14 +78,14 @@ Content-Type: application/json
   "pacienteId": 1
 }
 
-### POST Agregar Receta ###
+### POST Agregar Orden ###
 
 POST http://localhost:3000/medicos/orden
 Content-Type: application/json
 
 {
   "observacion": "Orden.",
-  "citaId": 13,
+  "citaId": 1,
   "medicoId": 1,
   "pacienteId": 1
 }

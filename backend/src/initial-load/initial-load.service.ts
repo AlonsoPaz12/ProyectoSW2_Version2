@@ -6,12 +6,14 @@ import { MedicoService } from 'src/medicos/medicos.service';
 import { PacienteService } from 'src/pacientes/paciente.service';
 import { CitaService } from 'src/citas/cita.service';
 import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
+import { OrdenMedicaService } from 'src/ordenes-medicas/ordenes-medicas.service';
 
 import { defaultPacientes } from './default-pacientes';
 import { defaultSpecialties } from './default-specialties';
 import { defaultMedicos } from './default-medicos';
 import { defaultCitas } from './default-citas';
 import { defaultRecetas } from './default-recetas';
+import { defaultOrdenes } from './default-ordenes';
 
 @Injectable()
 export class InitialLoadService implements OnModuleInit {
@@ -21,6 +23,7 @@ export class InitialLoadService implements OnModuleInit {
     private readonly pacienteService: PacienteService,
     private readonly citaService: CitaService,
     private readonly recetaService: RecetaService,
+    private readonly ordenMedicaService: OrdenMedicaService,
   ) { }
 
   async onModuleInit() {
@@ -59,6 +62,14 @@ export class InitialLoadService implements OnModuleInit {
           await this.recetaService.crearDocumentoMedico(receta);
         }
       }
+
+      const ordenes = await this.ordenMedicaService.obtenerTodasOrdenes();
+      if (ordenes.length === 0) {
+        for (const orden of defaultOrdenes) {
+          await this.ordenMedicaService.crearDocumentoMedico(orden);
+        }
+      }
+
     } catch (error) {
       console.error('Error initializing data:', error);
     }
