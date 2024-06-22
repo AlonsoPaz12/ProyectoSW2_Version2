@@ -3,7 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSpecialties } from "../../services/especialidades";
+import { getSpecialties } from "../../services/especialidadesService";
 import TextField from "@mui/material/TextField";
 import styles from "./ListaEspecialidades.module.css";
 
