@@ -28,9 +28,7 @@ const VerMedicos = () => {
         imagen: "/img/doctores2.png",
       })}
       
-      <Buscador onChange={handleSearchInputChange} label={"Buscar médico por nombre o especialidad"} />
-
-      <ListaDoctores input={inputText} />
+      <ListaDoctores/>
 
       <Footer/>
 
