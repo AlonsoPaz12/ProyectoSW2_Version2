@@ -47,3 +47,8 @@ export class ActualizarMedicoDto{
     repContrasena?: string;
     genero?: GeneroUsuario;
 }
+
+export class IniciarSesionDto{
+    correoElectronico: string;
+    contrasena: string;
+}
