@@ -3,7 +3,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getDoctors } from "../../services/medicos";
+import { getDoctors } from "../../services/medicosService";
 
 import styles from "./ListaDoctores.module.css";
 
