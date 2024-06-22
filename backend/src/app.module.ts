@@ -17,8 +17,10 @@ import { ResultadoLabModule } from './resultados-lab/resultados-lab.module';
 import { ImagenMedicaModule } from './imagenes-medicas/imagenes-medica.module';
 import { ComponentesModule } from './componentes-resultado/componentes_resultado.module';
 import { MedicamentoModule } from './medicamentos/medicamento.module';
+import { JwtModule } from '@nestjs/jwt';
 
 import { InitialLoadService } from './initial-load/initial-load.service';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -34,8 +36,12 @@ import { InitialLoadService } from './initial-load/initial-load.service';
     PacienteModule,
     RecetasMedicasModule,
     ResultadoLabModule,
+    JwtModule.register({
+      secret: 'pimba',
+      signOptions: {expiresIn: '1h'}
+    })
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [AppService, InitialLoadService],
 })
 export class AppModule {}

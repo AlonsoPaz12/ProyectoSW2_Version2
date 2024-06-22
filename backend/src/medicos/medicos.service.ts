@@ -22,6 +22,7 @@ import { CrearOrdenMedicaDto } from 'src/ordenes-medicas/dto/ordenes-medicas.dto
 
 import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
 import { OrdenMedicaService } from 'src/ordenes-medicas/ordenes-medicas.service';
+import { IniciarSesionDto } from 'src/pacientes/dto/paciente.dto';
 import { Paciente } from 'src/pacientes/pacientes.entity';
 
 
@@ -63,6 +64,20 @@ export class MedicoService {
 
         private readonly ordenService: OrdenMedicaService,
     ) { }
+
+    async findOneByEmail(correoElectronico: string): Promise<Medico | undefined> {
+        return this.medicoRepository.findOne({ where: { correoElectronico } });
+      }
+    
+    async validarMedico(iniciarSesionDto: IniciarSesionDto): Promise<any> {
+        const {correoElectronico, contrasena} = iniciarSesionDto;
+        const medico = await this.findOneByEmail(correoElectronico);
+        if (medico && contrasena === medico.contrasena) {
+            const { contrasena, ...result } = medico;
+            return result; // Aquí devuelves el médico sin incluir 'role'
+        }
+        return null;
+    }
 
     async crearMedico(crearMedicoDto: CrearMedicoDto) {
         const { especialidadID, ...medicoData } = crearMedicoDto;
