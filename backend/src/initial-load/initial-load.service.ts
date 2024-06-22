@@ -5,11 +5,13 @@ import { EspecialidadService } from 'src/especialidades/especialidades.service';
 import { MedicoService } from 'src/medicos/medicos.service';
 import { PacienteService } from 'src/pacientes/paciente.service';
 import { CitaService } from 'src/citas/cita.service';
+import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
 
 import { defaultPacientes } from './default-pacientes';
 import { defaultSpecialties } from './default-specialties';
 import { defaultMedicos } from './default-medicos';
 import { defaultCitas } from './default-citas';
+import { defaultRecetas } from './default-recetas';
 
 @Injectable()
 export class InitialLoadService implements OnModuleInit {
@@ -18,6 +20,7 @@ export class InitialLoadService implements OnModuleInit {
     private readonly medicoService: MedicoService, 
     private readonly pacienteService: PacienteService,
     private readonly citaService: CitaService,
+    private readonly recetaService: RecetaService,
   ) { }
 
   async onModuleInit() {
@@ -47,6 +50,13 @@ export class InitialLoadService implements OnModuleInit {
       if (citas.length === 0) {
         for (const cita of defaultCitas) {
           await this.pacienteService.agendarCita(cita);
+        }
+      }
+
+      const recetas = await this.recetaService.obtenerTodasRecetas();
+      if (recetas.length === 0) {
+        for (const receta of defaultRecetas) {
+          await this.recetaService.crearDocumentoMedico(receta);
         }
       }
     } catch (error) {

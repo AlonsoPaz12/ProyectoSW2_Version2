@@ -6,7 +6,9 @@ import { Repository } from 'typeorm';
 
 import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
 import { RecetaMedica } from './recetas-medicas.entity';
-import { Cita } from '../citas/citas.entity';
+import { Paciente } from 'src/pacientes/pacientes.entity';
+import { Cita } from 'src/citas/citas.entity';
+import { Medico } from 'src/medicos/medicos.entity';
 
 import { CrearRecetaMedicaDto } from './dto/recetas-medicas.dto';
 
@@ -18,27 +20,59 @@ export class RecetaService implements DocumentoMedico {
 
         @InjectRepository(Cita)
         private readonly citaRepository: Repository<Cita>,
+
+        @InjectRepository(Paciente)
+        private readonly pacienteRepository: Repository<Paciente>,
+
+        @InjectRepository(Medico)
+        private readonly medicoRepository: Repository<Medico>,
+
     ) { }
 
-    async crearDocumentoMedico(crearOrdenMedicaDto: CrearRecetaMedicaDto) {
-        const { observacion, citaId } = crearOrdenMedicaDto;
+    async crearDocumentoMedico(crearRecetaMedicaDto: CrearRecetaMedicaDto) {
+        const { observacion, citaId, medicoId, pacienteId } = crearRecetaMedicaDto;
 
-        // Crear nueva receta médica
         const nuevaReceta = new RecetaMedica();
         nuevaReceta.observacion = observacion;
 
-        // Si se proporciona citaId, buscar la cita y asociarla
         if (citaId) {
-            const cita = await this.citaRepository.findOne({
-                where: { id: citaId }
-            });
+            const cita = await this.citaRepository.findOne({ where: { id: citaId } });
             if (!cita) {
                 throw new NotFoundException(`No se encontró la cita con ID ${citaId}`);
             }
             nuevaReceta.cita = cita;
         }
 
-        // Guardar la receta médica en la base de datos
-        return await this.recetaMedicaRepository.save(nuevaReceta);
+        if (medicoId) {
+            const medico = await this.medicoRepository.findOne({ where: { id: medicoId } });
+            if (!medico) {
+                throw new NotFoundException(`No se encontró el médico con ID ${medicoId}`);
+            }
+            nuevaReceta.medico = medico;
+        }
+
+        if (pacienteId) {
+            const paciente = await this.pacienteRepository.findOne({ where: { id: pacienteId } });
+            if (!paciente) {
+                throw new NotFoundException(`No se encontró el paciente con ID ${pacienteId}`);
+            }
+            nuevaReceta.paciente = paciente;
+        }
+
+        const recetaGuardada = await this.recetaMedicaRepository.save(nuevaReceta);
+
+        if (citaId) {
+            const cita = await this.citaRepository.findOne({ where: { id: citaId } });
+            if (cita) {
+                cita.receta = recetaGuardada;
+                await this.citaRepository.save(cita); // Actualizar la cita con la receta
+            }
+        }
+
+        return recetaGuardada;
+    }
+
+    async obtenerTodasRecetas(): Promise<RecetaMedica[]> {
+        return await this.recetaMedicaRepository.find();
     }
 }
