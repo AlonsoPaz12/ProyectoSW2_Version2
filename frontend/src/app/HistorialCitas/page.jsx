@@ -1,34 +1,35 @@
+
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import citasData from "@/data/citasMedicas.JSON";
+import medicosData from "@/data/doctors.JSON";
+import recetasData from "@/data/recetaMedica.JSON";
 import styles from './page.module.css';
 import SideNavBar from '@/components/SideNavBar/SideNavBar';
 import Box from '@mui/material/Box';
 import UserMenu from '@/components/UserMenu/UserMenu';
 import { Modal, Button } from 'react-bootstrap';
-import { getHistorialCitas } from '@/services/pacientesService';
 
-const HistorialCitas = ({ idPaciente }) => {
+const HistorialCitas = () => {
   const [citas, setCitas] = useState([]);
   const [recetaSeleccionada, setRecetaSeleccionada] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCitas = async () => {
-      try {
-        const data = await getHistorialCitas(idPaciente);
-        setCitas(data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const citasConMedicosYRecetas = citasData.map(cita => {
+      const medico = medicosData.find(m => m.id === parseInt(cita.IDmedico));
+      const receta = recetasData.find(r => r.citaId === cita.id);
+      return {
+        ...cita,
+        medico: medico ? medico : { nombre: 'Médico no encontrado', especialidad: 'Desconocida' },
+        receta: receta ? receta : null,
+      };
+    });
 
-    fetchCitas();
-  }, [idPaciente]);
+    setCitas(citasConMedicosYRecetas);
+  }, []);
 
   const handleShowModal = (receta) => {
     setRecetaSeleccionada(receta);
@@ -39,14 +40,6 @@ const HistorialCitas = ({ idPaciente }) => {
     setShowModal(false);
     setRecetaSeleccionada(null);
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
@@ -74,10 +67,10 @@ const HistorialCitas = ({ idPaciente }) => {
                 <tr key={cita.id}>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{new Date(cita.fecha).toLocaleString()}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.motivo}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.medico.nombres} {cita.medico.apePaterno}</td>
+                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.medico.nombre}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.medico.especialidad}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.diagnostico}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.observacion}</td>
+                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.Observacion}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>
                     {cita.receta ? (
                       <Button variant="success" className={styles.botonReceta} onClick={() => handleShowModal(cita.receta)}>
