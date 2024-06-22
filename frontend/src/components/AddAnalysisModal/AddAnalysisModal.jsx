@@ -18,7 +18,6 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
     result: '',
     unit: '',
     normalRange: '',
-    image: '', // Add an image field
   }]);
   const [isDateValid, setIsDateValid] = useState(true); // Estado para verificar si la fecha es válida
 
@@ -44,7 +43,6 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
       result: '',
       unit: '',
       normalRange: '',
-      image: '', // Add an image field
     }]);
   };
 
@@ -74,16 +72,6 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
     setAnalysisData(updatedData);
   };
 
-  const handleImageRemove = (index) => {
-    const updatedData = [...analysisData];
-    updatedData[index].image = '';
-    setAnalysisData(updatedData);
-  };
-
-  const handleImageUpdate = (index) => {
-    document.getElementById(`image-upload-${index}`).click();
-  };
-
   return (
     <Modal show={show} onHide={() => {}} backdrop="static" keyboard={false} dialogClassName={styles.customModal}>
       <Modal.Header closeButton className={styles.customHeader}>
@@ -101,7 +89,6 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                 <th>Resultado</th>
                 <th>Unidades</th>
                 <th>Rango Normal</th>
-                <th>Imagen</th> {/* Add a column for the image */}
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -173,27 +160,6 @@ const AddAnalysisModal = ({ show, handleClose, handleSave, initialAnalysisData }
                       value={analysis.normalRange}
                       onChange={(e) => handleChange(e, index)}
                     />
-                  </td>
-                  <td>
-                    {analysis.image ? (
-                      <div className={styles.imageLab}>
-                        <img src={analysis.image} alt="uploaded" width={50} height={50} />
-                        <div>
-                          <Button variant='danger' onClick={() => handleImageRemove(index)}>Eliminar</Button>
-                          <Button variant='info' onClick={() => handleImageUpdate(index)}>Actualizar</Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <input
-                          type="file"
-                          id={`image-upload-${index}`}
-                          style={{ display: 'none' }}
-                          onChange={(e) => handleImageUpload(index, e.target.files[0])}
-                        />
-                        <Button variant="primary" href='/ImagenesMedicas' className={styles.addRowButton} >Subir</Button>
-                      </div>
-                    )}
                   </td>
                   <td>
                     <Button variant="danger" onClick={() => handleRemoveRow(index)}>Eliminar</Button>
