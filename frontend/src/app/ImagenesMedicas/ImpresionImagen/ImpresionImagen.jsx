@@ -56,9 +56,6 @@ const ImpresionImagen = ({ analysis, onDelete }) => {
                   <strong>Indicaciones:</strong> {analysis.indicaciones}
                 </li>
                 <li>
-                  <strong>Estrcuturas anatomicas:</strong> {analysis.AnatomicasEstruc}
-                </li>
-                <li>
                   <strong>Notas del medico:</strong> {analysis.NotasMedic}
                 </li>
                 <li>
