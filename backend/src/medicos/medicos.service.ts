@@ -22,6 +22,7 @@ import { CrearOrdenMedicaDto } from 'src/ordenes-medicas/dto/ordenes-medicas.dto
 
 import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
 import { OrdenMedicaService } from 'src/ordenes-medicas/ordenes-medicas.service';
+import { Paciente } from 'src/pacientes/pacientes.entity';
 
 
 
@@ -55,6 +56,9 @@ export class MedicoService {
         @InjectRepository(Especialidad)
         private readonly especialidadRepository: Repository<Especialidad>,
 
+        @InjectRepository(Paciente)
+        private readonly pacienteRepository: Repository<Paciente>,
+
         private readonly recetaService: RecetaService,
 
         private readonly ordenService: OrdenMedicaService,
@@ -85,35 +89,81 @@ export class MedicoService {
         return await this.medicoRepository.find({ relations: ['especialidad'] });
     }
 
-    async crearOrdenMedica(idCita: number, crearOrdenMedicaDto: CrearOrdenMedicaDto) {
+    async crearOrdenMedica(crearOrdenMedicaDto: CrearOrdenMedicaDto) {
+        const { citaId, medicoId, pacienteId, observacion } = crearOrdenMedicaDto;
+
         const cita = await this.citaRepository.findOne({
-            where: { id: idCita },
+            where: { id: citaId },
         });
 
         if (!cita) {
-            throw new NotFoundException(`No se encontró la cita con ID ${idCita}`);
+            throw new NotFoundException(`No se encontró la cita con ID ${citaId}`);
+        }
+
+        // Verificar si existe el médico
+        const medico = await this.medicoRepository.findOne({
+            where: { id: medicoId },
+        });
+
+        if (!medico) {
+            throw new NotFoundException(`No se encontró el médico con ID ${medicoId}`);
+        }
+
+        // Verificar si existe el paciente
+        const paciente = await this.pacienteRepository.findOne({
+            where: { id: pacienteId },
+        });
+
+        if (!paciente) {
+            throw new NotFoundException(`No se encontró el paciente con ID ${pacienteId}`);
         }
 
         // Crear la orden médica utilizando OrdenService
         return await this.ordenService.crearDocumentoMedico({
-            ...crearOrdenMedicaDto,
-            citaId: idCita,
+            citaId,
+            medicoId,
+            pacienteId,
+            observacion,
         });
     }
 
-    async crearRecetaMedica(idCita: number, crearRecetaMedicaDto: CrearRecetaMedicaDto) {
+
+    async crearRecetaMedica(crearRecetaMedicaDto: CrearRecetaMedicaDto) {
+        const { citaId, medicoId, pacienteId, observacion } = crearRecetaMedicaDto;
+
+        // Verificar si existe la cita
         const cita = await this.citaRepository.findOne({
-            where: { id: idCita },
+            where: { id: citaId },
         });
 
         if (!cita) {
-            throw new NotFoundException(`No se encontró la cita con ID ${idCita}`);
+            throw new NotFoundException(`No se encontró la cita con ID ${citaId}`);
+        }
+
+        // Verificar si existe el médico
+        const medico = await this.medicoRepository.findOne({
+            where: { id: medicoId },
+        });
+
+        if (!medico) {
+            throw new NotFoundException(`No se encontró el médico con ID ${medicoId}`);
+        }
+
+        // Verificar si existe el paciente
+        const paciente = await this.pacienteRepository.findOne({
+            where: { id: pacienteId },
+        });
+
+        if (!paciente) {
+            throw new NotFoundException(`No se encontró el paciente con ID ${pacienteId}`);
         }
 
         // Crear la receta médica utilizando RecetaService
         return await this.recetaService.crearDocumentoMedico({
-            ...crearRecetaMedicaDto,
-            citaId: idCita,
+            citaId,
+            medicoId,
+            pacienteId,
+            observacion,
         });
     }
 

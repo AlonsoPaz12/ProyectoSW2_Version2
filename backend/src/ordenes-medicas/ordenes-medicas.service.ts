@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
 import { OrdenMedica } from './ordenes-medicas.entity';
 import { Cita } from '../citas/citas.entity';
+import { Medico } from 'src/medicos/medicos.entity';
+import { Paciente } from 'src/pacientes/pacientes.entity';
 
 import { CrearOrdenMedicaDto } from './dto/ordenes-medicas.dto';
 
@@ -18,10 +20,16 @@ export class OrdenMedicaService implements DocumentoMedico {
         
         @InjectRepository(Cita)
         private readonly citaRepository: Repository<Cita>,
+        
+        @InjectRepository(Paciente)
+        private readonly pacienteRepository: Repository<Paciente>,
+        
+        @InjectRepository(Medico)
+        private readonly medicoRepository: Repository<Medico>,
     ) {}
 
     async crearDocumentoMedico(crearOrdenMedicaDto: CrearOrdenMedicaDto): Promise<OrdenMedica> {
-        const { observacion, citaId } = crearOrdenMedicaDto;
+        const { observacion, citaId, medicoId, pacienteId } = crearOrdenMedicaDto;
 
         // Crear nueva orden médica
         const nuevaOrden = new OrdenMedica();
@@ -38,7 +46,32 @@ export class OrdenMedicaService implements DocumentoMedico {
             nuevaOrden.cita = cita;
         }
 
-        // Guardar la orden médica en la base de datos
-        return await this.ordenMedicaRepository.save(nuevaOrden);
+        if (medicoId) {
+            const medico = await this.medicoRepository.findOne({ where: { id: medicoId } });
+            if (!medico) {
+                throw new NotFoundException(`No se encontró el médico con ID ${medicoId}`);
+            }
+            nuevaOrden.medico = medico;
+        }
+
+        if (pacienteId) {
+            const paciente = await this.pacienteRepository.findOne({ where: { id: pacienteId } });
+            if (!paciente) {
+                throw new NotFoundException(`No se encontró el paciente con ID ${pacienteId}`);
+            }
+            nuevaOrden.paciente = paciente;
+        }
+
+        const ordenGuardada = await this.ordenMedicaRepository.save(nuevaOrden);
+
+        if (citaId) {
+            const cita = await this.citaRepository.findOne({ where: { id: citaId } });
+            if (cita) {
+                cita.ordenMedica = ordenGuardada;
+                await this.citaRepository.save(cita); // Actualizar la cita
+            }
+        }
+
+        return ordenGuardada;
     }
 }

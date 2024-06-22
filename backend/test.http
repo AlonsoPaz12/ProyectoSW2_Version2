@@ -65,3 +65,27 @@ Content-Type: application/json
     "hora": "10:00",
     "diagnostico": "tos"
 }
+
+### POST Agregar Receta ###
+
+POST http://localhost:3000/medicos/receta
+Content-Type: application/json
+
+{
+  "observacion": "Tomar 1 tableta de paracetamol cada 8 horas por 5 días.",
+  "citaId": 13,
+  "medicoId": 1,
+  "pacienteId": 1
+}
+
+### POST Agregar Receta ###
+
+POST http://localhost:3000/medicos/orden
+Content-Type: application/json
+
+{
+  "observacion": "Orden.",
+  "citaId": 13,
+  "medicoId": 1,
+  "pacienteId": 1
+}

@@ -1,12 +1,14 @@
 //recetas-medicas.dto
 import { Medicamento } from "src/medicamentos/medicamentos.entity"
 
-export class CrearRecetaMedicaDto{
+export class CrearRecetaMedicaDto {
     observacion: string;
     citaId: number;
+    medicoId: number;
+    pacienteId: number;
 }
 
-export class ActualizarRecetaMedicaDto{
+export class ActualizarRecetaMedicaDto {
     medicamento?: Medicamento[];
     observacion?: string;
 }
