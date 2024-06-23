@@ -21,6 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { InitialLoadService } from './initial-load/initial-load.service';
 import { AuthController } from './auth/auth.controller';
+import { VacunasModule } from './vacunas/vacunas.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthController } from './auth/auth.controller';
     PacienteModule,
     RecetasMedicasModule,
     ResultadoLabModule,
+    VacunasModule,
     JwtModule.register({
       secret: 'pimba',
       signOptions: {expiresIn: '1h'}

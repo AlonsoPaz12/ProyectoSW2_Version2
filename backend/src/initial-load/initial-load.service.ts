@@ -7,6 +7,7 @@ import { PacienteService } from 'src/pacientes/paciente.service';
 import { CitaService } from 'src/citas/cita.service';
 import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
 import { OrdenMedicaService } from 'src/ordenes-medicas/ordenes-medicas.service';
+import { VacunaService } from 'src/vacunas/vacunas.service';
 
 import { defaultPacientes } from './default-pacientes';
 import { defaultSpecialties } from './default-specialties';
@@ -14,6 +15,7 @@ import { defaultMedicos } from './default-medicos';
 import { defaultCitas } from './default-citas';
 import { defaultRecetas } from './default-recetas';
 import { defaultOrdenes } from './default-ordenes';
+import { defaultVacunas } from './default-vacunas';
 
 @Injectable()
 export class InitialLoadService implements OnModuleInit {
@@ -24,6 +26,7 @@ export class InitialLoadService implements OnModuleInit {
     private readonly citaService: CitaService,
     private readonly recetaService: RecetaService,
     private readonly ordenMedicaService: OrdenMedicaService,
+    private readonly vacunaService: VacunaService
   ) { }
 
   async onModuleInit() {
@@ -67,6 +70,13 @@ export class InitialLoadService implements OnModuleInit {
       if (ordenes.length === 0) {
         for (const orden of defaultOrdenes) {
           await this.ordenMedicaService.crearDocumentoMedico(orden);
+        }
+      }
+
+      const vacunas = await this.vacunaService.mostrarVacunas();
+      if (vacunas.length === 0) {
+        for(const vacuna of defaultVacunas){
+          await this.vacunaService.crearVacuna(vacuna);
         }
       }
 

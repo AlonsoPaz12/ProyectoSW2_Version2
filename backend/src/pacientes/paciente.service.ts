@@ -28,7 +28,7 @@ export class PacienteService {
   ) { }
 
   async findOneByEmail(correoElectronico: string): Promise<Paciente | undefined> {
-    return this.pacienteRepository.findOne({ where: { correoElectronico } });
+    return this.pacienteRepository.findOne({ where: { correoElectronico }, relations: ['vacunas'] });
   }
   async validarPaciente(iniciarSesionDto: IniciarSesionDto): Promise<any> {
     const {correoElectronico, contrasena} = iniciarSesionDto;
@@ -51,7 +51,8 @@ export class PacienteService {
 
   async encontrarPacienteId(id: number) {
     return this.pacienteRepository.findOne({
-      where: { id: id }
+      where: { id: id },
+      relations: ['vacunas']
     });
   }
 
@@ -66,7 +67,7 @@ export class PacienteService {
     const { IDpaciente, IDmedico } = crearCitaDto;
 
     // Verificar si existe el paciente
-    const paciente = await this.pacienteRepository.findOne({ where: { id: IDpaciente } });
+    const paciente = await this.pacienteRepository.findOne({ where: { id: IDpaciente }, relations: ['vacunas'] });
     if (!paciente) {
       throw new NotFoundException(`Paciente con ID ${IDpaciente} no encontrado`);
     }
