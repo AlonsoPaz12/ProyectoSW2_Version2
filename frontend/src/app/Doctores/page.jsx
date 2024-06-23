@@ -5,7 +5,6 @@ import ResponsiveAppBar from '@/components/ResponsiveAppBar/ResponsiveAppBar.jsx
 import styles from './page.module.css';
 import BannerFactory from '@/components/Banner/BannerFactory';
 import Footer from '@/components/Footer/Footer.jsx';
-import Buscador from "@/components/Buscador/Buscador";
 import ListaDoctores from "@/components/ListaDoctores/ListaDoctores";
 
 const VerMedicos = () => {

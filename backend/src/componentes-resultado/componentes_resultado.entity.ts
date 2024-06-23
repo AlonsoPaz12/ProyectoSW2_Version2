@@ -1,20 +1,18 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ResultadoLab } from "src/resultados-lab/resultados-lab.entity";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
 
 @Entity()
 export class ComponenteResultado {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    nombre: string;
+  @Column()
+  nombre: string;
 
-    @Column()
-    resultado: string;
+  @Column()
+  valor: string;
 
-    @Column()
-    unidad: string;
-
-    @ManyToOne(() => ResultadoLab, resultadoLab => resultadoLab.componentes)
-    resultadoLab: ResultadoLab;
+  @ManyToOne(() => ResultadoLab, resultadoLab => resultadoLab.componentes)
+  resultadoLab: ResultadoLab;
 }
+

@@ -1,14 +1,22 @@
-//imagenes-medicas.dto
+// dto/imagenes-medicas.dto.ts
 export class CrearImagenMedicaDto {
-    tipo: string;
-    imagen: string;
     nombrePaciente: string;
+    ExamDate: string;
+    tipo: string;
+    indicaciones: string;
+    NombreDoc: string;
+    NotasMedic: string;
+    imagen: string;
     ordenmedicaId: number;
 }
 
 export class ActualizarImagenMedicaDto {
-    tipo?: string;
-    imagen?: string;
     nombrePaciente?: string;
+    ExamDate?: string;
+    tipo?: string;
+    indicaciones?: string;
+    NombreDoc?: string;
+    NotasMedic?: string;
+    imagen?: string;
     ordenmedicaId?: number;
 }

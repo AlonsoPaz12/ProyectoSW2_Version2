@@ -14,9 +14,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
     NombrePaciente: '',
     ExamDate: '',
     ExamTipo: '',
-    ParteCuerpo: '',
     indicaciones: '',
-    AnatomicasEstruc: '',
     NombreDoc: '',
     NotasMedic: '',
     image: '', 
@@ -41,9 +39,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
         NombrePaciente: '',
         ExamDate: '',
         ExamTipo: '',
-        ParteCuerpo: '',
         indicaciones: '',
-        AnatomicasEstruc: '',
         NombreDoc: '',
         NotasMedic: '',
         image: '', 
@@ -57,7 +53,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
   };
 
   const handleSubmit = () => {
-    const newData = analysisData.filter(data => data.NombrePaciente.trim() !== "" || data.ExamDate.trim() !== "" || data.ExamTipo.trim() !== "" || data.ParteCuerpo.trim() !== "" || data.indicaciones.trim() !== "" || data.AnatomicasEstruc.trim() !== "" ||  data.NombreDoc.trim() !== "" || data.NotasMedic.trim() !== "");
+    const newData = analysisData.filter(data => data.NombrePaciente.trim() !== "" || data.ExamDate.trim() !== "" || data.ExamTipo.trim() !== "" || data.indicaciones.trim() !== "" ||  data.NombreDoc.trim() !== "" || data.NotasMedic.trim() !== "");
     if (newData.some(data => data.ExamDate.trim() === "")) {
       setIsDateValid(false);
       return;
@@ -98,9 +94,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                 <th>Nombre del Paciente</th>
                 <th>Tipo de examen</th>
                 <th>Fecha de examen</th>
-                <th>Parte de cuerpo</th>
                 <th>Indicaciones</th>
-                <th>Estructuras anatomicas</th>
                 <th>Notas Medicas</th>
                 <th>Imagen</th>
                 <th>Acciones</th>
@@ -154,24 +148,8 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                   <td>
                     <Form.Control
                       type="text"
-                      name="ParteCuerpo"
-                      value={analysis.ParteCuerpo}
-                      onChange={(e) => handleChange(e, index)}
-                    />
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="text"
                       name="indicaciones"
                       value={analysis.indicaciones}
-                      onChange={(e) => handleChange(e, index)}
-                    />
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="text"
-                      name="AnatomicasEstruc"
-                      value={analysis.AnatomicasEstruc}
                       onChange={(e) => handleChange(e, index)}
                     />
                   </td>
