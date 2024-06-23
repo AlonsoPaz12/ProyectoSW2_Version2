@@ -1,0 +1,10 @@
+# Crear una orden médica
+POST http://localhost:3000/ordenes-medicas
+Content-Type: application/json
+
+{
+  "observacion": "Observación de prueba",
+  "medicoId": 1,    
+  "pacienteId": 1,
+  "citaId": 1
+}

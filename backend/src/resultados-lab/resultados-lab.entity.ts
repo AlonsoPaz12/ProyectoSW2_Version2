@@ -1,25 +1,64 @@
-import { Column, OneToMany, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
-import { ComponenteResultado } from "src/componentes-resultado/componentes_resultado.entity";
+import { ComponenteResultado } from 'src/componentes-resultado/componentes_resultado.entity';
 
 @Entity()
-export class ResultadoLab{
-    @PrimaryGeneratedColumn()
-    id: number;
+export class ResultadoLab {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    tipo: String;
+  @Column({ nullable: true })
+  imageurl: string;
 
-    @Column()
-    observacion: String;
+  @Column({ nullable: true })
+  numeroDocumento: string;
 
-    @Column()
-    nombrePaciente: String;
+  @Column()
+  nombres: string;
 
-    @OneToOne(() => OrdenMedica, orden => orden.resultadoLaboratorio)
-    @JoinColumn({ name: 'orden_medica_id' })
-    orden: OrdenMedica;
+  @Column()
+  apePaterno: string;
 
-    @OneToMany(() => ComponenteResultado, componente => componente.resultadoLab, { cascade: true })
-    componentes: ComponenteResultado[];
+  @Column({ nullable: true })
+  apeMaterno: string;
+
+  @Column({ nullable: true })
+  fechaNacimiento: Date;
+
+  @Column({ nullable: true })
+  numCelular: string;
+
+  @Column({ nullable: true })
+  correoElectronico: string;
+
+  @Column({ nullable: true })
+  contrasena: string;
+
+  @Column({ nullable: true })
+  repContrasena: string;
+
+  @Column({ nullable: true })
+  genero: string;
+
+  @Column()
+  motivoPrueba: string;
+
+  @Column()
+  fecha: Date;
+
+  @Column()
+  Resultado: string;
+
+  @Column()
+  unidades: string;
+
+  @Column()
+  rangoNormal: string;
+
+  @ManyToOne(() => OrdenMedica, orden => orden.resultadoLaboratorio)
+  @JoinColumn({ name: 'orden_medica_id' })
+  orden: OrdenMedica;
+
+  @OneToMany(() => ComponenteResultado, componente => componente.resultadoLab)
+  componentes: ComponenteResultado[];
 }
