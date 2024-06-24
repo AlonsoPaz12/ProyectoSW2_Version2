@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import UserMenu from '@/components/UserMenu/UserMenu';
 import Button from '@mui/material/Button';
 import { LuPlus } from "react-icons/lu";
+import { getAllDatesPerPacient } from '@/services/medicosService';
 
 const HistorialCitasDoctor = () => {
   const [citas, setCitas] = useState([]);
@@ -19,13 +20,16 @@ const HistorialCitasDoctor = () => {
   const router = useRouter();
 
   useEffect(() => {
-  
-    setCitas(citasData);
-    setPacientes(pacientesData);
+    const fetchDetails = async () => {
+      const allDatesPerPacient = await getAllDatesPerPacient(1)
+      setCitas(allDatesPerPacient);
+      setPacientes(pacientesData);
+    }
+    fetchDetails()
   }, []);
 
   const getNombrePaciente = (idPaciente) => {
-    const paciente = pacientes.find(p => p.id === idPaciente);
+    const paciente = pacientes.find(p => p.id == idPaciente);
     return paciente ? `${paciente.nombres} ${paciente.apePaterno} ${paciente.apeMaterno}` : 'Desconocido';
   };
 
@@ -34,7 +38,7 @@ const HistorialCitasDoctor = () => {
   };
 
   const filteredCitas = citas.filter(cita => {
-    const nombrePaciente = getNombrePaciente(cita.IDpaciente).toLowerCase();
+    const nombrePaciente = getNombrePaciente(cita.paciente.id).toLowerCase();
     const fechaCita = new Date(cita.fecha).toLocaleDateString('en-CA');
     return (
       (!searchName || nombrePaciente.includes(searchName.toLowerCase())) &&
@@ -89,7 +93,7 @@ const HistorialCitasDoctor = () => {
                 <tr key={cita.id} className={styles.tableRow}>
                   <td className={styles.tableCell}>{new Date(cita.fecha).toLocaleDateString()}</td>
                   <td className={styles.tableCell}>{new Date(cita.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                  <td className={styles.tableCell}>{getNombrePaciente(cita.IDpaciente)}</td>
+                  <td className={styles.tableCell}>{getNombrePaciente(cita.paciente.id)}</td>
                   <td className={styles.tableCell}>
                     <span className={cita.asistio ? styles.asistio : styles.noAsistio}>
                       {cita.asistio ? 'Asistió' : 'No Asistió'}

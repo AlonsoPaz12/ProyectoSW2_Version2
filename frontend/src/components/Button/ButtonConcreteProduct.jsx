@@ -3,12 +3,12 @@ import React from 'react';
 import styles from './Button.module.css';
 import { Button } from 'react-bootstrap';
 import { RiArrowGoBackFill, RiSkipRightLine } from "react-icons/ri";
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 export const ButtonStyle1 = ({ texto, page }) => {
-  const navigate = useNavigate();
+  const router = useRouter()
   return (
-    <Button variant="dark" onClick={() => navigate(`/${page}`)} className={styles.estiloUno}>
+    <Button variant="dark" onClick={() => router.push(`/${page}`)} className={styles.estiloUno}>
       {texto}
     </Button>
   );
@@ -26,9 +26,9 @@ export const ButtonStyle2 = ({ texto }) => {
 };
 
 export const ButtonStyle3 = ({ texto, page }) => {
-  const navigate = useNavigate();
+  const router = useRouter()
   return (
-    <Button onClick={() => { navigate(`/${page}`);}} variant="dark" style={{borderRadius: '10px', width: '250px'}}>
+    <Button onClick={() => { router.push(`/${page}`);}} variant="dark" style={{borderRadius: '10px', width: '250px'}}>
       {texto} <RiSkipRightLine size={'22'}/> 
     </Button>
   );

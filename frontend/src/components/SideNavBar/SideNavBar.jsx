@@ -208,7 +208,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
             
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/GenerarInforme")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/GenerarInformes")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
