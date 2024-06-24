@@ -253,7 +253,7 @@ const Registro = () => {
                         </div>
                         <button onClick={() => console.log(formData)} className={styles.button}>Registrarse</button>
                         <div className={styles.loginLink}>
-                            ¿Tienes una cuenta? <a href="/Iniciar Sesión">Inicia sesión</a>
+                            ¿Tienes una cuenta? <a href="/IniciarSesion">Inicia sesión</a>
                         </div>
                     </form>
                 </div>

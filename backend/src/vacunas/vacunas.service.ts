@@ -63,6 +63,19 @@ export class VacunaService {
         return this.vacunaRepository.find({relations: ['medicos', 'pacientes']});
     }
 
+    async mostrarVacunasPorIdPaciente(pacienteId: number) {
+        try {
+            const vacunas = await this.vacunaRepository
+              .createQueryBuilder('vacuna')
+              .innerJoin('vacuna.pacientes', 'paciente')
+              .where('paciente.id = :pacienteId', { pacienteId })
+              .getMany();
+            return vacunas;
+          } catch (error) {
+            throw new NotFoundException(`No se encontraron vacunas para el paciente con ID ${pacienteId}`);
+          }
+    }
+
     async encontrarVacunaId(id: number){
         return this.vacunaRepository.findOne({
             where: {id: id},

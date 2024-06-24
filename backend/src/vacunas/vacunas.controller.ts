@@ -27,6 +27,15 @@ export class VacunasController {
         return { vacuna };
     }
 
+    @Get('paciente/:id/vacunas')
+    async obtenerVacunasPorIdPaciente(@Param('id', ParseIntPipe) id: number) {
+        const vacunas = await this.vacunaService.mostrarVacunasPorIdPaciente(id);
+        if (!vacunas || vacunas.length === 0) {
+            throw new NotFoundException(`No se encontraron vacunas para el paciente con ID ${id}`);
+        }
+        return { vacunas };
+    }
+
     @Delete(':id')
     async eliminarVacuna(@Param('id', ParseIntPipe) id: number){
         await this.vacunaService.eliminarVacuna(id);
