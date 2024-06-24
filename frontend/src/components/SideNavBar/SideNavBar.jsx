@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -74,7 +74,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function SideNavBar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div>
@@ -92,7 +92,7 @@ export default function SideNavBar() {
         </DrawerHeader>
         <Divider />
         <List>
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/ProximasCitas")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/ProximasCitas")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -121,7 +121,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/HistorialCitas")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/HistorialCitas")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -150,7 +150,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Calendario")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/Calendario")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -179,7 +179,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Vacunas")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/Vacunas")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -208,7 +208,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
             
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/GenerarInforme")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/GenerarInforme")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',

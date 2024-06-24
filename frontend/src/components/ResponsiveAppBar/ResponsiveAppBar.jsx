@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import { useRouter } from 'next/navigation';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -23,7 +22,7 @@ const pages = ['Nosotros', 'Especialidades', 'Doctores'];
 const settings = ['Iniciar Sesión', 'Registrarse'];
 
 function ResponsiveAppBar() {
-  const navigate = useNavigate();
+  const router = useRouter()
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -103,7 +102,7 @@ function ResponsiveAppBar() {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={() => { handleCloseNavMenu(); navigate(`/${page}`);}} sx={{ color: '#00916E'}}>
+                  <MenuItem key={page} onClick={() => { handleCloseNavMenu(); router.push(`/${page}`);}} sx={{ color: '#00916E'}}>
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -132,7 +131,7 @@ function ResponsiveAppBar() {
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                   <Button
-                    onClick={() => navigate(`/${page}`)}
+                    onClick={() => router.push(`/${page}`)}
                     sx={{ my: 2, color: 'white', display: 'block'}}
                   >
                     {page}
@@ -165,7 +164,7 @@ function ResponsiveAppBar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={() => { handleCloseUserMenu(); navigate(`/${setting}`);}}>
+                  <MenuItem key={setting} onClick={() => { handleCloseUserMenu(); router.push(`/${setting}`);}}>
                     <Typography sx={{ color: '#00916E'}} textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}

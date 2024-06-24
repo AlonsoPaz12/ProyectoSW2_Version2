@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Menu, MenuItem, Typography, Avatar } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
+  const router = useRouter()
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,7 +44,7 @@ const UserMenu = () => {
           },
         }}
       >
-        <MenuItem onClick={() => { handleMenuClose(); navigate(`/VisualizacionDePerfil`);}}>
+        <MenuItem onClick={() => { handleMenuClose(); router.push(`/VisualizacionDePerfil`);}}>
           <Typography variant="body1" style={{ color: '#1a73e8', width: '100%' }}>Mi perfil</Typography>
         </MenuItem>
         <MenuItem onClick={() => { handleMenuClose()}} style={{ width: 200 }}> {/* Ancho fijo de las opciones del menú */}

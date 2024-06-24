@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
 import medicosData from "@/data/doctors.JSON";
 import styles from "./page.module.css";
-import vacunasData from "@/data/vacunas.JSON";
+import axios from "axios";
 import { TiArrowBack } from "react-icons/ti";
 import VaccinationScheduleTable from "@/components/VaccinationScheduleTable/VaccinationScheduleTable";
 import { Button } from "react-bootstrap";
+import { getVaccines, postVaccines } from "@/services/vacunasService";
 
-const DetallesPaciente = () => {
-  const { id } = useParams();
-  const [paciente, setPaciente] = useState(null);
+const DetallesPaciente = ({id}) => {
+
+  const [paciente, setPaciente] = useState({});
   const [citas, setCitas] = useState([]);
   const [futureCitas, setFutureCitas] = useState([]);
   const [lastPastCita, setLastPastCita] = useState(null);
@@ -22,15 +22,26 @@ const DetallesPaciente = () => {
 
   useEffect(() => {
     const fetchDetails = async () => {
-      const pacienteData = pacientesData.find((paciente) => paciente.id === id);
+      const vacunasDataForPaciente = await getVaccines();
+      const allUserVaccines = vacunasDataForPaciente.filter(vacuna =>
+        vacuna.pacientes.some(paciente => paciente.id === parseInt(id))
+      );
+      setVacunas(allUserVaccines);
+
+      const pacienteData = pacientesData.find(
+        (paciente) => parseInt(paciente.id) == id
+      );
+
+
       if (!pacienteData) {
         console.log(`No se encontró ningún paciente con el ID ${id}`);
         return;
       }
 
       const citasDataForPaciente = citasData.filter(
-        (cita) => cita.IDpaciente === pacienteData.id
+        (cita) => cita.IDpaciente == pacienteData.id
       );
+
 
       const now = new Date();
       const futureCitas = citasDataForPaciente.filter(
@@ -43,15 +54,10 @@ const DetallesPaciente = () => {
       pastCitas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
       const lastPastCita = pastCitas.length > 0 ? pastCitas[0] : null;
 
-      const vacunasDataForPaciente = vacunasData.filter(
-        (vacuna) => vacuna.IDpaciente === pacienteData.id
-      );
-
       setPaciente(pacienteData);
       setCitas(citasDataForPaciente);
       setFutureCitas(futureCitas);
       setLastPastCita(lastPastCita);
-      setVacunas(vacunasDataForPaciente);
     };
 
     if (id) {
@@ -60,7 +66,13 @@ const DetallesPaciente = () => {
   }, [id]);
 
   const addEmptyVaccineRecord = () => {
-    setNewVacuna({ VacunaNombre: '', fecha: '', Dosis: '', Fabricante: '', Lugar: '' });
+    setNewVacuna({
+      nombre: "",
+      fecha: "",
+      dosis: "",
+      fabricante: "",
+      lugarDeVacunacion: "",
+    });
   };
 
   const saveNewVaccineRecord = (updatedRecord) => {
@@ -84,10 +96,6 @@ const DetallesPaciente = () => {
       ? `${doctor.nombre} - ${doctor.especialidad}`
       : "Información del médico no disponible";
   };
-
-  if (!paciente || citas.length === 0) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className={styles.body}>
@@ -123,30 +131,30 @@ const DetallesPaciente = () => {
 
       <div className={styles.vacunacionDetalles}>
         <h5 className={styles.titulo2}>ESQUEMA DE VACUNACIÓN</h5>
-        <VaccinationScheduleTable 
-          vacunas={vacunas} 
+        <VaccinationScheduleTable
+          vacunas={vacunas}
           newVacuna={newVacuna}
           setNewVacuna={setNewVacuna}
-          saveNewVaccineRecord={saveNewVaccineRecord} 
+          saveNewVaccineRecord={saveNewVaccineRecord}
           setVacunas={setVacunas}
         />
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button 
-            variant="success" 
-            style={{ 
-              borderRadius: '100px', 
-              width: '50px',
-              height: '50px',
-              fontSize: '24px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            variant="success"
+            style={{
+              borderRadius: "100px",
+              width: "50px",
+              height: "50px",
+              fontSize: "24px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
             onClick={addEmptyVaccineRecord}
           >
             +
           </Button>
-        </div> 
+        </div>
       </div>
 
       <div className={styles.proximasCitasDetalles}>

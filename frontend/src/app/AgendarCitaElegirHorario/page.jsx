@@ -8,7 +8,7 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import ButtonFactory from '@/components/Button/ButtonFactory';
 import { Button } from 'react-bootstrap';
 import Link from 'next/link';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const AgendarCitaElegirHorario = () => {
   const buttonFactory = new ButtonFactory();
@@ -28,7 +28,7 @@ const AgendarCitaElegirHorario = () => {
     }
   };
 
-  const navigate = useNavigate();
+  const router = useRouter()
 
   const availableTimes = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM'];
 
@@ -78,7 +78,7 @@ const AgendarCitaElegirHorario = () => {
         })}
 
         <div style={{height: '5px', width: '50px'}}></div>
-          <Button onClick={() => { handleSaveCita(); navigate("/ProximasCitas");}} variant="dark" style={{borderRadius: '10px', width: '250px'}}>
+          <Button onClick={() => { handleSaveCita(); router.push("/ProximasCitas");}} variant="dark" style={{borderRadius: '10px', width: '250px'}}>
             Guardar Cita
           </Button>
         </div>

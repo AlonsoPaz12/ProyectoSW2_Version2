@@ -1,7 +1,4 @@
-
-
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -17,7 +14,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-
+import { useRouter } from "next/navigation";
 import { CgCalendarNext } from "react-icons/cg";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineHistory } from "react-icons/md";
@@ -75,8 +72,7 @@ const Drawer = styled(MuiDrawer, {
 export default function SideNavBar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-
+  const router = useRouter()
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -113,7 +109,7 @@ export default function SideNavBar() {
               disablePadding
               sx={{ display: "block" }}
               onClick={() => {
-                navigate("/ProximasCitasDoctor");
+                router.push("/ProximasCitasDoctor");
               }}
             >
               <ListItemButton
@@ -150,7 +146,7 @@ export default function SideNavBar() {
               disablePadding
               sx={{ display: "block" }}
               onClick={() => {
-                navigate("/HistorialCitasDoctor");
+                router.push("/HistorialCitasDoctor");
               }}
             >
               <ListItemButton
@@ -183,7 +179,7 @@ export default function SideNavBar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/LabAnalisis")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{router.push("/LabAnalisis")}}>
               <ListItemButton
                 sx={{
                   color: '#014433',
@@ -216,7 +212,7 @@ export default function SideNavBar() {
               disablePadding
               sx={{ display: "block" }}
               onClick={() => {
-                navigate("/CalendarioDoctor");
+                router.push("/CalendarioDoctor");
               }}
             >
               <ListItemButton
@@ -253,7 +249,7 @@ export default function SideNavBar() {
               disablePadding
               sx={{ display: "block" }}
               onClick={() => {
-                navigate("/Pacientes");
+                router.push("/Pacientes");
               }}
             >
               <ListItemButton

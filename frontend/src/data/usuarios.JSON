@@ -1,6 +1,6 @@
 [
   {
-    "id": "P001",
+    "id": "1",
     "numeroDocumento": "12345678",
     "nombres": "Juan",
     "apePaterno": "Pérez",
@@ -15,7 +15,7 @@
     "imageurl": "https://hbz.h-cdn.co/assets/17/10/980x980/square-1488819903-hbz-030217-mcm3-1.jpg"
   },
   {
-    "id": "P002",
+    "id": "2",
     "numeroDocumento": "87654321",
     "nombres": "Ana",
     "apePaterno": "García",
@@ -30,7 +30,7 @@
     "imageurl": "https://hbz.h-cdn.co/assets/17/10/980x980/square-1488819903-hbz-030217-mcm3-1.jpg"
   },
   {
-    "id": "P003",
+    "id": "3",
     "numeroDocumento": "11223344",
     "nombres": "Carlos",
     "apePaterno": "López",

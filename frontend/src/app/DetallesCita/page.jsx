@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
 import recetasData from "@/data/recetaMedica.JSON";
@@ -11,11 +10,10 @@ import { FaEdit } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { FaTrashAlt } from "react-icons/fa";
 import EditMedicamentoDialog from "./EditMedicamentoDialog";
-import { Edit } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 
-const DetallesPaciente = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const DetallesCita = ({id}) => {
+  const router = useRouter();
   const [paciente, setPaciente] = useState({});
   const [cita, setCita] = useState({ asistio: false, fecha: Date(), motivo: '', Observacion: '' });
   const [citas, setCitas] = useState([]);
@@ -35,12 +33,14 @@ const DetallesPaciente = () => {
       return;
     }
     setPaciente(pacienteData);
+    console.log(pacienteData)
     setEditablePaciente({ ...pacienteData });
     await fetchCitasFromPaciente(pacienteData);
   };
-
+  console.log(pacientesData)
   const fetchCita = async () => {
     const citaData = citasData.find(cita => cita.id === id);
+    console.log("hola")
     if (!citaData) {
       console.log(`No se encontró ninguna cita con el ID ${id}`);
       setNotFound(true);
@@ -156,7 +156,7 @@ const DetallesPaciente = () => {
     return (
       <div className={styles.body}>
         <h5 className={styles.titulo}>Cita no encontrada</h5>
-        <button onClick={() => navigate('/')} className={styles.backButton}>
+        <button onClick={() => router.push('/')} className={styles.backButton}>
           <TiArrowBack size={"20px"} /> Regresar a Home
         </button>
       </div>
@@ -166,7 +166,7 @@ const DetallesPaciente = () => {
   return (
     <div className={styles.body}>
       <div className={styles.cabecera}>
-        <button onClick={() => navigate(-1)} className={styles.backButton}><TiArrowBack size={"20px"} /> Regresar</button>
+        <button onClick={() => router.push('/HistorialCitasDoctor')} className={styles.backButton}><TiArrowBack size={"20px"} /> Regresar</button>
       </div>
       <h5 className={styles.titulo}>DETALLES DE LA CITA</h5>
       <div className={styles.citaInfo}>
@@ -240,11 +240,11 @@ const DetallesPaciente = () => {
             ) : (
               <>
                 <p className={styles.texto}><strong>Paciente:</strong> {paciente.nombres} {paciente.apePaterno} {paciente.apeMaterno}</p>
-                <p className={styles.texto}><strong>Fecha de Nacimiento:</strong> {new Date(paciente.fechaNacimiento).toLocaleDateString()}</p>
-                <p className={styles.texto}><strong>Edad:</strong> {new Date().getFullYear() - new Date(paciente.fechaNacimiento).getFullYear()} años</p>
+                <p className={styles.texto}><strong>Fecha de Nacimiento:</strong> {paciente.fechaNacimiento}</p>
+                <p className={styles.texto}><strong>Edad:</strong> {paciente.fechaNacimiento} años</p>
                 <p className={styles.texto}><strong>Estado:</strong> <span className={cita.asistio ? styles.asistio : styles.noAsistio}>{cita.asistio ? 'Asistió' : 'No Asistió'}</span></p>
-                <p className={styles.texto}><strong>Fecha:</strong> {new Date(cita.fecha).toLocaleDateString()}</p>
-                <p className={styles.texto}><strong>Hora:</strong> {new Date(cita.fecha).toLocaleTimeString()}</p>
+                <p className={styles.texto}><strong>Fecha:</strong> a</p>
+                <p className={styles.texto}><strong>Hora:</strong> a</p>
                 
               </>
             )}
@@ -319,7 +319,7 @@ const DetallesPaciente = () => {
             citas.length > 0 ? (
               citas.map(cita => (
                 <div key={cita.id} className={styles.cita}>
-                  <p>{new Date(cita.fecha).toLocaleDateString()} - {new Date(cita.fecha).toLocaleTimeString()}
+                  <p>{cita.fecha} - {cita.fecha}
                     {` `}- {cita.motivo}
                   </p>
                 </div>
@@ -366,4 +366,4 @@ const DetallesPaciente = () => {
   );
 };
 
-export default DetallesPaciente;
+export default DetallesCita;

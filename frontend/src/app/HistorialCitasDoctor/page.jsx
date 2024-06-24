@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
 import styles from './page.module.css';
@@ -16,7 +16,7 @@ const HistorialCitasDoctor = () => {
   const [pacientes, setPacientes] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [searchDate, setSearchDate] = useState("");
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
   
@@ -30,7 +30,7 @@ const HistorialCitasDoctor = () => {
   };
 
   const handleVerDetallesClick = (id) => {
-    navigate(`/DetallesCita/${id}`); 
+    router.push(`/DetallesCita/${id}`); 
   };
 
   const filteredCitas = citas.filter(cita => {
