@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, MenuItem, Typography, Avatar } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useRouter } from 'next/navigation';
@@ -6,6 +6,21 @@ import { useRouter } from 'next/navigation';
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter()
+  const [usuario, setUsuario] = useState(null); // Estado para almacenar el usuario
+  const [tipoUsuario, setTipoUsuario] = useState(null);
+
+  useEffect(()=>{
+    const storedUser = JSON.parse(localStorage.getItem('usuario'));
+    if (storedUser.medico) {
+        setUsuario(storedUser.medico);
+        setTipoUsuario('medico');
+    }else{
+        setUsuario(storedUser.paciente);
+        setTipoUsuario('paciente')
+    }
+
+},[])
+
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,7 +37,11 @@ const UserMenu = () => {
       <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleMenuOpen}>
         <Avatar style={{ marginRight: 8 }} />
         <Typography variant="body1" style={{ fontWeight: 'bold', color: '#004225' }}>
-          GIANELLA ARIANA CARRIÓN MENDOZA
+          {usuario ? 
+            tipoUsuario === 'paciente' || tipoUsuario === 'medico' ? 
+              `${usuario.nombres} ${usuario.apePaterno} ${usuario.apeMaterno}` : 
+              usuario.nombre
+            : 'Nombre de Usuario'}
         </Typography>
         <ArrowDropDownIcon style={{ color: '#004225' }} />
       </div>

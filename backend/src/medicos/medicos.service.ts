@@ -220,9 +220,9 @@ export class MedicoService {
         //Guardar la receta médica actualizada
         return await this.recetaMedicaRepository.save(receta);
     }
-
+/*
     async agregarHoraDisponible(medicoId: number, crearHoraDisponibleDto: CrearHoraDisponibleDto) {
-        const { fecha, horaInicio, horaFin } = crearHoraDisponibleDto;
+        const { fecha, horarios } = crearHoraDisponibleDto;
 
         // Buscar al médico por su ID
         const medico = await this.medicoRepository.findOne({
@@ -236,14 +236,14 @@ export class MedicoService {
         // Crear una nueva instancia de HoraDisponible
         const nuevaHoraDisponible = new HoraDisponible();
         nuevaHoraDisponible.fecha = fecha;
-        nuevaHoraDisponible.horaInicio = horaInicio;
+        nuevaHoraDisponible.horaInicio = horarios.horaInicio;
         nuevaHoraDisponible.horaFin = horaFin;
         nuevaHoraDisponible.medico = medico;
 
         // Guardar el nuevo horario disponible asociado al médico
         return await this.horaDisponibleRepository.save(nuevaHoraDisponible);
     }
-
+*/
     async verRecetaDeCita(citaId: number) {
         const cita = await this.citaRepository.findOne({
             where: { id: citaId },

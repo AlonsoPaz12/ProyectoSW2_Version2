@@ -57,7 +57,7 @@ export class MedicoController {
       throw new NotFoundException(error.message);
     }
   }
-
+/*
   @Post(':medicoId/hora-disponible')
   async agregarHoraDisponible(
     @Param('medicoId') medicoId: number,
@@ -70,6 +70,7 @@ export class MedicoController {
       throw new NotFoundException(error.message);
     }
   }
+    */
 
   @Get(':citaId/receta')
   async verRecetaDeCita(@Param('citaId') citaId: number) {

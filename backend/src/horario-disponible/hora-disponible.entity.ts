@@ -1,6 +1,6 @@
 // src/medicos/hora-disponible.entity.ts
 
-import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Medico } from 'src/medicos/medicos.entity';
 
 @Entity()
@@ -8,13 +8,13 @@ export class HoraDisponible {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'date' })
-    fecha: Date;
+    @Column()
+    diaSemana: string;
 
-    @Column({ type: 'time' })
+    @Column()
     horaInicio: string;
 
-    @Column({ type: 'time' })
+    @Column()
     horaFin: string;
 
     @ManyToOne(() => Medico, medico => medico.horasDisponibles)
