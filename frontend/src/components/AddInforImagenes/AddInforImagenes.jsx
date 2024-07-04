@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
-import axios from 'axios';  // Asegúrate de importar axios
+import axios from 'axios';
 import styles from "./AddInforImagenes.module.css";
 
 const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, doctorActivo }) => {
   const [analysisData, setAnalysisData] = useState([{
     nombrePaciente: '',
     ExamDate: '',
-    tipo: '',  
+    tipo: '',
     indicaciones: '',
     NombreDoc: doctorActivo,
     NotasMedic: '',
     imagen: '',
   }]);
-
   const [isDateValid, setIsDateValid] = useState(true);
 
   useEffect(() => {
@@ -34,9 +33,9 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
 
   const handleAddRow = () => {
     setAnalysisData([...analysisData, {
-      nombrePaciente: '',  // Cambiar a nombrePaciente
+      nombrePaciente: '',
       ExamDate: '',
-      ExamTipo: '',
+      tipo: '',
       indicaciones: '',
       NombreDoc: doctorActivo,
       NotasMedic: '',
@@ -57,32 +56,31 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
       return;
     }
     setIsDateValid(true);
-  
-    console.log('Datos a enviar:', newData);  // Añade este log
-  
-    // Aquí es donde realizamos la petición POST
+
+    console.log('Datos a enviar:', newData);
+
+    // Aquí es donde realizamos la petición POST o PUT
     try {
       const response = await axios.post('http://localhost:3000/imagenes-medicas', newData);
       console.log('Datos enviados exitosamente:', response.data);
     } catch (error) {
       console.error('Error al enviar los datos:', error);
     }
-  
+
     handleSave(newData);
     handleClose();
   };
-  
 
   const handleImageUpload = async (index, file) => {
     const imageUrl = URL.createObjectURL(file);
     const updatedData = [...analysisData];
-    updatedData[index].image = imageUrl;
+    updatedData[index].imagen = imageUrl;
     setAnalysisData(updatedData);
   };
 
   const handleImageRemove = (index) => {
     const updatedData = [...analysisData];
-    updatedData[index].image = '';
+    updatedData[index].imagen = '';
     setAnalysisData(updatedData);
   };
 
@@ -125,8 +123,8 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
                   <td>
                     <Form.Control
                       type="text"
-                      name="nombrePaciente"  // Cambiar a nombrePaciente
-                      value={analysis.nombrePaciente}  // Cambiar a nombrePaciente
+                      name="nombrePaciente"
+                      value={analysis.nombrePaciente}
                       onChange={(e) => handleChange(e, index)}
                     />
                   </td>
@@ -208,4 +206,3 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
 };
 
 export default AddInforImagenes;
-
