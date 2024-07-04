@@ -1,31 +1,29 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
+import axios from 'axios';  // Asegúrate de importar axios
 import styles from "./AddInforImagenes.module.css";
 
-const testReasons = [ 
-  { value: 'Dr. Juan Pérez', label: 'Dr. Juan Pérez' },
-  { value: 'Dra. María González', label: 'Dra. María González' },
-  { value: 'Dr. Luis Méndez', label: 'Dr. Luis Méndez' },
-  { value: 'Dr. Roberto Martínez', label: 'Dr. Roberto Martínez' }, 
-];
-
-const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }) => {
+const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, doctorActivo }) => {
   const [analysisData, setAnalysisData] = useState([{
-    NombrePaciente: '',
+    nombrePaciente: '',
     ExamDate: '',
-    ExamTipo: '',
+    tipo: '',  
     indicaciones: '',
-    NombreDoc: '',
+    NombreDoc: doctorActivo,
     NotasMedic: '',
-    image: '', 
+    imagen: '',
   }]);
-  const [isDateValid, setIsDateValid] = useState(true); 
+
+  const [isDateValid, setIsDateValid] = useState(true);
 
   useEffect(() => {
     if (initialAnalysisData) {
-      setAnalysisData(initialAnalysisData);
+      setAnalysisData(initialAnalysisData.map(data => ({
+        ...data,
+        NombreDoc: data.NombreDoc || doctorActivo
+      })));
     }
-  }, [initialAnalysisData]);
+  }, [initialAnalysisData, doctorActivo]);
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -36,13 +34,13 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
 
   const handleAddRow = () => {
     setAnalysisData([...analysisData, {
-        NombrePaciente: '',
-        ExamDate: '',
-        ExamTipo: '',
-        indicaciones: '',
-        NombreDoc: '',
-        NotasMedic: '',
-        image: '', 
+      nombrePaciente: '',  // Cambiar a nombrePaciente
+      ExamDate: '',
+      ExamTipo: '',
+      indicaciones: '',
+      NombreDoc: doctorActivo,
+      NotasMedic: '',
+      imagen: '',
     }]);
   };
 
@@ -52,19 +50,31 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
     setAnalysisData(updatedData);
   };
 
-  const handleSubmit = () => {
-    const newData = analysisData.filter(data => data.NombrePaciente.trim() !== "" || data.ExamDate.trim() !== "" || data.ExamTipo.trim() !== "" || data.indicaciones.trim() !== "" ||  data.NombreDoc.trim() !== "" || data.NotasMedic.trim() !== "");
+  const handleSubmit = async () => {
+    const newData = analysisData.filter(data => data.nombrePaciente.trim() !== "" || data.ExamDate.trim() !== "" || data.tipo.trim() !== "" || data.indicaciones.trim() !== "" || data.NombreDoc.trim() !== "" || data.NotasMedic.trim() !== "");
     if (newData.some(data => data.ExamDate.trim() === "")) {
       setIsDateValid(false);
       return;
     }
     setIsDateValid(true);
+  
+    console.log('Datos a enviar:', newData);  // Añade este log
+  
+    // Aquí es donde realizamos la petición POST
+    try {
+      const response = await axios.post('http://localhost:3000/imagenes-medicas', newData);
+      console.log('Datos enviados exitosamente:', response.data);
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+    }
+  
     handleSave(newData);
     handleClose();
   };
+  
 
   const handleImageUpload = async (index, file) => {
-    const imageUrl = URL.createObjectURL(file); 
+    const imageUrl = URL.createObjectURL(file);
     const updatedData = [...analysisData];
     updatedData[index].image = imageUrl;
     setAnalysisData(updatedData);
@@ -81,7 +91,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
   };
 
   return (
-    <Modal show={show} onHide={() => {}} backdrop="static" keyboard={false} dialogClassName={styles.customModal}>
+    <Modal show={show} onHide={() => { }} backdrop="static" keyboard={false} dialogClassName={styles.customModal}>
       <Modal.Header closeButton className={styles.customHeader}>
         <Modal.Title>{initialAnalysisData ? 'Editar Imagen' : 'Agregar Imagen'}</Modal.Title>
       </Modal.Header>
@@ -105,31 +115,26 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                 <tr key={index}>
                   <td>
                     <Form.Control
-                      as="select"
+                      type="text"
                       name="NombreDoc"
                       value={analysis.NombreDoc}
                       onChange={(e) => handleChange(e, index)}
-                    >
-                      {testReasons.map((reason) => (
-                        <option key={reason.value} value={reason.value}>
-                          {reason.label}
-                        </option>
-                      ))}
-                    </Form.Control>
+                      readOnly
+                    />
                   </td>
                   <td>
                     <Form.Control
                       type="text"
-                      name="NombrePaciente"
-                      value={analysis.NombrePaciente}
+                      name="nombrePaciente"  // Cambiar a nombrePaciente
+                      value={analysis.nombrePaciente}  // Cambiar a nombrePaciente
                       onChange={(e) => handleChange(e, index)}
                     />
                   </td>
                   <td>
                     <Form.Control
                       type="text"
-                      name="ExamTipo"
-                      value={analysis.ExamTipo}
+                      name="tipo"
+                      value={analysis.tipo}
                       onChange={(e) => handleChange(e, index)}
                     />
                   </td>
@@ -139,7 +144,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                       name="ExamDate"
                       value={analysis.ExamDate}
                       onChange={(e) => handleChange(e, index)}
-                      isInvalid={!isDateValid} 
+                      isInvalid={!isDateValid}
                     />
                     <Form.Control.Feedback type="invalid">
                       La fecha es obligatoria.
@@ -162,9 +167,9 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
                     />
                   </td>
                   <td>
-                    {analysis.image ? (
+                    {analysis.imagen ? (
                       <div className={styles.imageLab}>
-                        <img src={analysis.image} alt="uploaded" width={50} height={50} />
+                        <img src={analysis.imagen} alt="uploaded" width={50} height={50} />
                         <div>
                           <Button variant='danger' onClick={() => handleImageRemove(index)}>Eliminar</Button>
                           <Button variant='info' onClick={() => handleImageUpdate(index)}>Actualizar</Button>
@@ -203,3 +208,4 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData }
 };
 
 export default AddInforImagenes;
+

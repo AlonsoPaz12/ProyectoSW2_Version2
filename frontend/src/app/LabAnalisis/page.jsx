@@ -1,7 +1,7 @@
 'use client';
 import ImagenesAnalisis from '@/app/LabAnalisis/ImagenesAnalisis/ImagenesAnalisis';
 import AddAnalysisModal from '@/components/AddAnalysisModal/AddAnalysisModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './page.module.css';
 import Box from '@mui/material/Box';
@@ -10,15 +10,22 @@ import SideNavBarDoctor from '@/components/SideNavBarDoctor/SideNavBarDoctor';
 import ImpresionImagen from '../ImagenesMedicas/ImpresionImagen/ImpresionImagen';
 import AddInforImagenes from '@/components/AddInforImagenes/AddInforImagenes';
 
-
-
 const LabAnalisis = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalimg, setShowModalimg] = useState(false);
   const [impresion, setImpresion] = useState([]);
   const [analyses, setAnalyses] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');//para buscar
-  const [filterType, setFilterType] = useState('');// para filtrar mediante un select
+  const [searchTerm, setSearchTerm] = useState(''); //para buscar
+  const [filterType, setFilterType] = useState(''); // para filtrar mediante un select
+  const [doctorActivo, setDoctorActivo] = useState(''); // Para el nombre del doctor activo
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('usuario'));
+    if (storedUser && storedUser.medico) {
+      const { nombres, apePaterno, apeMaterno } = storedUser.medico;
+      setDoctorActivo(`${nombres} ${apePaterno} ${apeMaterno}`);
+    }
+  }, []);
 
   const handleShowModal = () => setShowModal(true);
   const handleShowModalimg = () => setShowModalimg(true);
@@ -51,7 +58,7 @@ const LabAnalisis = () => {
     setFilterType(e.target.value);
   };
 
-  //para poder buscar agrego aca ya sea nmbre o lo que sea
+  //para poder buscar agrego aca ya sea nombre o lo que sea
   const filteredAnalyses = analyses.filter((analysis) =>
     analysis.testName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     analysis.testLasName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -59,19 +66,20 @@ const LabAnalisis = () => {
   );
 
   const filteredImpresion = impresion.filter((imagenmed) =>
-    imagenmed.NombrePaciente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    imagenmed.ExamTipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    imagenmed.ExamDate.toLowerCase().includes(searchTerm.toLowerCase())
+  (imagenmed.nombrePaciente && imagenmed.nombrePaciente.toLowerCase().includes(searchTerm.toLowerCase())) ||
+  (imagenmed.ExamTipo && imagenmed.ExamTipo.toLowerCase().includes(searchTerm.toLowerCase())) ||
+  (imagenmed.ExamDate && imagenmed.ExamDate.toLowerCase().includes(searchTerm.toLowerCase()))
 );
+
 
   return (
     <Box className={styles.container}>
       <SideNavBarDoctor />
-      <Box sx={{flexDirection: "column", margin: "2em", width: "100%", height: "100vh"}}>
+      <Box sx={{ flexDirection: "column", margin: "2em", width: "100%", height: "100vh" }}>
         <div className={styles.cabecera}>
           <UserMenu />
         </div>
-        <h5 style={{marginTop:'1em', marginBottom:'1em'}}><b>RESULTADOS DEL LABORATORIO</b></h5>
+        <h5 style={{ marginTop: '1em', marginBottom: '1em' }}><b>RESULTADOS DEL LABORATORIO</b></h5>
         <div>
           <div className={styles.cardlabel}>
             <input
@@ -84,7 +92,7 @@ const LabAnalisis = () => {
             <div className={styles.labelline}>Buscar por nombre de análisis o imagen medica</div>
           </div>
           <div>
-          <select className={styles.select} value={filterType} onChange={handleFilterTypeChange}>
+            <select className={styles.select} value={filterType} onChange={handleFilterTypeChange}>
               <option value="">Todos</option>
               <option value="analisis">Análisis</option>
               <option value="imagenmedica">Imagen Médica</option>
@@ -113,19 +121,20 @@ const LabAnalisis = () => {
           <Button variant="dark" className={styles.agregarBotonImg} onClick={handleShowModalimg}>Agregar Imagen Médica</Button>
         </div>
 
-      <AddAnalysisModal
-        show={showModal}
-        handleClose={handleCloseModal}
-        handleSave={handleSaveAnalysis}
-        initialAnalysisData={analyses}
-      />
+        <AddAnalysisModal
+          show={showModal}
+          handleClose={handleCloseModal}
+          handleSave={handleSaveAnalysis}
+          initialAnalysisData={analyses}
+        />
 
-      <AddInforImagenes
-        show={showModalimg}
-        handleClose={handleCloseModalimg}
-        handleSave={handleSaveImpresion}
-        initialAnalysisData={impresion}
-      />
+        <AddInforImagenes
+          show={showModalimg}
+          handleClose={handleCloseModalimg}
+          handleSave={handleSaveImpresion}
+          initialAnalysisData={impresion}
+          doctorActivo={doctorActivo} // Pasa el nombre del doctor activo
+        />
       </Box>
     </Box>
   );
