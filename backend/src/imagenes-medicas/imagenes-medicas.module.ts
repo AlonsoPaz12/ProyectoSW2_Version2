@@ -1,4 +1,3 @@
-// src/imagenes-medicas/imagenes-medicas.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImagenMedica } from './imagenes-medicas.entity';

@@ -33,6 +33,6 @@ export class OrdenMedica {
     @JoinColumn({ name: 'cita_id' })
     cita: Cita | null;
 
-    @OneToMany(() => ImagenMedica, imagen => imagen.orden)
-    imagenesMedicas: ImagenMedica[];
+    //@OneToMany(() => ImagenMedica, imagen => imagen.ordenId, { nullable: true })
+    //imagenesMedicas: ImagenMedica[];
 }

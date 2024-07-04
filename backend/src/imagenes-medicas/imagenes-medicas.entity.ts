@@ -1,34 +1,31 @@
-// imagenes-medicas.entity.ts
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { OrdenMedica } from '../ordenes-medicas/ordenes-medicas.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ImagenMedica {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    nombrePaciente: string;
+  @Column()
+  nombrePaciente: string;
 
-    @Column()
-    ExamDate: string;
+  @Column()
+  ExamDate: string;
 
-    @Column()
-    tipo: string;
+  @Column()
+  tipo: string;
 
-    @Column()
-    indicaciones: string;
+  @Column()
+  indicaciones: string;
 
-    @Column()
-    NombreDoc: string;
+  @Column()
+  NombreDoc: string;
 
-    @Column()
-    NotasMedic: string;
+  @Column()
+  NotasMedic: string;
 
-    @Column()
-    imagen: string;
+  @Column()
+  imagen: string;
 
-    @ManyToOne(() => OrdenMedica, orden => orden.imagenesMedicas)
-    @JoinColumn({ name: "ordenId" })  
-    orden: OrdenMedica;
+  @Column({ nullable: true })
+  ordenId: number;
 }
