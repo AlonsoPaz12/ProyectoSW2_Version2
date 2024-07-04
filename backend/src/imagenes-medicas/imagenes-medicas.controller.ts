@@ -1,33 +1,30 @@
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
-import { ImagenesMedicasService } from './imagenes-medicas.service';
+import { Controller, Post, Body, Put, Param, NotFoundException, Get } from '@nestjs/common';
+import { ImagenMedicaService } from './imagenes-medicas.service';
 import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';
 
 @Controller('imagenes-medicas')
-export class ImagenesMedicasController {
-    constructor(private readonly imagenesMedicasService: ImagenesMedicasService) {}
+export class ImagenMedicaController {
+  constructor(private readonly imagenMedicaService: ImagenMedicaService) {}
 
-    @Post()
-    async crearImagenMedica(@Body() crearImagenMedicaDto: CrearImagenMedicaDto) {
-        return this.imagenesMedicasService.crearImagenMedica(crearImagenMedicaDto);
-    }
+  @Post()
+  async crearImagenMedica(@Body() crearImagenMedicaDto: CrearImagenMedicaDto) {
+    return await this.imagenMedicaService.crearImagenMedica(crearImagenMedicaDto);
+  }
 
-    @Get()
-    async mostrarImagenesMedicas() {
-        return this.imagenesMedicasService.mostrarImagenesMedicas();
+  @Put(':id')
+  async actualizarImagenMedica(
+    @Param('id') id: string,
+    @Body() actualizarImagenMedicaDto: ActualizarImagenMedicaDto,
+  ) {
+    const imagenMedica = await this.imagenMedicaService.actualizarImagenMedica(+id, actualizarImagenMedicaDto);
+    if (!imagenMedica) {
+      throw new NotFoundException('Imagen médica no encontrada');
     }
+    return imagenMedica;
+  }
 
-    @Get(':id')
-    async obtenerImagenMedicaPorId(@Param('id') id: number) {
-        return this.imagenesMedicasService.obtenerImagenMedicaPorId(id);
-    }
-
-    @Put(':id')
-    async actualizarImagenMedica(@Param('id') id: number, @Body() actualizarImagenMedicaDto: ActualizarImagenMedicaDto) {
-        return this.imagenesMedicasService.actualizarImagenMedica(id, actualizarImagenMedicaDto);
-    }
-
-    @Delete(':id')
-    async eliminarImagenMedica(@Param('id') id: number) {
-        return this.imagenesMedicasService.eliminarImagenMedica(id);
-    }
+  @Get()
+  async obtenerImagenesMedicas() {
+    return await this.imagenMedicaService.obtenerTodasImagenesMedicas();
+  }
 }

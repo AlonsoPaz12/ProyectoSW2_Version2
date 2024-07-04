@@ -1,79 +1,40 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { ImagenMedica } from './imagenes-medicas.entity';
-import { OrdenMedica } from '../ordenes-medicas/ordenes-medicas.entity';
 import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';
+import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
 
 @Injectable()
-export class ImagenesMedicasService {
-    constructor(
-        @InjectRepository(ImagenMedica)
-        private readonly imagenMedicaRepository: Repository<ImagenMedica>,
-        
-        @InjectRepository(OrdenMedica)
-        private readonly ordenMedicaRepository: Repository<OrdenMedica>,
-    ) {}
+export class ImagenMedicaService {
+  constructor(
+    @InjectRepository(ImagenMedica)
+    private readonly imagenMedicaRepository: Repository<ImagenMedica>,
+    @InjectRepository(OrdenMedica)
+    private readonly ordenMedicaRepository: Repository<OrdenMedica>,
+  ) {}
 
-    async crearImagenMedica(crearImagenMedicaDto: CrearImagenMedicaDto) {
-        const { ordenmedicaId, ...imagenData } = crearImagenMedicaDto;
-
-        const ordenMedica = await this.ordenMedicaRepository.findOne({
-            where: { id: ordenmedicaId },
-        });
-
-        if (!ordenMedica) {
-            throw new NotFoundException(`Orden médica con ID ${ordenmedicaId} no encontrada`);
-        }
-
-        const nuevaImagen = this.imagenMedicaRepository.create({
-            ...imagenData,
-            orden: ordenMedica,
-        });
-
-        return await this.imagenMedicaRepository.save(nuevaImagen);
+  async crearImagenMedica(crearImagenMedicaDto: CrearImagenMedicaDto): Promise<ImagenMedica> {
+    const orden = await this.ordenMedicaRepository.findOne({ where: { id: crearImagenMedicaDto.ordenId } });
+    if (!orden) {
+      throw new Error('Orden médica no encontrada');
     }
 
-    async mostrarImagenesMedicas() {
-        return await this.imagenMedicaRepository.find({ relations: ['orden'] });
+    const nuevaImagen = this.imagenMedicaRepository.create({ ...crearImagenMedicaDto, orden });
+    return this.imagenMedicaRepository.save(nuevaImagen);
+  }
+
+  async obtenerTodasImagenesMedicas(): Promise<ImagenMedica[]> {
+    return this.imagenMedicaRepository.find({ relations: ['orden'] });
+  }
+
+  async actualizarImagenMedica(id: number, actualizarImagenMedicaDto: ActualizarImagenMedicaDto): Promise<ImagenMedica> {
+    const orden = await this.ordenMedicaRepository.findOne({ where: { id: actualizarImagenMedicaDto.ordenId } });
+    if (!orden) {
+      throw new Error('Orden médica no encontrada');
     }
 
-    async obtenerImagenMedicaPorId(id: number) {
-        const imagen = await this.imagenMedicaRepository.findOne({
-            where: { id },
-            relations: ['orden'],
-        });
-
-        if (!imagen) {
-            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
-        }
-
-        return imagen;
-    }
-
-    async actualizarImagenMedica(id: number, actualizarImagenMedicaDto: ActualizarImagenMedicaDto) {
-        const imagen = await this.imagenMedicaRepository.findOne({
-            where: { id },
-        });
-
-        if (!imagen) {
-            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
-        }
-
-        Object.assign(imagen, actualizarImagenMedicaDto);
-        return await this.imagenMedicaRepository.save(imagen);
-    }
-
-    async eliminarImagenMedica(id: number) {
-        const imagen = await this.imagenMedicaRepository.findOne({
-            where: { id },
-        });
-
-        if (!imagen) {
-            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
-        }
-
-        return await this.imagenMedicaRepository.remove(imagen);
-    }
+    await this.imagenMedicaRepository.update(id, { ...actualizarImagenMedicaDto, orden });
+    return this.imagenMedicaRepository.findOne({ where: { id }, relations: ['orden'] });
+  }
 }

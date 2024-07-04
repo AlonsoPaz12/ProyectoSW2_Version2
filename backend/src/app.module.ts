@@ -3,9 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
-
 import { dataSourceOptions } from '../db/data-source';
-
 import { EspecialidadModule } from './especialidades/especialidades.module'; 
 import { MedicoModule } from './medicos/medicos.module';
 import { PacienteModule } from './pacientes/pacientes.module';
@@ -18,7 +16,6 @@ import { ImagenMedicaModule } from './imagenes-medicas/imagenes-medicas.module';
 import { ComponentesModule } from './componentes-resultado/componentes_resultado.module';
 import { MedicamentoModule } from './medicamentos/medicamento.module';
 import { JwtModule } from '@nestjs/jwt';
-
 import { InitialLoadService } from './initial-load/initial-load.service';
 import { AuthController } from './auth/auth.controller';
 import { VacunasModule } from './vacunas/vacunas.module';
