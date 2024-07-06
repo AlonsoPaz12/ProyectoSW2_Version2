@@ -16,6 +16,51 @@
         { "id": 2,"nombre": "Paracetamol", "dosis": "150mg", "frecuencia": "Cada 8 horas" }
       ],
       "observacion": "Completar el tratamiento completo de 7 días."
+    },
+    {
+      "id": "3",
+      "citaId": "3",
+      "medicamento": [
+        { "id": 1, "nombre": "Metformina", "dosis": "850mg", "frecuencia": "Cada 12 horas" },
+        { "id": 2, "nombre": "Lisinopril", "dosis": "10mg", "frecuencia": "Cada 24 horas" }
+      ],
+      "observacion": "Tomar con las comidas para reducir los efectos secundarios gastrointestinales."
+    },
+    {
+      "id": "4",
+      "citaId": "4",
+      "medicamento": [
+        { "id": 1, "nombre": "Atenolol", "dosis": "50mg", "frecuencia": "Cada 24 horas" },
+        { "id": 2, "nombre": "Atorvastatina", "dosis": "20mg", "frecuencia": "Cada 24 horas" }
+      ],
+      "observacion": "Tomar por la noche para mejor efectividad."
+    },
+    {
+      "id": "5",
+      "citaId": "5",
+      "medicamento": [
+        { "id": 1, "nombre": "Furosemida", "dosis": "40mg", "frecuencia": "Cada 12 horas" },
+        { "id": 2, "nombre": "Potassium", "dosis": "20mEq", "frecuencia": "Cada 24 horas" }
+      ],
+      "observacion": "Mantenerse hidratado y controlar los niveles de potasio."
+    },
+    {
+      "id": "6",
+      "citaId": "6",
+      "medicamento": [
+        { "id": 1, "nombre": "Levotiroxina", "dosis": "50mcg", "frecuencia": "Cada 24 horas" },
+        { "id": 2, "nombre": "Vitamina D", "dosis": "2000IU", "frecuencia": "Cada 24 horas" }
+      ],
+      "observacion": "Tomar con el estómago vacío, preferiblemente en la mañana."
+    },
+    {
+      "id": "7",
+      "citaId": "7",
+      "medicamento": [
+        { "id": 1, "nombre": "Insulina", "dosis": "10 unidades", "frecuencia": "Cada 24 horas" },
+        { "id": 2, "nombre": "Metoprolol", "dosis": "50mg", "frecuencia": "Cada 12 horas" }
+      ],
+      "observacion": "Monitorizar los niveles de glucosa regularmente."
     }
   ]
   
