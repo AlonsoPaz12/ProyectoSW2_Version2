@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
 import styles from './page.module.css';
@@ -10,31 +10,35 @@ import Box from '@mui/material/Box';
 import UserMenu from '@/components/UserMenu/UserMenu';
 import Button from '@mui/material/Button';
 import { LuPlus } from "react-icons/lu";
+import { getAllDatesPerPacient } from '@/services/medicosService';
 
 const HistorialCitasDoctor = () => {
   const [citas, setCitas] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [searchDate, setSearchDate] = useState("");
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
-  
-    setCitas(citasData);
-    setPacientes(pacientesData);
+    const fetchDetails = async () => {
+      const allDatesPerPacient = await getAllDatesPerPacient(1)
+      setCitas(allDatesPerPacient);
+      setPacientes(pacientesData);
+    }
+    fetchDetails()
   }, []);
 
   const getNombrePaciente = (idPaciente) => {
-    const paciente = pacientes.find(p => p.id === idPaciente);
+    const paciente = pacientes.find(p => p.id == idPaciente);
     return paciente ? `${paciente.nombres} ${paciente.apePaterno} ${paciente.apeMaterno}` : 'Desconocido';
   };
 
   const handleVerDetallesClick = (id) => {
-    navigate(`/DetallesCita/${id}`); 
+    router.push(`/DetallesCita/${id}`); 
   };
 
   const filteredCitas = citas.filter(cita => {
-    const nombrePaciente = getNombrePaciente(cita.IDpaciente).toLowerCase();
+    const nombrePaciente = getNombrePaciente(cita.paciente.id).toLowerCase();
     const fechaCita = new Date(cita.fecha).toLocaleDateString('en-CA');
     return (
       (!searchName || nombrePaciente.includes(searchName.toLowerCase())) &&
@@ -89,7 +93,7 @@ const HistorialCitasDoctor = () => {
                 <tr key={cita.id} className={styles.tableRow}>
                   <td className={styles.tableCell}>{new Date(cita.fecha).toLocaleDateString()}</td>
                   <td className={styles.tableCell}>{new Date(cita.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                  <td className={styles.tableCell}>{getNombrePaciente(cita.IDpaciente)}</td>
+                  <td className={styles.tableCell}>{getNombrePaciente(cita.paciente.id)}</td>
                   <td className={styles.tableCell}>
                     <span className={cita.asistio ? styles.asistio : styles.noAsistio}>
                       {cita.asistio ? 'Asistió' : 'No Asistió'}

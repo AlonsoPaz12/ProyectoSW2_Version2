@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import pacientesData from "@/data/usuarios.JSON";
 import styles from './page.module.css';
 import SideNavBarDoctor from '@/components/SideNavBarDoctor/SideNavBarDoctor';
@@ -9,11 +8,12 @@ import Box from '@mui/material/Box';
 import UserMenu from '@/components/UserMenu/UserMenu';
 import Button from '@mui/material/Button';
 import { LuPlus } from "react-icons/lu";
+import { useRouter } from 'next/navigation';
 
 const ListaPacientes = () => {
   const [pacientes, setPacientes] = useState([]);
   const [selectedPaciente, setSelectedPaciente] = useState(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     // Cargar datos
@@ -31,7 +31,7 @@ const ListaPacientes = () => {
 
   const handleVerDetallesClick = (e, id) => {
     e.stopPropagation(); // Prevent triggering the row click event
-    navigate(`/DetallesPaciente/${id}`); // Navegar a DetallesPaciente con el ID del paciente
+    router.push(`/DetallesPaciente/${id}`); // Navegar a DetallesPaciente con el ID del paciente
   };
 
   const calculateAge = (birthDate) => {
@@ -55,7 +55,7 @@ const ListaPacientes = () => {
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
-      <SideNavBarDoctor />
+      <SideNavBarDoctor router={router} />
       <Box sx={{ flexDirection: "column", margin: "2em", width: "100%" }}>
         <div className={styles.cabecera}>
           <UserMenu />

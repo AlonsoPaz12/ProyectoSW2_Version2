@@ -1,5 +1,3 @@
-// medicos.service.ts
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
@@ -24,8 +22,6 @@ import { RecetaService } from 'src/recetas-medicas/recetas-medicas.service';
 import { OrdenMedicaService } from 'src/ordenes-medicas/ordenes-medicas.service';
 import { IniciarSesionDto } from 'src/pacientes/dto/paciente.dto';
 import { Paciente } from 'src/pacientes/pacientes.entity';
-
-
 
 @Injectable()
 export class MedicoService {
@@ -61,16 +57,15 @@ export class MedicoService {
         private readonly pacienteRepository: Repository<Paciente>,
 
         private readonly recetaService: RecetaService,
-
         private readonly ordenService: OrdenMedicaService,
     ) { }
 
     async findOneByEmail(correoElectronico: string): Promise<Medico | undefined> {
         return this.medicoRepository.findOne({ where: { correoElectronico } });
-      }
-    
+    }
+
     async validarMedico(iniciarSesionDto: IniciarSesionDto): Promise<any> {
-        const {correoElectronico, contrasena} = iniciarSesionDto;
+        const { correoElectronico, contrasena } = iniciarSesionDto;
         const medico = await this.findOneByEmail(correoElectronico);
         if (medico && contrasena === medico.contrasena) {
             const { contrasena, ...result } = medico;
@@ -102,6 +97,18 @@ export class MedicoService {
 
     async mostrarMedicos() {
         return await this.medicoRepository.find({ relations: ['especialidad'] });
+    }
+
+    async findAll(): Promise<Medico[]> {
+        return this.medicoRepository.find();
+    }
+
+    async findOne(id: number): Promise<Medico> {
+        const medico = await this.medicoRepository.findOne({ where: { id } });
+        if (!medico) {
+            throw new NotFoundException(`Medico con ID ${id} no encontrado`);
+        }
+        return medico;
     }
 
     async crearOrdenMedica(crearOrdenMedicaDto: CrearOrdenMedicaDto) {
@@ -141,7 +148,6 @@ export class MedicoService {
             observacion,
         });
     }
-
 
     async crearRecetaMedica(crearRecetaMedicaDto: CrearRecetaMedicaDto) {
         const { citaId, medicoId, pacienteId, observacion } = crearRecetaMedicaDto;
@@ -186,10 +192,9 @@ export class MedicoService {
         idReceta: number,
         agregarMedicamentoDto: AgregarMedicamentoDto
     ) {
-
         const { idMedicamento } = agregarMedicamentoDto;
 
-        //Buscar Receta por su ID
+        // Buscar Receta por su ID
         const receta = await this.recetaMedicaRepository.findOne({
             where: { id: idReceta },
             relations: ['medicamentos'],
@@ -199,7 +204,7 @@ export class MedicoService {
             throw new NotFoundException(`No se encontró la receta médica con ID ${idReceta}`);
         }
 
-        //Buscar medicamento por su ID
+        // Buscar medicamento por su ID
         const medicamento = await this.medicamentoRepository.findOne({
             where: { id: idMedicamento },
         });
@@ -208,21 +213,22 @@ export class MedicoService {
             throw new Error(`No se encontró ningún medicamento con el ID ${idMedicamento}`);
         }
 
-        //Verificar si el medicamento ya está asociado a la receta
+        // Verificar si el medicamento ya está asociado a la receta
         const existeMedicamento = receta.medicamentos.some(med => med.id === medicamento.id);
         if (existeMedicamento) {
             throw new Error(`El medicamento con ID ${medicamento.id} ya está asociado a la receta`);
         }
 
-        //Agregar el medicamento a la receta médica
+        // Agregar el medicamento a la receta médica
         receta.medicamentos.push(medicamento);
 
-        //Guardar la receta médica actualizada
+        // Guardar la receta médica actualizada
         return await this.recetaMedicaRepository.save(receta);
     }
 
+    /*
     async agregarHoraDisponible(medicoId: number, crearHoraDisponibleDto: CrearHoraDisponibleDto) {
-        const { fecha, horaInicio, horaFin } = crearHoraDisponibleDto;
+        const { fecha, horarios } = crearHoraDisponibleDto;
 
         // Buscar al médico por su ID
         const medico = await this.medicoRepository.findOne({
@@ -236,13 +242,14 @@ export class MedicoService {
         // Crear una nueva instancia de HoraDisponible
         const nuevaHoraDisponible = new HoraDisponible();
         nuevaHoraDisponible.fecha = fecha;
-        nuevaHoraDisponible.horaInicio = horaInicio;
+        nuevaHoraDisponible.horaInicio = horarios.horaInicio;
         nuevaHoraDisponible.horaFin = horaFin;
         nuevaHoraDisponible.medico = medico;
 
         // Guardar el nuevo horario disponible asociado al médico
         return await this.horaDisponibleRepository.save(nuevaHoraDisponible);
     }
+*/
 
     async verRecetaDeCita(citaId: number) {
         const cita = await this.citaRepository.findOne({
@@ -287,7 +294,6 @@ export class MedicoService {
     }
 
     async agregarResultadoLaboratorio(idOrdenMedica: number, idResultadoLab: number) {
-
         const ordenMedica = await this.ordenMedicaRepository.findOne({
             where: { id: idOrdenMedica },
             relations: ['resultadoLaboratorio'],
@@ -373,5 +379,4 @@ export class MedicoService {
         ordenMedica.resultadoLaboratorio = null;
         return await this.ordenMedicaRepository.save(ordenMedica);
     }
-
 }

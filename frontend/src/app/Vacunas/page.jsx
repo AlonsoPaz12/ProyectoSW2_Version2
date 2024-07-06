@@ -1,49 +1,38 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import styles from './page.module.css';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import {
+  Box,
+  Paper,
+  Avatar,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button
+} from '@mui/material'; // Asegúrate de importar los componentes de MUI que estás utilizando
 import SideNavBar from '@/components/SideNavBar/SideNavBar';
-import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-// Datos planos de ejemplo
-const userData = {
-  nombre: "Carrión Mendoza, Gianella Ariana",
-  fechaNacimiento: "15 de enero del 2001",
-  documentoIdentificacion: "73252828",
-  genero: "Femenino",
-  vacunas: [
-    { vacuna: "Hepatitis B", fecha: "01-02-2020", dosis: "1ra", fabricante: "Sanofi", lugar: "Lima" },
-    { vacuna: "Influenza", fecha: "15-03-2021", dosis: "2da", fabricante: "Pfizer", lugar: "Arequipa" },
-    { vacuna: "Influenza", fecha: "15-03-2021", dosis: "2da", fabricante: "Pfizer", lugar: "Arequipa" },
-    { vacuna: "Influenza", fecha: "15-03-2021", dosis: "2da", fabricante: "Pfizer", lugar: "Arequipa" },
-  ]
-};
-
-// Comentario: Importa axios para realizar peticiones HTTP al backend
-// import axios from 'axios';
 
 const Vacunas = () => {
-  const [data, setData] = useState(userData);
+  const [paciente, setPaciente] = useState(null);
+  const [vacunas, setVacunas] = useState([]);
 
-  // Comentario: Usa useEffect para realizar una petición al backend cuando el componente se monte
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Comentario: Realiza una petición GET a la API para obtener los datos de vacunación
-        // const response = await axios.get('https://tu-api-url.com/vacunas'); // Reemplaza con la URL de tu API
-        // setData(response.data);
+        const storedUser = JSON.parse(localStorage.getItem('usuario'));
+        if (storedUser && storedUser.paciente) {
+          setPaciente(storedUser.paciente);
+          fetchVacunasByPacienteId(storedUser.paciente.id);
+        } else {
+          console.error('No se encontró información del paciente en localStorage');
+        }
       } catch (error) {
         console.error('Error fetching user data', error);
       }
@@ -51,28 +40,40 @@ const Vacunas = () => {
 
     fetchData();
   }, []);
+
+  const fetchVacunasByPacienteId = async (pacienteId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/vacunas/paciente/${pacienteId}/vacunas`);
+      setVacunas(response.data.vacunas);
+    } catch (error) {
+      console.error('Error al obtener las vacunas del paciente:', error);
+    }
+  };
+
   const generatePDF = () => {
+    if (!paciente) return;
+
     const doc = new jsPDF();
 
-    doc.text(`Nombre: ${data.nombre}`, 10, 10);
-    doc.text(`Fecha de Nacimiento: ${data.fechaNacimiento}`, 10, 20);
-    doc.text(`Documento de Identificación: ${data.documentoIdentificacion}`, 10, 30);
-    doc.text(`Género: ${data.genero}`, 10, 40);
+    doc.text(`Nombre: ${paciente.nombres} ${paciente.apePaterno} ${paciente.apeMaterno}`, 10, 10);
+    doc.text(`Fecha de Nacimiento: ${paciente.fechaNacimiento}`, 10, 20);
+    doc.text(`Documento de Identificación: ${paciente.numeroDocumento}`, 10, 30);
+    doc.text(`Género: ${paciente.genero}`, 10, 40);
 
     const tableColumn = ["Vacuna Administrada", "Fecha de Vacunación", "Dosis", "Fabricante", "Lugar de vacunación"];
     const tableRows = [];
 
-    data.vacunas.forEach(vacuna => {
+    vacunas.forEach((vacuna, index) => {
       const vacunaData = [
-        vacuna.vacuna,
+        vacuna.nombre,
         vacuna.fecha,
         vacuna.dosis,
         vacuna.fabricante,
-        vacuna.lugar,
+        vacuna.lugarDeVacunacion,
       ];
       tableRows.push(vacunaData);
     });
-    
+
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
@@ -81,24 +82,29 @@ const Vacunas = () => {
 
     doc.save("vacunacion.pdf");
   };
+
   return (
     <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
       <SideNavBar />
+
       <Box sx={{ flexDirection: "column", margin: "2em", width: "100%" }}>
         <Paper sx={{ padding: "2em", width: "100%" }}>
-          <Box sx={{ display: "flex", alignItems: "center", marginBottom: "1em" }}>
-            <Avatar
-              alt={data.nombre}
-              src="/path/to/avatar.jpg" // Reemplaza con la ruta a la imagen del usuario
-              sx={{ width: 56, height: 56, marginRight: "1em" }}
-            />
-            <Box>
-              <Typography variant="h6">{data.nombre}</Typography>
-              <Typography variant="body1">Fecha de Nacimiento: {data.fechaNacimiento}</Typography>
-              <Typography variant="body1">Documento de Identificación: {data.documentoIdentificacion}</Typography>
-              <Typography variant="body1">Género: {data.genero}</Typography>
+          {paciente && (
+            <Box sx={{ display: "flex", alignItems: "center", marginBottom: "1em" }}>
+              <Avatar
+                alt={paciente.nombres}
+                src={paciente.imageurl}
+                sx={{ width: 56, height: 56, marginRight: "1em" }}
+              />
+              <Box>
+                <Typography variant="h6">{`${paciente.nombres} ${paciente.apePaterno} ${paciente.apeMaterno}`}</Typography>
+                <Typography variant="body1">Fecha de Nacimiento: {paciente.fechaNacimiento.slice(0,10)}</Typography>
+                <Typography variant="body1">Documento de Identificación: {paciente.numeroDocumento}</Typography>
+                <Typography variant="body1">Género: {paciente.genero}</Typography>
+              </Box>
             </Box>
-          </Box>
+          )}
+
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -111,18 +117,19 @@ const Vacunas = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.vacunas.map((vacuna, index) => (
+                {vacunas.map((vacuna, index) => (
                   <TableRow key={index}>
-                    <TableCell>{vacuna.vacuna}</TableCell>
+                    <TableCell>{vacuna.nombre}</TableCell>
                     <TableCell>{vacuna.fecha}</TableCell>
                     <TableCell>{vacuna.dosis}</TableCell>
                     <TableCell>{vacuna.fabricante}</TableCell>
-                    <TableCell>{vacuna.lugar}</TableCell>
+                    <TableCell>{vacuna.lugarDeVacunacion}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
           <Box sx={{ marginTop: "1em", textAlign: "right" }}>
             <Button variant="contained" color="primary" onClick={generatePDF}>Descargar PDF</Button>
           </Box>

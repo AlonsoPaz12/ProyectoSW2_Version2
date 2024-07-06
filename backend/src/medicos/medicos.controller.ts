@@ -57,7 +57,7 @@ export class MedicoController {
       throw new NotFoundException(error.message);
     }
   }
-
+/*
   @Post(':medicoId/hora-disponible')
   async agregarHoraDisponible(
     @Param('medicoId') medicoId: number,
@@ -66,6 +66,17 @@ export class MedicoController {
     try {
       const horaDisponible = await this.medicoService.agregarHoraDisponible(medicoId, crearHoraDisponibleDto);
       return { message: 'Hora disponible agregada correctamente', horaDisponible };
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+    */
+   
+  @Get()
+  async findAll() {
+    try {
+      const medicos = await this.medicoService.findAll();
+      return { message: 'Médicos obtenidos correctamente', medicos };
     } catch (error) {
       throw new NotFoundException(error.message);
     }

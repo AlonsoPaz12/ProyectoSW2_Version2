@@ -21,27 +21,3 @@ Content-Type: application/json
   "rangoNormal": "70-100",
   "ordenmedicaId": 1
 }
-
-# Obtener todos los resultados de laboratorio
-GET http://localhost:3000/resultados-lab
-
-# Obtener un resultado de laboratorio por ID
-GET http://localhost:3000/resultados-lab/1
-
-# Actualizar un resultado de laboratorio
-PUT http://localhost:3000/resultados-lab/1
-Content-Type: application/json
-
-{
-  "motivoPrueba": "Motivo de prueba actualizado",
-  "nombres": "Jane",
-  "apePaterno": "Doe",
-  "fecha": "2024-06-23T00:00:00Z",
-  "Resultado": "Resultado actualizado",
-  "unidades": "mmol/L",
-  "rangoNormal": "4-6",
-  "ordenmedicaId": 1
-}
-
-# Eliminar un resultado de laboratorio
-DELETE http://localhost:3000/resultados-lab/1

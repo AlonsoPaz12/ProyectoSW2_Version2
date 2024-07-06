@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, MenuItem, Typography, Avatar } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
+  const router = useRouter()
+  const [usuario, setUsuario] = useState(null); // Estado para almacenar el usuario
+  const [tipoUsuario, setTipoUsuario] = useState(null);
+
+  useEffect(()=>{
+    const storedUser = JSON.parse(localStorage.getItem('usuario'));
+    if (storedUser.medico) {
+        setUsuario(storedUser.medico);
+        setTipoUsuario('medico');
+    }else{
+        setUsuario(storedUser.paciente);
+        setTipoUsuario('paciente')
+    }
+
+},[])
+
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,7 +37,11 @@ const UserMenu = () => {
       <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleMenuOpen}>
         <Avatar style={{ marginRight: 8 }} />
         <Typography variant="body1" style={{ fontWeight: 'bold', color: '#004225' }}>
-          GIANELLA ARIANA CARRIÓN MENDOZA
+          {usuario ? 
+            tipoUsuario === 'paciente' || tipoUsuario === 'medico' ? 
+              `${usuario.nombres} ${usuario.apePaterno} ${usuario.apeMaterno}` : 
+              usuario.nombre
+            : 'Nombre de Usuario'}
         </Typography>
         <ArrowDropDownIcon style={{ color: '#004225' }} />
       </div>
@@ -44,7 +63,7 @@ const UserMenu = () => {
           },
         }}
       >
-        <MenuItem onClick={() => { handleMenuClose(); navigate(`/VisualizacionDePerfil`);}}>
+        <MenuItem onClick={() => { handleMenuClose(); router.push(`/VisualizacionDePerfil`);}}>
           <Typography variant="body1" style={{ color: '#1a73e8', width: '100%' }}>Mi perfil</Typography>
         </MenuItem>
         <MenuItem onClick={() => { handleMenuClose()}} style={{ width: 200 }}> {/* Ancho fijo de las opciones del menú */}

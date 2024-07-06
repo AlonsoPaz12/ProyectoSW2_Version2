@@ -31,7 +31,6 @@ export class Medico extends Usuario{
     ordenes: OrdenMedica[];
 
     @ManyToMany(() => Vacuna, vacuna => vacuna.medicos)
-    @JoinTable()
     vacunas: Vacuna[];
 
     @OneToMany(() => HoraDisponible, horaDisponible => horaDisponible.medico)

@@ -1,12 +1,14 @@
-export class CrearOrdenMedicaDto{
+export class CrearOrdenMedicaDto {
     observacion: string;
     citaId: number;
     medicoId: number;
     pacienteId: number;
 }
-
-export class ActualizarOrdenMedicaDto{
-    resultadoLabId?: number;
-    imagenMedicasId?: number;
+export class ActualizarOrdenMedicaDto {
     observacion?: string;
+    citaId?: number;
+    medicoId?: number;
+    pacienteId?: number;
+    resultadoLabId?: number;
+    imagenMedicasId?: number[]; 
 }

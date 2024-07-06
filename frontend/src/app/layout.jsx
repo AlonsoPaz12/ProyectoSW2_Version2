@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ["latin"] });
 
-const AppRoutes = dynamic(() => import('./routes'), { ssr: false });
 
 export const metadata = {
   title: "MedControl+",
@@ -15,8 +14,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AppRoutes />
+      <body className={inter.className}>   
+      {children}
       </body>
     </html>
   );
