@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from 'typeorm';
 import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
+import { RecetaDetalle } from 'src/recetas-detalle/recetas-detalle.entity';
+
 @Entity()
 export class Medicamento{
     @PrimaryGeneratedColumn()
@@ -20,5 +22,8 @@ export class Medicamento{
     @ManyToMany(() => RecetaMedica, receta => receta.medicamentos)
     @JoinTable()
     recetas: RecetaMedica[];
+
+    @OneToMany(() => RecetaDetalle, detalle => detalle.medicamento)
+    detalles: RecetaDetalle[];      /*añadiendo para la rela con recetas detalle*/
     
 }

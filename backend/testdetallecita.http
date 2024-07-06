@@ -1,0 +1,34 @@
+# Crear un detalle de receta
+POST http://localhost:3000/recetas-detalle
+Content-Type: application/json
+
+{
+  "idReceta": 1,
+  "idMedicamento": 1
+}
+
+###
+
+# Obtener todos los detalles de receta
+GET http://localhost:3000/recetas-detalle
+
+###
+
+# Obtener un detalle de receta por ID
+GET http://localhost:3000/recetas-detalle/1
+
+###
+
+# Actualizar un detalle de receta
+PUT http://localhost:3000/recetas-detalle/1
+Content-Type: application/json
+
+{
+  "idReceta": 2,
+  "idMedicamento": 2
+}
+
+###
+
+# Eliminar un detalle de receta
+DELETE http://localhost:3000/recetas-detalle/1

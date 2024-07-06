@@ -11,6 +11,8 @@ import { MedicoModule } from './medicos/medicos.module';
 import { PacienteModule } from './pacientes/pacientes.module';
 import { CitaModule } from './citas/citas.module';
 import { RecetasMedicasModule } from './recetas-medicas/recetas-medicas.module';
+import { RecetaDetalleModule } from './recetas-detalle/recetas-detalle.module';
+
 import { HoraDisponibleModule } from './horario-disponible/horario-disponible.module';
 import { OrdenesMedicasModule } from './ordenes-medicas/ordenes-medicas.module';
 import { ResultadoLabModule } from './resultados-lab/resultados-lab.module';
@@ -35,6 +37,7 @@ import { AuthController } from './auth/auth.controller';
     OrdenesMedicasModule,
     PacienteModule,
     RecetasMedicasModule,
+    RecetaDetalleModule, /*agregando para receta detalle*/
     ResultadoLabModule,
     JwtModule.register({
       secret: 'pimba',
