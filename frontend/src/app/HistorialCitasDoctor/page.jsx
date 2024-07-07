@@ -21,7 +21,8 @@ const HistorialCitasDoctor = () => {
 
   useEffect(() => {
     const fetchDetails = async () => {
-      const allDatesPerPacient = await getAllDatesPerPacient(1)
+      const storedUser = JSON.parse(localStorage.getItem('usuario'));
+      const allDatesPerPacient = await getAllDatesPerPacient(storedUser.medico.id)
       setCitas(allDatesPerPacient);
       setPacientes(pacientesData);
     }

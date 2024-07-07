@@ -19,7 +19,7 @@ import { FaUser, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 const pages = ['Nosotros', 'Especialidades', 'Doctores'];
-const settings = ['Iniciar Sesión', 'Registrarse'];
+const settings = ['IniciarSesion', 'Registro'];
 
 function ResponsiveAppBar() {
   const router = useRouter()
@@ -101,8 +101,8 @@ function ResponsiveAppBar() {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={() => { handleCloseNavMenu(); router.push(`/${page}`);}} sx={{ color: '#00916E'}}>
+                {pages.map((page, index) => (
+                  <MenuItem key={index} onClick={() => { handleCloseNavMenu(); router.push(`/${page}`);}} sx={{ color: '#00916E'}}>
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -129,8 +129,9 @@ function ResponsiveAppBar() {
               MC+
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+              {pages.map((page, index) => (
                   <Button
+                    key={index}
                     onClick={() => router.push(`/${page}`)}
                     sx={{ my: 2, color: 'white', display: 'block'}}
                   >
@@ -163,10 +164,12 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={() => { handleCloseUserMenu(); router.push(`/${setting}`);}}>
-                    <Typography sx={{ color: '#00916E'}} textAlign="center">{setting}</Typography>
-                  </MenuItem>
+                {settings.map((setting, index) => (
+                  <MenuItem key={index} onClick={() => { handleCloseUserMenu(); router.push(`/${setting === 'IniciarSesion' ? 'IniciarSesion' : 'Registro'}`); }}>
+                  <Typography sx={{ color: '#00916E'}} textAlign="center">
+                    {setting === 'IniciarSesion' ? 'Iniciar Sesión' : 'Registro'}
+                  </Typography>
+                </MenuItem>
                 ))}
               </Menu>
             </Box>
