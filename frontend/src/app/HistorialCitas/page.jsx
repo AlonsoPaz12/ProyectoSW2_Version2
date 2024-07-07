@@ -45,9 +45,7 @@ const HistorialCitas = () => {
     <Box sx={{ display: "flex", backgroundColor: "#E7F6F1", height: "100vh", width: "100%" }}>
       <SideNavBar />
       <Box sx={{ flexDirection: "column", margin: "2em", width: "100%" }}>
-        <div className={styles.cabecera}>
-          <UserMenu />
-        </div>
+      
         <h5 className={styles.titulo}>HISTORIAL DE CITAS</h5>
         <div className={styles.containerTabla}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
