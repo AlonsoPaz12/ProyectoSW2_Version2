@@ -59,19 +59,23 @@ export class HorasDisponiblesService {
             horaFin,
         });
     }
-
+    //1
     async updateHorarios(medicoId: number, horarios: CrearHoraDisponibleDto[]): Promise<HoraDisponible[]> {
+        //2
         const medico = await this.medicoRepository.findOne({ where: { id: medicoId }, relations: ['horasDisponibles'] });
-
+        //3
         if (!medico) {
+            //4
             throw new Error('Medico not found');
         }
 
-        // Obtener horarios existentes
+        //5 Obtener horarios existentes
         const horariosExistentes = await this.horaDisponibleRepository.find({ where: { medico: { id: medicoId } } });
 
         // Crear nuevos horarios y eliminar los desmarcados
+        //                            6   7
         const nuevosHorarios = horarios.map(horario => {
+            // 8
             return {
                 diaSemana: horario.diaSemana,
                 horaInicio: horario.horaInicio,
@@ -79,27 +83,33 @@ export class HorasDisponiblesService {
                 seleccionado: horario.seleccionado,
             };
         });
-
+        //9                  10
         for (const horarioExistente of horariosExistentes) {
+            //11
             const horarioNuevo = nuevosHorarios.find(horario => 
                 horario.diaSemana === horarioExistente.diaSemana &&
                 horario.horaInicio === horarioExistente.horaInicio &&
                 horario.horaFin === horarioExistente.horaFin
             );
-
+                //12                // 13
             if (horarioNuevo && !horarioNuevo.seleccionado) {
+                //14
                 await this.deleteHorario(medicoId, horarioExistente.diaSemana, horarioExistente.horaInicio, horarioExistente.horaFin);
             }
         }
-
-        const horariosAInsertar = nuevosHorarios.filter(horario => 
+        //                           15              16
+        const horariosAInsertar = nuevosHorarios.filter(horario =>
+            // 17 
             horario.seleccionado &&
+            // 18
             !horariosExistentes.some(existente => 
                 existente.diaSemana === horario.diaSemana &&
                 existente.horaInicio === horario.horaInicio &&
                 existente.horaFin === horario.horaFin
             )
+            //19  20
         ).map(horario => {
+            //21
             const nuevaHoraDisponible = new HoraDisponible();
             nuevaHoraDisponible.medico = medico;
             nuevaHoraDisponible.diaSemana = horario.diaSemana;
@@ -108,8 +118,10 @@ export class HorasDisponiblesService {
             return nuevaHoraDisponible;
         });
 
-        await this.horaDisponibleRepository.save(horariosAInsertar);
 
+        //22
+        await this.horaDisponibleRepository.save(horariosAInsertar);
+        //23
         return horariosAInsertar;
     }
    
