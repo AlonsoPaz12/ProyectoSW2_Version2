@@ -1,4 +1,4 @@
-export class CrearOrdenMedicaDto{
+export class CrearOrdenMedicaDto {
     observacion: string;
     imagenMedicaId: number;
     resultadoLabId: number;
@@ -9,6 +9,6 @@ export class CrearOrdenMedicaDto{
 
 export class ActualizarOrdenMedicaDto{
     resultadoLabId?: number;
-    imagenMedicaId?: number;
+    imagenMedicasId?: number;
     observacion?: string;
 }

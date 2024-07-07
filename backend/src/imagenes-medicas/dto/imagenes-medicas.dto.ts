@@ -1,4 +1,3 @@
-// dto/imagenes-medicas.dto.ts
 export class CrearImagenMedicaDto {
     nombrePaciente: string;
     ExamDate: string;
@@ -8,6 +7,7 @@ export class CrearImagenMedicaDto {
     NotasMedic: string;
     imagen: string;
 }
+
 
 export class ActualizarImagenMedicaDto {
     nombrePaciente?: string;

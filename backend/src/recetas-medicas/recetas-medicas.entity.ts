@@ -1,9 +1,11 @@
 //recetas-medicas.entity
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
-import { Medicamento } from "src/medicamentos/medicamentos.entity";
-import { Medico } from 'src/medicos/medicos.entity';
-import { Cita } from 'src/citas/citas.entity';
-import { Paciente } from 'src/pacientes/pacientes.entity';
+import { Medicamento } from "../medicamentos/medicamentos.entity";
+import { Medico } from '../medicos/medicos.entity';
+import { Cita } from '../citas/citas.entity';
+import { Paciente } from '../pacientes/pacientes.entity';
+import { RecetaDetalle } from '../recetas-detalle/recetas-detalle.entity';
+
 @Entity()
 export class RecetaMedica{
     @PrimaryGeneratedColumn()
@@ -26,5 +28,9 @@ export class RecetaMedica{
 
     @ManyToOne(() => Paciente, paciente => paciente.recetas)
     @JoinColumn({ name: 'paciente_id' })
-    paciente: Paciente;
+    paciente: Paciente
+    
+    @OneToMany(() => RecetaDetalle, detalle => detalle.receta)
+    detalles: RecetaDetalle[];
+    
 }

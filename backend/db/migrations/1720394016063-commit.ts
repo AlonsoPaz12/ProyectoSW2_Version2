@@ -1,14 +1,15 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Commit1720326683493 implements MigrationInterface {
-    name = 'Commit1720326683493'
+export class Commit1720394016063 implements MigrationInterface {
+    name = 'Commit1720394016063'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "imagen_medica" ("id" SERIAL NOT NULL, "nombrePaciente" character varying NOT NULL, "ExamDate" character varying NOT NULL, "tipo" character varying NOT NULL, "indicaciones" character varying NOT NULL, "NombreDoc" character varying NOT NULL, "NotasMedic" character varying NOT NULL, "imagen" character varying NOT NULL, "orden_medica_id" integer, CONSTRAINT "PK_e8009c59a8675d663c5681399ff" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "imagen_medica" ("id" SERIAL NOT NULL, "nombrePaciente" character varying NOT NULL, "ExamDate" character varying NOT NULL, "tipo" character varying NOT NULL, "indicaciones" character varying NOT NULL, "NombreDoc" character varying NOT NULL, "NotasMedic" character varying NOT NULL, "imagen" character varying NOT NULL, "ordenId" integer, CONSTRAINT "PK_e8009c59a8675d663c5681399ff" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "componente_resultado" ("id" SERIAL NOT NULL, "nombre" character varying NOT NULL, "valor" character varying NOT NULL, "resultadoLabId" integer, CONSTRAINT "PK_a096d6626bf1c3dc1c90a81d1b9" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "resultado_lab" ("id" SERIAL NOT NULL, "imageurl" character varying, "numeroDocumento" character varying, "nombres" character varying NOT NULL, "apePaterno" character varying NOT NULL, "apeMaterno" character varying, "fechaNacimiento" TIMESTAMP, "numCelular" character varying, "correoElectronico" character varying, "contrasena" character varying, "repContrasena" character varying, "genero" character varying, "motivoPrueba" character varying NOT NULL, "fecha" TIMESTAMP NOT NULL, "Resultado" character varying NOT NULL, "unidades" character varying NOT NULL, "rangoNormal" character varying NOT NULL, "orden_medica_id" integer, CONSTRAINT "PK_bcb902819fd116bb7fc7baf6f4e" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "orden_medica" ("id" SERIAL NOT NULL, "observacion" character varying NOT NULL, "resultadoLaboratorioId" integer, "imagenMedicaId" integer, "medico_id" integer, "paciente_id" integer, "cita_id" integer, CONSTRAINT "REL_985a46a966708e1c592a1d5e91" UNIQUE ("resultadoLaboratorioId"), CONSTRAINT "REL_bcc7cf45152b5c7666543330a9" UNIQUE ("imagenMedicaId"), CONSTRAINT "REL_e948a2e962b242356ad80cc02a" UNIQUE ("cita_id"), CONSTRAINT "PK_a7b646fda2bf0959a2dff01565f" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "usuario" ("id" SERIAL NOT NULL, "imageurl" character varying NOT NULL, "numeroDocumento" character varying NOT NULL, "nombres" character varying NOT NULL, "apePaterno" character varying NOT NULL, "apeMaterno" character varying NOT NULL, "fechaNacimiento" TIMESTAMP NOT NULL, "numCelular" character varying NOT NULL, "correoElectronico" character varying NOT NULL, "contrasena" character varying NOT NULL, "repContrasena" character varying NOT NULL, "genero" character varying NOT NULL, CONSTRAINT "PK_a56c58e5cabaa04fb2c98d2d7e2" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "recetas_detalle" ("id" SERIAL NOT NULL, "idReceta" integer, "idMedicamento" integer, CONSTRAINT "PK_91721bb01470a4536f5a9e767ff" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "medicamento" ("id" SERIAL NOT NULL, "nombre" character varying NOT NULL, "tipo" character varying NOT NULL, "frecuencia" character varying NOT NULL, "dosis" character varying NOT NULL, CONSTRAINT "PK_d78d6a102cc6e898c965583d55a" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "receta_medica" ("id" SERIAL NOT NULL, "observacion" character varying NOT NULL, "medico_id" integer, "cita_id" integer, "paciente_id" integer, CONSTRAINT "REL_930f4875c976845d4d12416c58" UNIQUE ("cita_id"), CONSTRAINT "PK_0547b19ff725e3eed67ee542405" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "paciente" ("id" SERIAL NOT NULL, "imageurl" character varying NOT NULL, "numeroDocumento" character varying NOT NULL, "nombres" character varying NOT NULL, "apePaterno" character varying NOT NULL, "apeMaterno" character varying NOT NULL, "fechaNacimiento" TIMESTAMP NOT NULL, "numCelular" character varying NOT NULL, "correoElectronico" character varying NOT NULL, "contrasena" character varying NOT NULL, "repContrasena" character varying NOT NULL, "genero" character varying NOT NULL, CONSTRAINT "PK_cbcb7985432e4b49d32c5243867" PRIMARY KEY ("id"))`);
@@ -29,7 +30,6 @@ export class Commit1720326683493 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "vacuna_pacientes_paciente" ("vacunaId" integer NOT NULL, "pacienteId" integer NOT NULL, CONSTRAINT "PK_9ade85f671fa12053255cf96c65" PRIMARY KEY ("vacunaId", "pacienteId"))`);
         await queryRunner.query(`CREATE INDEX "IDX_38baea6f24d0b5da8042fa8300" ON "vacuna_pacientes_paciente" ("vacunaId") `);
         await queryRunner.query(`CREATE INDEX "IDX_0d8ae38e99950e8a9f6a58ca5d" ON "vacuna_pacientes_paciente" ("pacienteId") `);
-        await queryRunner.query(`ALTER TABLE "imagen_medica" ADD CONSTRAINT "FK_86ffcb09cef464ae6897d9e1333" FOREIGN KEY ("orden_medica_id") REFERENCES "orden_medica"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "componente_resultado" ADD CONSTRAINT "FK_26be3d2c519ee92d7c2d5b3484d" FOREIGN KEY ("resultadoLabId") REFERENCES "resultado_lab"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "resultado_lab" ADD CONSTRAINT "FK_383bc394486c7547ae52da8dddd" FOREIGN KEY ("orden_medica_id") REFERENCES "orden_medica"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "orden_medica" ADD CONSTRAINT "FK_985a46a966708e1c592a1d5e91a" FOREIGN KEY ("resultadoLaboratorioId") REFERENCES "resultado_lab"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -37,6 +37,8 @@ export class Commit1720326683493 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "orden_medica" ADD CONSTRAINT "FK_d7b8889d7bd4f4b55457e883233" FOREIGN KEY ("medico_id") REFERENCES "medico"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "orden_medica" ADD CONSTRAINT "FK_dd6ffe47827f7dbbf180c6ec5bd" FOREIGN KEY ("paciente_id") REFERENCES "paciente"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "orden_medica" ADD CONSTRAINT "FK_e948a2e962b242356ad80cc02a5" FOREIGN KEY ("cita_id") REFERENCES "cita"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "recetas_detalle" ADD CONSTRAINT "FK_e75c5cf4d6304b094cc6b145f1b" FOREIGN KEY ("idReceta") REFERENCES "receta_medica"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "recetas_detalle" ADD CONSTRAINT "FK_4c6836bb7ebc447d49845fcf23c" FOREIGN KEY ("idMedicamento") REFERENCES "medicamento"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "receta_medica" ADD CONSTRAINT "FK_9eef899e13bdf21000a44bc5a6d" FOREIGN KEY ("medico_id") REFERENCES "medico"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "receta_medica" ADD CONSTRAINT "FK_930f4875c976845d4d12416c580" FOREIGN KEY ("cita_id") REFERENCES "cita"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "receta_medica" ADD CONSTRAINT "FK_506ad30b48b6f04aa923dc93a91" FOREIGN KEY ("paciente_id") REFERENCES "paciente"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -74,6 +76,8 @@ export class Commit1720326683493 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "receta_medica" DROP CONSTRAINT "FK_506ad30b48b6f04aa923dc93a91"`);
         await queryRunner.query(`ALTER TABLE "receta_medica" DROP CONSTRAINT "FK_930f4875c976845d4d12416c580"`);
         await queryRunner.query(`ALTER TABLE "receta_medica" DROP CONSTRAINT "FK_9eef899e13bdf21000a44bc5a6d"`);
+        await queryRunner.query(`ALTER TABLE "recetas_detalle" DROP CONSTRAINT "FK_4c6836bb7ebc447d49845fcf23c"`);
+        await queryRunner.query(`ALTER TABLE "recetas_detalle" DROP CONSTRAINT "FK_e75c5cf4d6304b094cc6b145f1b"`);
         await queryRunner.query(`ALTER TABLE "orden_medica" DROP CONSTRAINT "FK_e948a2e962b242356ad80cc02a5"`);
         await queryRunner.query(`ALTER TABLE "orden_medica" DROP CONSTRAINT "FK_dd6ffe47827f7dbbf180c6ec5bd"`);
         await queryRunner.query(`ALTER TABLE "orden_medica" DROP CONSTRAINT "FK_d7b8889d7bd4f4b55457e883233"`);
@@ -81,7 +85,6 @@ export class Commit1720326683493 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "orden_medica" DROP CONSTRAINT "FK_985a46a966708e1c592a1d5e91a"`);
         await queryRunner.query(`ALTER TABLE "resultado_lab" DROP CONSTRAINT "FK_383bc394486c7547ae52da8dddd"`);
         await queryRunner.query(`ALTER TABLE "componente_resultado" DROP CONSTRAINT "FK_26be3d2c519ee92d7c2d5b3484d"`);
-        await queryRunner.query(`ALTER TABLE "imagen_medica" DROP CONSTRAINT "FK_86ffcb09cef464ae6897d9e1333"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_0d8ae38e99950e8a9f6a58ca5d"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_38baea6f24d0b5da8042fa8300"`);
         await queryRunner.query(`DROP TABLE "vacuna_pacientes_paciente"`);
@@ -102,6 +105,7 @@ export class Commit1720326683493 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "paciente"`);
         await queryRunner.query(`DROP TABLE "receta_medica"`);
         await queryRunner.query(`DROP TABLE "medicamento"`);
+        await queryRunner.query(`DROP TABLE "recetas_detalle"`);
         await queryRunner.query(`DROP TABLE "usuario"`);
         await queryRunner.query(`DROP TABLE "orden_medica"`);
         await queryRunner.query(`DROP TABLE "resultado_lab"`);

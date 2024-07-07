@@ -43,6 +43,20 @@ const DetallesCita = ({id}) => {
   const [isOrdenDialogOpen, setIsOrdenDialogOpen] = useState(false);
   const [currentOrden, setCurrentOrden] = useState({});
 
+  const calcularEdad = (fechaNacimiento) => {
+    const hoy = new Date();
+    const fechaNacimientoObj = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - fechaNacimientoObj.getFullYear();
+    const diferenciaMeses = hoy.getMonth() - fechaNacimientoObj.getMonth();
+
+    if (diferenciaMeses < 0 || (diferenciaMeses === 0 && hoy.getDate() < fechaNacimientoObj.getDate())) {
+      edad--;
+    }
+
+    return edad;
+  };
+
+
   const fetchPaciente = async (pacienteId) => {
     
     const pacienteData = pacientesData.find(paciente => paciente.id === pacienteId);
@@ -319,10 +333,10 @@ const DetallesCita = ({id}) => {
               <>
                 <p className={styles.texto}><strong>Paciente:</strong> {paciente.nombres} {paciente.apePaterno} {paciente.apeMaterno}</p>
                 <p className={styles.texto}><strong>Fecha de Nacimiento:</strong> {paciente.fechaNacimiento}</p>
-                <p className={styles.texto}><strong>Edad:</strong> {paciente.fechaNacimiento} años</p>
+                <p className={styles.texto}><strong>Edad:</strong> {calcularEdad(paciente.fechaNacimiento)} años</p>
                 <p className={styles.texto}><strong>Estado:</strong> <span className={cita.asistio ? styles.asistio : styles.noAsistio}>{cita.asistio ? 'Asistió' : 'No Asistió'}</span></p>
-                <p className={styles.texto}><strong>Fecha:</strong> a</p>
-                <p className={styles.texto}><strong>Hora:</strong> a</p>
+                <p className={styles.texto}><strong>Fecha:</strong>  {new Date(cita.fecha).toLocaleDateString()}</p>
+                <p className={styles.texto}><strong>Hora:</strong> {new Date(cita.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
                 
               </>
             )}

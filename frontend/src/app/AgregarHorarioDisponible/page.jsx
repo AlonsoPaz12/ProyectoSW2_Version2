@@ -36,10 +36,7 @@ const AgregarHorarioDisponible = () => {
     useEffect(() => {
         const fetchHorarios = async () => {
             
-            if (!medicoId){
-                alert('Error: MedicoId no encontrado en el localStorage');
-                return;
-            }
+            
             try{
                 const response = await axios.get(`http://localhost:3000/horas-disponibles/${medicoId}`)
                 const horarios = response.data;

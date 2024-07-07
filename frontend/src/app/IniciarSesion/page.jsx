@@ -80,7 +80,7 @@ const IniciarSesion = () => {
                     <div className={styles.link}>¿Olvidaste tu contraseña?</div>
                     <button type="submit" className={styles.button}>Iniciar Sesión</button>
                     <div className={styles.separator}>0</div>
-                    <button className={styles.buttonSecondary}><a href='/Registrarse'>Registrarse</a></button>
+                    <button className={styles.buttonSecondary}><a href='/Registro'>Registrarse</a></button>
                 </form>
             </div>
         </div>

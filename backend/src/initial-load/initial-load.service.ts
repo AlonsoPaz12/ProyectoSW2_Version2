@@ -16,7 +16,7 @@ import { defaultCitas } from './default-citas';
 import { defaultRecetas } from './default-recetas';
 import { defaultOrdenes } from './default-ordenes';
 import { defaultVacunas } from './default-vacunas';
-import { ImagenesMedicasService } from 'src/imagenes-medicas/imagenes-medicas.service';
+import { ImagenMedicaService } from 'src/imagenes-medicas/imagenes-medicas.service';
 import { ResultadoLabService } from 'src/resultados-lab/resultados-lab.service';
 import { defaultImagenes } from './default-imagenes';
 import { defaultResultado } from './default-resultado';
@@ -31,7 +31,7 @@ export class InitialLoadService implements OnModuleInit {
     private readonly recetaService: RecetaService,
     private readonly ordenMedicaService: OrdenMedicaService,
     private readonly vacunaService: VacunaService,
-    private readonly imagenesService: ImagenesMedicasService,
+    private readonly imagenesService: ImagenMedicaService,
     private readonly resultadoService: ResultadoLabService
   ) { }
 

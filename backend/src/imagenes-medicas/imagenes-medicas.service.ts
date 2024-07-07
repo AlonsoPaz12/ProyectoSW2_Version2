@@ -1,20 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { ImagenMedica } from './imagenes-medicas.entity';
-import { OrdenMedica } from '../ordenes-medicas/ordenes-medicas.entity';
 import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';
 
 @Injectable()
-export class ImagenesMedicasService {
-    constructor(
-        @InjectRepository(ImagenMedica)
-        private readonly imagenMedicaRepository: Repository<ImagenMedica>,
-        
-        @InjectRepository(OrdenMedica)
-        private readonly ordenMedicaRepository: Repository<OrdenMedica>,
-    ) {}
+export class ImagenMedicaService {
+  constructor(
+    @InjectRepository(ImagenMedica)
+    private readonly imagenMedicaRepository: Repository<ImagenMedica>,
+  ) {}
 
     async crearImagenMedica(crearImagenMedicaDto: CrearImagenMedicaDto) {
         const nuevaImagen = this.imagenMedicaRepository.create(crearImagenMedicaDto);

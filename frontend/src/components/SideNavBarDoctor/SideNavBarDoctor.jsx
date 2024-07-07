@@ -20,6 +20,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineHistory } from "react-icons/md";
 import { FaUserInjured } from "react-icons/fa6";
 import { SlChemistry } from "react-icons/sl";
+import { MdSchedule } from "react-icons/md"; // Importar el icono para agregar horario
 
 const drawerWidth = 250;
 
@@ -281,6 +282,48 @@ export default function SideNavBar() {
                 />
               </ListItemButton>
             </ListItem>
+
+
+            <ListItem
+              disablePadding
+              sx={{display: "block"}}
+              onClick={()=>{
+                router.push('/AgregarHorarioDisponible');
+              }}
+            >
+              <ListItemButton
+                sx={{
+                  color: "#014433",
+                  margin: "10px",
+                  minHeight: 40,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                  "&:hover":{
+                    backgroundColor: "#E7F6F1",
+                    borderRadius: "10px",
+                  }
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 1 : "auto",
+                    justifyContent: "center",
+                    color: "inherit"
+                  }}
+                >
+                  <MdSchedule size={25} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Agregar Horario Disponible"
+                  sx={{opacity: open ? 1 : 0}}
+                />
+
+              </ListItemButton>
+
+            </ListItem>
+
+
           </List>
           <Divider />
         </Drawer>

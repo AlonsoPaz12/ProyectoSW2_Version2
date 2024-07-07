@@ -1,5 +1,3 @@
-// orden-medica.service.ts
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,9 +7,9 @@ import { OrdenMedica } from './ordenes-medicas.entity';
 import { Cita } from '../citas/citas.entity';
 import { Medico } from 'src/medicos/medicos.entity';
 import { Paciente } from 'src/pacientes/pacientes.entity';
+import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
 
 import { ActualizarOrdenMedicaDto, CrearOrdenMedicaDto } from './dto/ordenes-medicas.dto';
-import { ImagenMedica } from 'src/imagenes-medicas/imagenes-medicas.entity';
 import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
 import { ActualizarImagenMedicaDto } from 'src/imagenes-medicas/dto/imagenes-medicas.dto';
 import { ActualizarResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto';
@@ -42,7 +40,6 @@ export class OrdenMedicaService implements DocumentoMedico {
     async crearDocumentoMedico(crearOrdenMedicaDto: CrearOrdenMedicaDto): Promise<OrdenMedica> {
         const { observacion, imagenMedicaId, resultadoLabId, citaId, medicoId, pacienteId } = crearOrdenMedicaDto;
 
-        // Crear nueva orden médica
         const nuevaOrden = new OrdenMedica();
         nuevaOrden.observacion = observacion;
 
@@ -68,9 +65,7 @@ export class OrdenMedicaService implements DocumentoMedico {
         }
 
         if (citaId) {
-            const cita = await this.citaRepository.findOne({
-                where: { id: citaId }
-            });
+            const cita = await this.citaRepository.findOne({ where: { id: citaId } });
             if (!cita) {
                 throw new NotFoundException(`No se encontró la cita con ID ${citaId}`);
             }
@@ -99,7 +94,7 @@ export class OrdenMedicaService implements DocumentoMedico {
             const cita = await this.citaRepository.findOne({ where: { id: citaId } });
             if (cita) {
                 cita.ordenMedica = ordenGuardada;
-                await this.citaRepository.save(cita); // Actualizar la cita
+                await this.citaRepository.save(cita);
             }
         }
 

@@ -1,8 +1,9 @@
-import { Controller, Post, Body, NotFoundException, Get, Put, Param } from '@nestjs/common';
+import { Controller, Post, Body, NotFoundException, Get, Patch, Put, Param, Delete } from '@nestjs/common';
 import { OrdenMedicaService } from './ordenes-medicas.service';
-import { ActualizarOrdenMedicaDto, CrearOrdenMedicaDto } from './dto/ordenes-medicas.dto';
 import { ActualizarImagenMedicaDto } from 'src/imagenes-medicas/dto/imagenes-medicas.dto';
 import { ActualizarResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto';
+import { CrearOrdenMedicaDto, ActualizarOrdenMedicaDto } from './dto/ordenes-medicas.dto';
+import { OrdenMedica } from './ordenes-medicas.entity';
 
 @Controller('ordenes-medicas')
 export class OrdenMedicaController {

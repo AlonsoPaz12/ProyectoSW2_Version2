@@ -76,6 +76,16 @@ export class MedicoController {
     }
   }
     */
+   
+  @Get()
+  async findAll() {
+    try {
+      const medicos = await this.medicoService.findAll();
+      return { message: 'Médicos obtenidos correctamente', medicos };
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 
   @Get(':citaId/receta')
   async verRecetaDeCita(@Param('citaId') citaId: number) {

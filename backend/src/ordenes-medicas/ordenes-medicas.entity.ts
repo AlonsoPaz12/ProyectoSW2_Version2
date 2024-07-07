@@ -1,9 +1,9 @@
 import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
-import { Paciente } from "src/pacientes/pacientes.entity";
-import { Medico } from "src/medicos/medicos.entity";
-import { ResultadoLab } from "src/resultados-lab/resultados-lab.entity";
-import { Column, Entity, JoinColumn, OneToOne, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Cita } from 'src/citas/citas.entity';
+import { Paciente } from "../pacientes/pacientes.entity";
+import { Medico } from "../medicos/medicos.entity";
+import { ResultadoLab } from "../resultados-lab/resultados-lab.entity";
+import { Column, Entity, JoinColumn, OneToOne, ManyToOne, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Cita } from '../citas/citas.entity';
 
 @Entity()
 export class OrdenMedica {
@@ -11,17 +11,17 @@ export class OrdenMedica {
     id: number;
 
     @Column()
-    observacion: String;
+    observacion: string;
 
     @OneToOne(() => ResultadoLab, resultadoLaboratorio => resultadoLaboratorio.orden,{nullable: true})
     @JoinColumn()
     resultadoLaboratorio: ResultadoLab;
 
-    @OneToOne(()=> ImagenMedica, imagenMedica => imagenMedica.orden,{nullable: true})
+    @OneToOne(()=> ImagenMedica, {nullable: true})
     @JoinColumn()
     imagenMedica: ImagenMedica;
 
-    @ManyToOne(() => Medico, medico => medico.recetas)
+    @ManyToOne(() => Medico, medico => medico.ordenes)
     @JoinColumn({ name: 'medico_id' })
     medico: Medico;
 
@@ -29,8 +29,10 @@ export class OrdenMedica {
     @JoinColumn({ name: 'paciente_id' })
     paciente: Paciente;
 
-    @OneToOne(() => Cita, cita => cita.receta)
+    @OneToOne(() => Cita, cita => cita.ordenMedica, { nullable: true })
     @JoinColumn({ name: 'cita_id' })
-    cita: Cita
-    
+    cita: Cita | null;
+
+    //@OneToMany(() => ImagenMedica, imagen => imagen.ordenId, { nullable: true })
+    //imagenesMedicas: ImagenMedica[];
 }
