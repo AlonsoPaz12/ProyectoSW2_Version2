@@ -7,7 +7,6 @@ export class CrearImagenMedicaDto {
     NombreDoc: string;
     NotasMedic: string;
     imagen: string;
-    ordenmedicaId: number;
 }
 
 export class ActualizarImagenMedicaDto {
@@ -18,5 +17,4 @@ export class ActualizarImagenMedicaDto {
     NombreDoc?: string;
     NotasMedic?: string;
     imagen?: string;
-    ordenmedicaId?: number;
 }

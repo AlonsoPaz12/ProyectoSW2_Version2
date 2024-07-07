@@ -23,6 +23,11 @@ export class MedicoController {
     }
   }
 
+  @Get()
+  async mostrarMedicos() {
+    return this.medicoService.mostrarMedicos();
+  }
+
   @Post('orden')
   async crearOrdenMedica(
     @Body() crearOrdenMedicaDto: CrearOrdenMedicaDto,
@@ -90,5 +95,10 @@ export class MedicoController {
     } catch (error) {
       throw new NotFoundException(error.message);
     }
+  }
+
+  @Get('pacientes/citas/:id')
+  async verHistorialCitas(@Param('id') id: number){
+    return this.medicoService.verHistorialCitas(id);
   }
 }

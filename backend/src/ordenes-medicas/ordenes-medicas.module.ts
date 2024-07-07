@@ -7,15 +7,17 @@ import { OrdenMedicaService } from './ordenes-medicas.service';
 import { Cita } from 'src/citas/citas.entity';
 import { Paciente } from 'src/pacientes/pacientes.entity';
 import { Medico } from 'src/medicos/medicos.entity'
+import { ImagenMedica } from 'src/imagenes-medicas/imagenes-medicas.entity';
+import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([OrdenMedica, Cita, Medico, Paciente]), 
+        TypeOrmModule.forFeature([OrdenMedica, Cita, Medico, Paciente, ImagenMedica, ResultadoLab]), 
         CitaModule,
     ],
     controllers: [OrdenMedicaController],
     providers: [OrdenMedicaService],
-    exports: [OrdenMedicaService]
+    exports: [TypeOrmModule, OrdenMedicaService]
 })
 export class OrdenesMedicasModule {}
 

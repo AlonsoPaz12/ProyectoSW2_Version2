@@ -17,32 +17,17 @@ export class ImagenesMedicasService {
     ) {}
 
     async crearImagenMedica(crearImagenMedicaDto: CrearImagenMedicaDto) {
-        const { ordenmedicaId, ...imagenData } = crearImagenMedicaDto;
-
-        const ordenMedica = await this.ordenMedicaRepository.findOne({
-            where: { id: ordenmedicaId },
-        });
-
-        if (!ordenMedica) {
-            throw new NotFoundException(`Orden médica con ID ${ordenmedicaId} no encontrada`);
-        }
-
-        const nuevaImagen = this.imagenMedicaRepository.create({
-            ...imagenData,
-            orden: ordenMedica,
-        });
-
+        const nuevaImagen = this.imagenMedicaRepository.create(crearImagenMedicaDto);
         return await this.imagenMedicaRepository.save(nuevaImagen);
     }
 
     async mostrarImagenesMedicas() {
-        return await this.imagenMedicaRepository.find({ relations: ['orden'] });
+        return await this.imagenMedicaRepository.find();
     }
 
     async obtenerImagenMedicaPorId(id: number) {
         const imagen = await this.imagenMedicaRepository.findOne({
-            where: { id },
-            relations: ['orden'],
+            where: { id }
         });
 
         if (!imagen) {
@@ -67,7 +52,7 @@ export class ImagenesMedicasService {
 
     async eliminarImagenMedica(id: number) {
         const imagen = await this.imagenMedicaRepository.findOne({
-            where: { id },
+            where: { id }
         });
 
         if (!imagen) {

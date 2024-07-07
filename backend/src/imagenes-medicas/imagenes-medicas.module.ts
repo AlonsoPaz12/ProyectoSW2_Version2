@@ -9,6 +9,6 @@ import { ImagenesMedicasController } from './imagenes-medicas.controller';
     imports: [TypeOrmModule.forFeature([ImagenMedica, OrdenMedica])],
     providers: [ImagenesMedicasService],
     controllers: [ImagenesMedicasController],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, ImagenesMedicasService],
 })
 export class ImagenMedicaModule {}

@@ -10,6 +10,7 @@ import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
 import { Medico } from '../medicos/medicos.entity';
 
 import { CrearPacienteDto, CrearCitaDto, IniciarSesionDto } from './dto/paciente.dto';
+import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
 
 @Injectable()
 export class PacienteService {
@@ -25,6 +26,10 @@ export class PacienteService {
 
     @InjectRepository(RecetaMedica)
     private readonly recetaMedicaRepository: Repository<RecetaMedica>,
+
+    @InjectRepository(OrdenMedica)
+    private readonly ordenMedicaRepostory: Repository<OrdenMedica>
+
   ) { }
 
   async findOneByEmail(correoElectronico: string): Promise<Paciente | undefined> {
@@ -116,4 +121,12 @@ export class PacienteService {
 
     return receta;
   }
+
+  async visualizarOrdenesMedicas(idPaciente: number){
+    const ordenes = await this.ordenMedicaRepostory.find({relations: ['medico', 'paciente', 'cita', 'resultadoLaboratorio', 'imagenMedica']});
+
+    return ordenes.filter(orden => orden.paciente.id == idPaciente);
+
+  }
+
 }

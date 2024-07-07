@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Commit1719641906385 implements MigrationInterface {
-    name = 'Commit1719641906385'
+export class Commit1720326683493 implements MigrationInterface {
+    name = 'Commit1720326683493'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "imagen_medica" ("id" SERIAL NOT NULL, "nombrePaciente" character varying NOT NULL, "ExamDate" character varying NOT NULL, "tipo" character varying NOT NULL, "indicaciones" character varying NOT NULL, "NombreDoc" character varying NOT NULL, "NotasMedic" character varying NOT NULL, "imagen" character varying NOT NULL, "orden_medica_id" integer, CONSTRAINT "PK_e8009c59a8675d663c5681399ff" PRIMARY KEY ("id"))`);

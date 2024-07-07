@@ -11,10 +11,11 @@ import { RecetasMedicasModule } from 'src/recetas-medicas/recetas-medicas.module
 import { Cita } from 'src/citas/citas.entity';
 import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
 import { Medico } from 'src/medicos/medicos.entity';
+import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Paciente, Cita, RecetaMedica, Medico]),
+    TypeOrmModule.forFeature([Paciente, Cita, RecetaMedica, Medico, OrdenMedica]),
     CitaModule,
     RecetasMedicasModule,
   ],

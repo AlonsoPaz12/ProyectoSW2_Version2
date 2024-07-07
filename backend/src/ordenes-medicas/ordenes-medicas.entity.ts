@@ -13,11 +13,11 @@ export class OrdenMedica {
     @Column()
     observacion: String;
 
-    @OneToOne(() => ResultadoLab, {nullable: true})
+    @OneToOne(() => ResultadoLab, resultadoLaboratorio => resultadoLaboratorio.orden,{nullable: true})
     @JoinColumn()
     resultadoLaboratorio: ResultadoLab;
 
-    @OneToOne(()=> ImagenMedica, {nullable: true})
+    @OneToOne(()=> ImagenMedica, imagenMedica => imagenMedica.orden,{nullable: true})
     @JoinColumn()
     imagenMedica: ImagenMedica;
 
