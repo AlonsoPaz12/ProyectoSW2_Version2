@@ -1,3 +1,4 @@
+/*
 .container {
     display: flex;
     flex-direction: column;
@@ -65,4 +66,140 @@
     margin: 10px 0;
     cursor: pointer;
     color: #007BFF;
+}
+*/
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #E9F5F2;
+    min-height: 100vh;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.backButton {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.profileContainer {
+    display: flex;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leftSide, .rightSide {
+    flex: 1;
+    padding: 20px;
+    align-content: center;
+}
+
+.leftSide {
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profilePicture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.profileInfo {
+    text-align: center;
+}
+
+.profileInfo h2 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.profileInfo p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.optionsList {
+    list-style-type: none;
+    padding: 0;
+    font-size: 18px;
+    width: 100%;
+}
+
+.optionsList li {
+    margin: 10px 0;
+    cursor: pointer;
+    color: #007BFF;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.optionsList li:hover {
+    text-decoration: underline;
+}
+
+.editContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.editContainer h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.editContainer input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.editContainer button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
 }
