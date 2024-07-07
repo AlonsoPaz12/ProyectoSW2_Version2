@@ -1,12 +1,12 @@
 //medicos.entity.ts
 import { Entity, JoinTable, ManyToMany, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { Cita } from "src/citas/citas.entity";
-import { RecetaMedica } from "src/recetas-medicas/recetas-medicas.entity";
-import { OrdenMedica } from "src/ordenes-medicas/ordenes-medicas.entity";
-import { Usuario } from "src/usuarios/usuario.entity";
-import { Especialidad } from "src/especialidades/especialidades.entity";
-import { Vacuna } from "src/vacunas/vacunas.entity";
-import { HoraDisponible } from "src/horario-disponible/hora-disponible.entity"; // Importar entidad de HoraDisponible si es necesario
+import { Cita } from "../citas/citas.entity";
+import { RecetaMedica } from "../recetas-medicas/recetas-medicas.entity";
+import { OrdenMedica } from "../ordenes-medicas/ordenes-medicas.entity";
+import { Usuario } from "../usuarios/usuario.entity";
+import { Especialidad } from "../especialidades/especialidades.entity";
+import { Vacuna } from "../vacunas/vacunas.entity";
+import { HoraDisponible } from "../horario-disponible/hora-disponible.entity"; // Importar entidad de HoraDisponible si es necesario
 
 
 @Entity()

@@ -1,7 +1,7 @@
 // src/medicos/hora-disponible.entity.ts
 
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Medico } from 'src/medicos/medicos.entity';
+import { Medico } from '../medicos/medicos.entity';
 
 @Entity()
 export class HoraDisponible {

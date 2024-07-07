@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
+import { ResultadoLab } from '../resultados-lab/resultados-lab.entity';
 
 @Entity()
 export class ComponenteResultado {
