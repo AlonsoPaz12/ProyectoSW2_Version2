@@ -1,9 +1,9 @@
 import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
-import { Paciente } from "src/pacientes/pacientes.entity";
-import { Medico } from "src/medicos/medicos.entity";
-import { ResultadoLab } from "src/resultados-lab/resultados-lab.entity";
+import { Paciente } from "../pacientes/pacientes.entity";
+import { Medico } from "../medicos/medicos.entity";
+import { ResultadoLab } from "../resultados-lab/resultados-lab.entity";
 import { Column, Entity, JoinColumn, OneToOne, ManyToOne, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Cita } from 'src/citas/citas.entity';
+import { Cita } from '../citas/citas.entity';
 
 @Entity()
 export class OrdenMedica {
