@@ -1,8 +1,8 @@
 // citas.entity.ts
-import { Medico } from "src/medicos/medicos.entity";
-import { Paciente } from "src/pacientes/pacientes.entity";
-import { RecetaMedica } from "src/recetas-medicas/recetas-medicas.entity";
-import { OrdenMedica } from "src/ordenes-medicas/ordenes-medicas.entity";
+import { Medico } from "../medicos/medicos.entity";
+import { Paciente } from "../pacientes/pacientes.entity";
+import { RecetaMedica } from "../recetas-medicas/recetas-medicas.entity";
+import { OrdenMedica } from "../ordenes-medicas/ordenes-medicas.entity";
 import { Entity, JoinColumn, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()

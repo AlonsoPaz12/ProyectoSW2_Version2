@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
-import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
-import { ComponenteResultado } from 'src/componentes-resultado/componentes_resultado.entity';
+import { OrdenMedica } from '../ordenes-medicas/ordenes-medicas.entity';
+import { ComponenteResultado } from '../componentes-resultado/componentes_resultado.entity';
 
 @Entity()
 export class ResultadoLab {

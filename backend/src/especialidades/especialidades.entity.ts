@@ -1,6 +1,6 @@
 import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Medico } from 'src/medicos/medicos.entity';
+import { Medico } from '../medicos/medicos.entity';
 
 @Entity()
 export class Especialidad {

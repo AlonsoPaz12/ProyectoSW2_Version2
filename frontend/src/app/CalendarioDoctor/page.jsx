@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios'; 
 import { Box, Grid, Paper, IconButton, Typography } from '@mui/material';
 import Calendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import pacientesData from "@/data/usuarios.JSON";
+import UserMenu from '@/components/UserMenu/UserMenu';
 
 import SideNavBarDoctor from '@/components/SideNavBarDoctor/SideNavBarDoctor';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -28,6 +29,8 @@ const Calendario = () => {
     }
   }, [currentDate]);
 
+  const medicoId = 3; // Por ejemplo, deberías tener el ID del médico disponible
+
   const handlePrev = () => {
     setCurrentDate(subMonths(currentDate, 1));
   };
@@ -45,49 +48,35 @@ const Calendario = () => {
   };
 
   const handleDateClick = (info) => {
-    const clickedDate = new Date(info.dateStr + 'T00:00:00');
-    const citas = citasDoctor(clickedDate);
-    setEventDetail(citas);
+    const clickedDate = new Date(info.dateStr);
+    citasDoctor(clickedDate); 
   };
 
-  const citasDoctor = (fecha) => {
-    const citas = [
-      {
-        id: "C001",
-        fecha: fecha,
-        hora: "10:00",
-        paciente: "P001"
-      },
-      {
-        id: "C002",
-        fecha: fecha,
-        hora: "11:00",
-        paciente: "P002"
-      },
-      {
-        id: "C003",
-        fecha: fecha,
-        hora: "14:00",
-        paciente: "P003"
-      }
-    ];
-
-    const citasFiltradas = citas.map(cita => ({
-      ...cita,
-      paciente: pacientesData.find(paciente => paciente.id === cita.paciente)
-    }));
-
-    return citasFiltradas;
+  const citasDoctor = async (fecha) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/citas/medico/${medicoId}`);
+      setEventDetail(response.data); 
+    } catch (error) {
+      console.error('Error fetching citas:', error);
+      setEventDetail([]); 
+    }
   };
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   };
 
+  const formatTime = (timeString) => {
+    const date = new Date(`2000-01-01T${timeString}`); 
+    return date.toLocaleTimeString('es-ES');
+  };
+
   return (
+    
     <Box className={styles.mainContainer}>
       <SideNavBarDoctor />
       <Box className={styles.contentContainer}>
+      
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
             <Paper className={styles.calendarContainer}>
@@ -117,8 +106,8 @@ const Calendario = () => {
                 initialView="dayGridMonth"
                 weekends={true}
                 events={eventDetail.map((cita) => ({
-                  title: `${cita.paciente.nombres} ${cita.paciente.apePaterno}`,
-                  start: new Date(cita.fecha + 'T' + cita.hora),
+                  title: cita.paciente ? `${cita.paciente.nombres} ${cita.paciente.apePaterno}` : 'Unknown Patient',
+                  start: cita.fecha,
                   allDay: false
                 }))}
                 dateClick={handleDateClick}
@@ -131,7 +120,6 @@ const Calendario = () => {
                 selectMirror={true}
                 dayMaxEvents={true}
                 initialDate={currentDate}
-                
               />
             </Paper>
           </Grid>
@@ -142,8 +130,10 @@ const Calendario = () => {
                 eventDetail.map((cita, index) => (
                   <div key={cita.id} className={styles.citaItem}>
                     {index === 0 && <div className={styles.citaFecha}>Fecha: {formatDate(cita.fecha)}</div>}
-                    <div className={styles.citaHora}>Hora: {cita.hora}</div>
-                    <div className={styles.citaPaciente}>Paciente: {cita.paciente.nombres} {cita.paciente.apePaterno}</div>
+                   <div className={styles.citaHora}>Hora: {formatTime(cita.hora)}</div> {}
+                    <div className={styles.citaPaciente}>Paciente: {cita.paciente ? `${cita.paciente.nombres} ${cita.paciente.apePaterno}` : 'Unknown Patient'}</div>
+                    <div className={styles.citaMotivo}>Motivo: {cita.motivo}</div>
+                    <div className={styles.citaObservacion}>Observación: {cita.observacion}</div>
                   </div>
                 ))
               ) : (
@@ -158,4 +148,3 @@ const Calendario = () => {
 };
 
 export default Calendario;
-

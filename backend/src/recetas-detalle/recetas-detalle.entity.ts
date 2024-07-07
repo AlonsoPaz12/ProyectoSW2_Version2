@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { RecetaMedica } from 'src/recetas-medicas/recetas-medicas.entity';
-import { Medicamento } from 'src/medicamentos/medicamentos.entity';
+import { RecetaMedica } from '../recetas-medicas/recetas-medicas.entity';
+import { Medicamento } from '../medicamentos/medicamentos.entity';
 
 @Entity('recetas_detalle')
 export class RecetaDetalle {

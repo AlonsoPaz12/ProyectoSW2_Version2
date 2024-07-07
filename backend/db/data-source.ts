@@ -5,7 +5,7 @@ export const dataSourceOptions: DataSourceOptions = {
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "12345",
+    "password": "MAHIN",
     "database": "medcontroldb",
     "entities": ["dist/**/*.entity.js"],
     "migrations": ["dist/db/migrations/*.js"],
