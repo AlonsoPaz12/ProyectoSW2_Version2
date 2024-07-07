@@ -1,11 +1,12 @@
-
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import citasData from "@/data/citasMedicas.JSON";
 import medicosData from "@/data/doctors.JSON";
 import recetasData from "@/data/recetaMedica.JSON";
+import usuariosData from "@/data/usuarios.JSON"; 
 import styles from './page.module.css';
 import SideNavBar from '@/components/SideNavBar/SideNavBar';
 import Box from '@mui/material/Box';
@@ -16,8 +17,15 @@ const HistorialCitas = () => {
   const [citas, setCitas] = useState([]);
   const [recetaSeleccionada, setRecetaSeleccionada] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
+    const storedUser = { id: "1" }; 
+    if (storedUser) {
+      const usuarioData = usuariosData.find(u => u.id === storedUser.id);
+      setUsuario(usuarioData);
+    }
+
     const citasConMedicosYRecetas = citasData.map(cita => {
       const medico = medicosData.find(m => m.id === parseInt(cita.IDmedico));
       const receta = recetasData.find(r => r.citaId === cita.id);
@@ -39,6 +47,43 @@ const HistorialCitas = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setRecetaSeleccionada(null);
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    if (usuario) {
+      doc.text(`Nombre: ${usuario.nombres} ${usuario.apePaterno} ${usuario.apeMaterno}`, 10, 10);
+      doc.text(`Fecha de Nacimiento: ${usuario.fechaNacimiento}`, 10, 20);
+      doc.text(`Documento de Identificación: ${usuario.numeroDocumento}`, 10, 30);
+      doc.text(`Género: ${usuario.genero}`, 10, 40);
+    }
+
+    doc.text('Historial de Citas', 10, 60);
+
+    const tableColumn = ["Fecha", "Motivo", "Médico", "Especialidad", "Diagnóstico", "Observación", "Receta Médica"];
+    const tableRows = [];
+
+    citas.forEach(cita => {
+      const citaData = [
+        new Date(cita.fecha).toLocaleString(),
+        cita.motivo,
+        cita.medico.nombre,
+        cita.medico.especialidad,
+        cita.diagnostico || 'No hay diagnostico',
+        cita.Observacion,
+        cita.receta ? cita.receta.observacion : 'No hay receta'
+      ];
+      tableRows.push(citaData);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 70,
+    });
+
+    doc.save('historial_de_citas.pdf');
   };
 
   return (
@@ -69,7 +114,7 @@ const HistorialCitas = () => {
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.motivo}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.medico.nombre}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.medico.especialidad}</td>
-                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.diagnostico}</td>
+                  <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.diagnostico || 'No hay diagnostico'}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>{cita.Observacion}</td>
                   <td style={{ border: "1px solid #014433", padding: "8px" }}>
                     {cita.receta ? (
@@ -85,6 +130,9 @@ const HistorialCitas = () => {
             </tbody>
           </table>
         </div>
+        <Box sx={{ marginTop: "1em", textAlign: "right" }}>
+          <Button variant="contained" color="primary" onClick={generatePDF}>Descargar PDF</Button>
+        </Box>
         <Modal show={showModal} onHide={handleCloseModal} centered backdrop="static">
           <Modal.Header closeButton style={{ backgroundColor: '#00916e', color: '#fff', borderBottom: 'none' }}>
             <Modal.Title>Receta Médica</Modal.Title>
