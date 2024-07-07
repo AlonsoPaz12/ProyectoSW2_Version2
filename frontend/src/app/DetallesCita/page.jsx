@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import citasData from "@/data/citasMedicas.JSON";
 import pacientesData from "@/data/usuarios.JSON";
 import recetasData from "@/data/recetaMedica.JSON";
@@ -11,20 +12,38 @@ import { IoMdAdd } from "react-icons/io";
 import { FaTrashAlt } from "react-icons/fa";
 import EditMedicamentoDialog from "./EditMedicamentoDialog";
 import { useRouter } from 'next/navigation';
+import { getOrders } from '@/services/ordenesService';
+import EditOrdenDialog from './EditOrdenDialog';
+import axios from 'axios';
+
+const updateOrdenMedica = async (id, updateData) =>{
+  try {
+    const response = await axios.put(`http://localhost:3000/ordenes-medicas/${id}`, updateData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating orden médica:', error);
+    throw error;
+  }
+}
+
 
 const DetallesCita = ({id}) => {
   const router = useRouter();
   const [paciente, setPaciente] = useState({});
+  const [paciente2, setPaciente2] = useState({});
   const [cita, setCita] = useState({ asistio: false, fecha: Date(), motivo: '', Observacion: '' });
   const [citas, setCitas] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editablePaciente, setEditablePaciente] = useState({ nombres: '', apePaterno: '', apeMaterno: '', fechaNacimiento: '', id: '' });
-  const [editableCita, setEditableCita] = useState({ asistio: false, fecha: Date(), motivo: '', Observacion: '' });
+  const [editableCita, setEditableCita] = useState([]);
   const [receta, setReceta] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [currentMedicamento, setCurrentMedicamento] = useState({ id: '', nombre: '', dosis: '', frecuencia: '' });
+  const [ordenes, setOrdenes] = useState([]);
+  const [isOrdenDialogOpen, setIsOrdenDialogOpen] = useState(false);
+  const [currentOrden, setCurrentOrden] = useState({});
 
   const calcularEdad = (fechaNacimiento) => {
     const hoy = new Date();
@@ -38,18 +57,67 @@ const DetallesCita = ({id}) => {
 
     return edad;
   };
+  const fectchprueba = async (pacienteId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/pacientes/${pacienteId}`);
+      
+      setPaciente2(response.data.paciente);
+      console.log(response.data.paciente);
+      
+      //setEditablePaciente({ ...pacienteData });
+      //await fetchCitasFromPaciente(pacienteData);
+    } catch (error) {
+      console.error('Error al obtener las vacunas del paciente:', error);
+    }
+  };
+  const fetchCita2 = async (pacientId, medicoid) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/citas`);
+      const data = response.data;
+      console.log("Aquí está la data");
+      console.log(response.data);
+  
+      // Encontrar la cita correspondiente con los IDs específicos
+      const filteredCita = data.find(cita => cita.medico.id === medicoid && cita.paciente.id === pacientId);
+  
+      if (filteredCita) {
+        const filteredData = {
+          id: filteredCita.id,
+          asistio: filteredCita.asistio,
+          fecha: filteredCita.fecha,
+          motivo: filteredCita.motivo,
+          observacion: filteredCita.observacion,
+        };
+  
+        setCitas(filteredData);
+        setEditableCita(filteredData);
+        console.log("Estas son las citas editables");
+        console.log(filteredData);
+      } else {
+        console.log(`No se encontró ninguna cita con el médico ID ${medicoid} y paciente ID ${pacientId}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  
+    
+  
 
 
   const fetchPaciente = async (pacienteId) => {
+    
     const pacienteData = pacientesData.find(paciente => paciente.id === pacienteId);
     if (!pacienteData) {
       console.log(`No se encontró ningún paciente con el ID ${pacienteId}`);
       return;
     }
-    setPaciente(pacienteData);
+    //setPaciente(pacienteData);
     console.log(pacienteData)
     setEditablePaciente({ ...pacienteData });
     await fetchCitasFromPaciente(pacienteData);
+    await fetchOrdenes(id);
   };
   console.log(pacientesData)
   const fetchCita = async () => {
@@ -61,9 +129,10 @@ const DetallesCita = ({id}) => {
       return;
     }
     setCita(citaData);
-    setEditableCita({ ...citaData });
+    
     fetchPaciente(citaData.IDpaciente);
     fetchReceta(citaData.id);
+    
   };
 
   const fetchCitasFromPaciente = async (paciente) => {
@@ -81,24 +150,53 @@ const DetallesCita = ({id}) => {
     setReceta(recetaAux);
   };
 
+  const fetchOrdenes = async (pacienteId) => {
+    const ordenesData = await getOrders(pacienteId);
+    console.log(ordenesData)
+    setOrdenes(ordenesData);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         await fetchCita();
+        
+        await fectchprueba(1);
+        await fetchCita2(1,1);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, ordenes]);
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setPaciente({ ...editablePaciente });
-    setCita({ ...editableCita });
-    setIsEditing(false);
+  const handleSaveClick = async (idCita) => {
+    try {
+      const response = await fetch(`http://localhost:3000/citas/${idCita}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editableCita),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        console.log('Cita actualizada:', result);
+        // Aquí puedes manejar la respuesta exitosa, por ejemplo, mostrar un mensaje al usuario.
+      } else {
+        console.error('Error al actualizar la cita:', result.message);
+        // Aquí puedes manejar el error, por ejemplo, mostrar un mensaje al usuario.
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+      // Aquí puedes manejar errores de la solicitud, por ejemplo, mostrar un mensaje al usuario.
+    }
   };
+  
 
   const handlePacienteInputChange = (e) => {
     const { name, value } = e.target;
@@ -132,6 +230,11 @@ const DetallesCita = ({id}) => {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
   };
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const options = { day: '2-digit', month: 'long', year: 'numeric' };
+    return date.toLocaleDateString('es-ES', options);
+};
 
   const handleCreateDialogSave = (newMedicamento) => {
     console.log(newMedicamento);
@@ -166,6 +269,40 @@ const DetallesCita = ({id}) => {
     setIsCreateDialogOpen(false);
   };
 
+  const handleEditOrdenClick = (orden) => {
+    setCurrentOrden(orden);
+    setIsOrdenDialogOpen(true);
+  };
+
+  const handleOrdenDialogSave = async (updatedOrden) => {
+    const imagenesIguales = shallowEqual(updatedOrden.imagenMedica, currentOrden.imagenMedica);
+    const resultadoIguales = shallowEqual(updatedOrden.resultadoLaboratorio, currentOrden.resultadoLaboratorio);
+
+    if (!imagenesIguales && resultadoIguales) {
+      const updatedImagenesData = await updateOrdenMedica(currentOrden.id, updatedOrden.imagenMedica);
+    }else if(imagenesIguales && !resultadoIguales){
+      const updatedResultadoData = await updateOrdenMedica(currentOrden.id, updatedOrden.resultadoLaboratorio);
+    }else if(!imagenesIguales && !resultadoIguales){
+      const updatedImagenesData = await updateOrdenMedica(currentOrden.id, updatedOrden.imagenMedica);
+      const updatedResultadoData = await updateOrdenMedica(currentOrden.id, updatedOrden.resultadoLaboratorio);
+    }else{
+      await updateOrdenMedica(currentOrden.id, updatedOrden);
+    }
+
+    const updatedOrdenData = await getOrders(currentOrden.id);
+
+    const updatedOrdenes = ordenes.map(ord => 
+      ord.id === updatedOrdenData.id ? updatedOrdenData : ord
+    );
+    console.log(updatedOrdenData);
+    setOrdenes(updatedOrdenes);
+    setIsOrdenDialogOpen(false);
+  };
+
+  const handleOrdenDialogClose = () => {
+    setIsOrdenDialogOpen(false);
+  };
+
   if (notFound) {
     return (
       <div className={styles.body}>
@@ -177,6 +314,23 @@ const DetallesCita = ({id}) => {
     );
   }
 
+  const shallowEqual = (obj1, obj2) => {
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+  
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+  
+    for (let key of keys1) {
+      if (obj1[key] !== obj2[key]) {
+        return false;
+      }
+    }
+  
+    return true;
+  };
+
   return (
     <div className={styles.body}>
       <div className={styles.cabecera}>
@@ -186,39 +340,12 @@ const DetallesCita = ({id}) => {
       <div className={styles.citaInfo}>
         <div className={styles.pacienteInfo}>
           <div className={styles.columna1}>
-            <img src={paciente.imageurl} alt="Paciente" className={styles.pacienteFoto} />
+            <img src={paciente2.imageurl} alt="Paciente" className={styles.pacienteFoto} />
           </div>
           <div className={styles.columna2}>
             {isEditing ? (
               <>
-                <input
-                  type="text"
-                  name="nombres"
-                  value={editablePaciente.nombres}
-                  onChange={handlePacienteInputChange}
-                  className={styles.input}
-                />
-                <input
-                  type="text"
-                  name="apePaterno"
-                  value={editablePaciente.apePaterno}
-                  onChange={handlePacienteInputChange}
-                  className={styles.input}
-                />
-                <input
-                  type="text"
-                  name="apeMaterno"
-                  value={editablePaciente.apeMaterno}
-                  onChange={handlePacienteInputChange}
-                  className={styles.input}
-                />
-                <input
-                  type="date"
-                  name="fechaNacimiento"
-                  value={editablePaciente.fechaNacimiento}
-                  onChange={handlePacienteInputChange}
-                  className={styles.input}
-                />
+                
                 <input
                     type="checkbox"
                     name="asistio"
@@ -246,19 +373,20 @@ const DetallesCita = ({id}) => {
                 <input
                   type="text"
                   name="observacion"
-                  value={editableCita.Observacion}
+                  value={editableCita.observacion}
                   onChange={handleCitaInputChange}
                   className={styles.input}
                 />
               </>
             ) : (
               <>
-                <p className={styles.texto}><strong>Paciente:</strong> {paciente.nombres} {paciente.apePaterno} {paciente.apeMaterno}</p>
-                <p className={styles.texto}><strong>Fecha de Nacimiento:</strong> {paciente.fechaNacimiento}</p>
-                <p className={styles.texto}><strong>Edad:</strong> {calcularEdad(paciente.fechaNacimiento)} años</p>
-                <p className={styles.texto}><strong>Estado:</strong> <span className={cita.asistio ? styles.asistio : styles.noAsistio}>{cita.asistio ? 'Asistió' : 'No Asistió'}</span></p>
-                <p className={styles.texto}><strong>Fecha:</strong>  {new Date(cita.fecha).toLocaleDateString()}</p>
-                <p className={styles.texto}><strong>Hora:</strong> {new Date(cita.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
+                <p className={styles.texto}><strong>Paciente:</strong> {paciente2.nombres} {paciente2.apePaterno} {paciente2.apeMaterno}</p>
+                <p className={styles.texto}></p><strong>Fecha de Nacimiento:</strong> {formatDate(paciente2.fechaNacimiento)}
+                <p className={styles.texto}><strong>Edad:</strong> {calcularEdad(paciente2.fechaNacimiento)} años</p>
+                <p className={styles.texto}><strong>Estado:</strong> <span className={citas.asistio ? styles.asistio : styles.noAsistio}>{cita.asistio ? 'Asistió' : 'No Asistió'}</span></p>
+                
+                <p className={styles.texto}><strong>Fecha:</strong>  {new Date(citas.fecha).toLocaleDateString()}</p>
+                <p className={styles.texto}><strong>Hora:</strong> {new Date(citas.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
                 
               </>
             )}
@@ -269,15 +397,16 @@ const DetallesCita = ({id}) => {
               </>
             ) : (
               <>
-                <p className={styles.texto}><strong>Motivo de la Cita:</strong> {cita.motivo}</p>
-                <p className={styles.texto}><strong>Observacion:</strong> {cita.Observacion || 'No disponible'}</p>
+                <p className={styles.texto}><strong>Motivo de la Cita:</strong> {citas.motivo}</p>
+                <p className={styles.texto}><strong>Observacion:</strong> {citas.observacion || 'No disponible'}</p>
               </>
             )}
           </div>
         
           <div className={styles.columna4}>
             {isEditing ? (
-              <button className={styles.backButton} onClick={handleSaveClick}>Guardar</button>
+              <button className={styles.backButton} onClick={() => handleSaveClick(citas.id)}>Guardar</button>
+
             ) : (
               <button className={styles.editButton} onClick={handleEditClick}><FaEdit size={"20px"} /> Editar</button>
             )}
@@ -300,9 +429,9 @@ const DetallesCita = ({id}) => {
                     receta.medicamento && receta.medicamento.length > 0 &&
                     receta.medicamento.map(medicamento => (
                       <div key={medicamento.id} className={styles.card}>
-                        <p className={styles.texto}><strong>Nombre:</strong> {medicamento.nombre}</p>
-                        <p className={styles.texto}><strong>Dosis:</strong> {medicamento.dosis}</p>
-                        <p className={styles.texto}><strong>Frecuencia:</strong> {medicamento.frecuencia}</p>
+                        <p className={styles.texto}><strong>Nombre: </strong> {medicamento.nombre}</p>
+                        <p className={styles.texto}><strong>Dosis: </strong> {medicamento.dosis}</p>
+                        <p className={styles.texto}><strong>Frecuencia: </strong> {medicamento.frecuencia}</p>
                         <div className={styles.medicamento__buttons}>
                           <button 
                           className={styles.editButton}
@@ -334,7 +463,7 @@ const DetallesCita = ({id}) => {
               citas.map(cita => (
                 <div key={cita.id} className={styles.cita}>
                   <p>{cita.fecha} - {cita.fecha}
-                    {` `}- {cita.motivo}
+                    { }- {cita.motivo}
                   </p>
                 </div>
               ))
@@ -348,18 +477,30 @@ const DetallesCita = ({id}) => {
       <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>ORDEN MEDICA</h5>
         <div className={styles.recetaInfo}>
-          <div className={styles.ordenMedica}>
-            <p><strong>Nº ORDEN:</strong> 123.456.789</p>
-            <h6>IMAGEN MÉDICA:</h6>
+          {ordenes.map( orden =>(
+          <div key={orden.id} className={styles.ordenMedica}>
+            <p><strong>Nº ORDEN: </strong>{orden.id}</p>
+            <h6>{orden.observacion}</h6>
+            <h6>IMAGEN MÉDICA: </h6>
             <div className={styles.imagenMedica}>
-              <h6>Resultados de Radiografía de Torax</h6>
               <div className={styles.imagenContenedor}>
-                <img src="https://via.placeholder.com/150" alt="Resultados de Radiografía de Torax" />
+                <img src={orden.imagenMedica.imagen} alt="Resultados de Radiografía de Torax" />
               </div>
-              <p><strong>Resultados e Interpretación:</strong> Se observan opacidades en el lóbulo superior del pulmón derecho, sugestivas de proceso inflamatorio. No se observan fracturas ni lesiones óseas.</p>
-              <p><strong>Observaciones/Comentarios:</strong> El paciente no presenta síntomas respiratorios en este momento.</p>
+              <p><strong>Resultados e Interpretación: </strong>{orden.imagenMedica.indicaciones}</p>
+              <p><strong>Observaciones/Comentarios: </strong>{orden.imagenMedica.NotasMedic}</p>
             </div>
+            <h6>RESULTADO DE LABORATORIO: </h6>
+            <div className={styles.imagenMedica}>
+              <div className={styles.imagenContenedor}>
+                <img src={orden.resultadoLaboratorio.imageurl} alt="Resultados de Radiografía de Torax" />
+              </div>
+              <p><strong>Resultado: </strong>{orden.resultadoLaboratorio.Resultado}</p>
+              <p><strong>Motivo de prueba: </strong>{orden.resultadoLaboratorio.motivoPrueba}</p>
+            </div>
+            <br></br>
+            <button className={styles.editButton} onClick={() => handleEditOrdenClick(orden)}><FaEdit size={"20px"} /> Editar Orden</button>
           </div>
+          ))}
         </div>
       </div>
 
@@ -375,6 +516,12 @@ const DetallesCita = ({id}) => {
       onSave={handleCreateDialogSave}
       medicamento={ { id: '', nombre: '', dosis: '', frecuencia: '' } }
     />
+    <EditOrdenDialog 
+        open={isOrdenDialogOpen} 
+        onClose={handleOrdenDialogClose} 
+        orden={currentOrden} 
+        onSave={handleOrdenDialogSave} 
+      />
     </div>
     
   );

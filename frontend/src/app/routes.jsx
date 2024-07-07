@@ -44,10 +44,11 @@ const AppRoutes = () => {
         <Route path="/ImagenesMedicas" element={<ImagenesMedicas />} />
         <Route path="/IniciarSesion" element={<IniciarSesion />} />
         <Route path="/Registro" element={<Registro />} />
+        <Route path="/IniciarSesion" element={<IniciarSesion />} />
+        <Route path="/Registrarse" element={<Registro />} />
         <Route path="/Calendario" element={<Calendario />} />
         <Route path="/Vacunas" element={<Vacunas />} />
         <Route path="/GenerarInforme" element={<GenerarInforme />} />
-        
         <Route path="/ProximasCitasDoctor" element={<ProximasCitasDoctor />} />
         <Route path="/HistorialCitasDoctor" element={<HistorialCitasDoctor />} />
         <Route path="/DetallesCita/:id" element={<DetallesCita />} />

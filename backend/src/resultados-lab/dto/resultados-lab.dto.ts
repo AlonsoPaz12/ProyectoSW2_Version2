@@ -15,7 +15,6 @@ export class CrearResultadoLabDto {
     Resultado: string;
     unidades: string;
     rangoNormal: string;
-    ordenmedicaId: number;
   }
   
   export class ActualizarResultadoLabDto {
@@ -35,6 +34,5 @@ export class CrearResultadoLabDto {
     Resultado?: string;
     unidades?: string;
     rangoNormal?: string;
-    ordenmedicaId?: number;
   }
   

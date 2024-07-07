@@ -11,21 +11,49 @@ export class ImagenMedicaService {
     private readonly imagenMedicaRepository: Repository<ImagenMedica>,
   ) {}
 
-  async crearImagenMedica(crearImagenMedicaDto: CrearImagenMedicaDto): Promise<ImagenMedica> {
-    const nuevaImagen = this.imagenMedicaRepository.create(crearImagenMedicaDto);
-    return this.imagenMedicaRepository.save(nuevaImagen);
-  }
-
-  async obtenerTodasImagenesMedicas(): Promise<ImagenMedica[]> {
-    return this.imagenMedicaRepository.find();
-  }
-
-  async actualizarImagenMedica(id: number, actualizarImagenMedicaDto: ActualizarImagenMedicaDto): Promise<ImagenMedica> {
-    const imagenMedica = await this.imagenMedicaRepository.findOne({ where: { id } });
-    if (!imagenMedica) {
-      throw new NotFoundException('Imagen médica no encontrada');
+    async crearImagenMedica(crearImagenMedicaDto: CrearImagenMedicaDto) {
+        const nuevaImagen = this.imagenMedicaRepository.create(crearImagenMedicaDto);
+        return await this.imagenMedicaRepository.save(nuevaImagen);
     }
-    await this.imagenMedicaRepository.update(id, actualizarImagenMedicaDto);
-    return this.imagenMedicaRepository.findOne({ where: { id } });
-  }
+
+    async mostrarImagenesMedicas() {
+        return await this.imagenMedicaRepository.find();
+    }
+
+    async obtenerImagenMedicaPorId(id: number) {
+        const imagen = await this.imagenMedicaRepository.findOne({
+            where: { id }
+        });
+
+        if (!imagen) {
+            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
+        }
+
+        return imagen;
+    }
+
+    async actualizarImagenMedica(id: number, actualizarImagenMedicaDto: ActualizarImagenMedicaDto) {
+        const imagen = await this.imagenMedicaRepository.findOne({
+            where: { id },
+        });
+
+        if (!imagen) {
+            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
+        }
+
+        Object.assign(imagen, actualizarImagenMedicaDto);
+        return await this.imagenMedicaRepository.save(imagen);
+    }
+
+    async eliminarImagenMedica(id: number) {
+        const imagen = await this.imagenMedicaRepository.findOne({
+            where: { id }
+        });
+
+        if (!imagen) {
+            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
+        }
+
+        return await this.imagenMedicaRepository.remove(imagen);
+    }
 }

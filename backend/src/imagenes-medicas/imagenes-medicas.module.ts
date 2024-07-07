@@ -8,5 +8,6 @@ import { ImagenMedicaController } from './imagenes-medicas.controller';
   imports: [TypeOrmModule.forFeature([ImagenMedica])],
   providers: [ImagenMedicaService],
   controllers: [ImagenMedicaController],
+  exports: [TypeOrmModule, ImagenMedicaService]
 })
 export class ImagenMedicaModule {}

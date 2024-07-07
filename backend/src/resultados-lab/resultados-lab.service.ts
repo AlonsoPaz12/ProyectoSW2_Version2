@@ -16,32 +16,19 @@ export class ResultadoLabService {
   ) {}
 
   async crearResultadoLab(crearResultadoLabDto: CrearResultadoLabDto): Promise<ResultadoLab> {
-    const { ordenmedicaId, ...resultadoData } = crearResultadoLabDto;
 
-    const ordenMedica = await this.ordenMedicaRepository.findOne({
-      where: { id: ordenmedicaId },
-    });
-
-    if (!ordenMedica) {
-      throw new NotFoundException(`Orden médica con ID ${ordenmedicaId} no encontrada`);
-    }
-
-    const nuevoResultado = this.resultadoLabRepository.create({
-      ...resultadoData,
-      orden: ordenMedica,
-    });
+    const nuevoResultado = this.resultadoLabRepository.create(crearResultadoLabDto);
 
     return await this.resultadoLabRepository.save(nuevoResultado);
   }
 
   async obtenerResultadosLab(): Promise<ResultadoLab[]> {
-    return await this.resultadoLabRepository.find({ relations: ['orden'] });
+    return await this.resultadoLabRepository.find();
   }
 
   async obtenerResultadoLabPorId(id: number): Promise<ResultadoLab> {
     const resultadoLab = await this.resultadoLabRepository.findOne({
-      where: { id },
-      relations: ['orden'],
+      where: { id }
     });
 
     if (!resultadoLab) {

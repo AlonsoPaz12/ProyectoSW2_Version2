@@ -1,5 +1,7 @@
-import { Controller, Post, Body, NotFoundException, Get, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, NotFoundException, Get, Patch, Put, Param, Delete } from '@nestjs/common';
 import { OrdenMedicaService } from './ordenes-medicas.service';
+import { ActualizarImagenMedicaDto } from 'src/imagenes-medicas/dto/imagenes-medicas.dto';
+import { ActualizarResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto';
 import { CrearOrdenMedicaDto, ActualizarOrdenMedicaDto } from './dto/ordenes-medicas.dto';
 import { OrdenMedica } from './ordenes-medicas.entity';
 
@@ -18,22 +20,17 @@ export class OrdenMedicaController {
     }
 
     @Get()
-    async findAll(): Promise<OrdenMedica[]> {
-        return this.ordenMedicaService.findAll();
+    async obtenerTodasOrdenes() {
+        return this.ordenMedicaService.obtenerTodasOrdenes();
     }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string): Promise<OrdenMedica> {
-        return this.ordenMedicaService.findOne(+id);
-    }
-
-    @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateOrdenMedicaDto: ActualizarOrdenMedicaDto): Promise<OrdenMedica> {
-        return this.ordenMedicaService.update(+id, updateOrdenMedicaDto);
-    }
-
-    @Delete(':id')
-    async remove(@Param('id') id: string): Promise<void> {
-        return this.ordenMedicaService.remove(+id);
+    @Put(':id')
+    async actualizarOrdenMedica(@Param('id') id: number, @Body() actualizarOrdenDto: ActualizarOrdenMedicaDto, @Body() actualizarImagenDto: ActualizarImagenMedicaDto, @Body() actualizarResultadoDto: ActualizarResultadoLabDto){
+        try{
+            const orden = await this.ordenMedicaService.actualizarOrdenMedica(id, actualizarOrdenDto, actualizarImagenDto, actualizarResultadoDto);
+            return orden;
+        }catch(error){
+            throw new NotFoundException(error.message);
+        }
     }
 }

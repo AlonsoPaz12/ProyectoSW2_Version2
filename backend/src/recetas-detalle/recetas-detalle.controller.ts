@@ -30,4 +30,6 @@ export class RecetaDetalleController {
   async eliminarRecetaDetalle(@Param('id') id: number) {
     return this.recetaDetalleService.eliminarRecetaDetalle(id);
   }
-}
+  
+  }
+
