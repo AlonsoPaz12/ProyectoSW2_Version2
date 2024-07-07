@@ -62,11 +62,89 @@ const Registro = () => {
         }
     };
 
+
+    const validateForm = () => {
+        const { documento, nombres, apellidoPaterno, apellidoMaterno, genero, fechaDeNacimiento, celular, correo, contrasena, repetirContrasena, aceptaTerminos } = formData;
+        const { dia, mes, año } = fecha;
+
+        if (!documento || !nombres || !apellidoPaterno || !apellidoMaterno || !genero || !fechaDeNacimiento || !celular || !correo || !contrasena || !repetirContrasena) {
+            alert('Todos los campos son obligatorios.');
+            return false;
+        }
+
+        if (!/^\d{9}$/.test(celular)) {
+            alert('El número de celular debe tener 9 dígitos.');
+            return false;
+        }
+
+        if (!/@/.test(correo)) {
+            alert('El correo electrónico debe contener "@".');
+            return false;
+        }
+
+        if (!/(?=.*[A-Z])(?=.*\d)/.test(contrasena)) {
+            alert('La contraseña debe tener al menos una letra mayúscula y un número.');
+            return false;
+        }
+
+        if (contrasena !== repetirContrasena) {
+            alert('Las contraseñas no coinciden.');
+            return false;
+        }
+        if (contrasena.length < 8) {
+            alert('La contraseña debe tener al menos 8 caracteres.');
+            return false;
+        }
+        if (!aceptaTerminos) {
+            alert('Debes aceptar los términos y la política de privacidad.');
+            return false;
+        }
+        const diaNum = parseInt(dia, 10);
+        const mesNum = parseInt(mes, 10);
+        const añoNum = parseInt(año, 10);
+
+        if (isNaN(diaNum) || isNaN(mesNum) || isNaN(añoNum)) {
+            alert('Fecha de nacimiento no válida.');
+            return false;
+        }
+
+        if (diaNum < 1 || diaNum > 31) {
+            alert('Día no válido. Debe estar entre 1 y 31.');
+            return false;
+        }
+
+        if (mesNum < 1 || mesNum > 12) {
+            alert('Mes no válido. Debe estar entre 1 y 12.');
+            return false;
+        }
+
+        if (añoNum < 1900 || añoNum > new Date().getFullYear() - 18) {
+            alert(`Año no válido. Debe estar entre 1900 y ${new Date().getFullYear()-18}.`);
+            return false;
+        }
+
+        if ((mesNum === 4 || mesNum === 6 || mesNum === 9 || mesNum === 11) && diaNum > 30) {
+            alert('El mes seleccionado tiene solo 30 días.');
+            return false;
+        }
+
+        if (mesNum === 2) {
+            const isLeapYear = (añoNum % 4 === 0 && añoNum % 100 !== 0) || (añoNum % 400 === 0);
+            if (diaNum > 29 || (diaNum === 29 && !isLeapYear)) {
+                alert('Febrero no tiene más de 28 días, excepto en años bisiestos que tiene 29.');
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Formulario enviado:', formData);
         console.log('Formulario enviado:', JSON.stringify(formData));
-
+        if (!validateForm()){
+            return;
+        }
         try{
             const imageUrlToSend = profileImage || '/images/user-icon.png'; // URL predeterminada si no se selecciona una imagen
 
