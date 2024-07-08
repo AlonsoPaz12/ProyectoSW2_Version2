@@ -7,9 +7,8 @@ import pacientesData from "@/data/usuarios.JSON";
 import recetasData from "@/data/recetaMedica.JSON";
 import styles from './page.module.css';
 import { TiArrowBack } from "react-icons/ti";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
-import { FaTrashAlt } from "react-icons/fa";
 import EditMedicamentoDialog from "./EditMedicamentoDialog";
 import { useRouter } from 'next/navigation';
 import { getOrders } from '@/services/ordenesService';
@@ -38,6 +37,7 @@ const DetallesCita = ({ id }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [currentMedicamento, setCurrentMedicamento] = useState({ id: '', nombre: '', dosis: '', frecuencia: '' });
+  const [currentReceta, setCurrentReceta] = useState({ id: '' });
   const [ordenes, setOrdenes] = useState([]);
   const [isOrdenDialogOpen, setIsOrdenDialogOpen] = useState(false);
   const [currentOrden, setCurrentOrden] = useState({});
@@ -229,6 +229,7 @@ const DetallesCita = ({ id }) => {
   };
 
   const handleCreateMedicamentoClick = () => {
+    setCurrentReceta(receta); // Actualiza el estado currentReceta antes de abrir el diálogo
     setIsCreateDialogOpen(true);
   };
 
@@ -236,17 +237,8 @@ const DetallesCita = ({ id }) => {
     setIsDialogOpen(false);
   };
 
-  const handleCreateDialogSave = (newMedicamento) => {
-    const medicamentos = receta.medicamento;
-
-    if (medicamentos.length > 0) {
-      newMedicamento.id = medicamentos[medicamentos.length - 1].id + 1;
-    } else {
-      newMedicamento.id = 1;
-    }
-
-    medicamentos.push(newMedicamento);
-    setReceta({ ...receta, medicamento: medicamentos });
+  const handleCreateDialogSave = async (newMedicamento) => {
+    await fetchRecetas(1); // Refetch the receta data from the server after adding the medicamento
     setIsCreateDialogOpen(false);
   };
 
@@ -260,14 +252,11 @@ const DetallesCita = ({ id }) => {
 
   const handleDeleteMedicamentoClick = async (recetaId, medicamentoId) => {
     try {
-      // Realiza la solicitud DELETE al backend
       await axios.delete(`http://localhost:3000/recetas/${recetaId}/medicamentos/${medicamentoId}`);
-      
-      // Filtra los medicamentos en el estado local después de eliminar
       const medicamentosActualizados = receta.medicamento.filter(medicamento => medicamento.id !== medicamentoId);
       setReceta({ ...receta, medicamento: medicamentosActualizados });
-  
       console.log(`Medicamento con ID ${medicamentoId} eliminado de la receta con ID ${recetaId}`);
+      await fetchRecetas(1);
     } catch (error) {
       console.error('Error al eliminar el medicamento:', error);
     }
@@ -472,9 +461,9 @@ const DetallesCita = ({ id }) => {
           <div className={styles.proximas_citas}>
           {
             citas.length > 0 ? (
-              citas.map(cita => (
-                <div key={cita.id} className={styles.cita}>
-                  <p>{cita.fecha} - {cita.fecha} - {cita.motivo}</p>
+              citas.map(citas => (
+                <div key={citas.id} className={styles.cita}>
+                  <p>{citas.fecha} - {citas.fecha} - {citas.motivo}</p>
                 </div>
               ))
             ) : <p>No se han encontrado próximas citas</p>
@@ -531,7 +520,7 @@ const DetallesCita = ({ id }) => {
         open={isCreateDialogOpen}
         onClose={handleCreateDialogClose}
         onSave={handleCreateDialogSave}
-        medicamento={{ id: '', nombre: '', dosis: '', frecuencia: '' }}
+        recetaId={currentReceta.id} // Pasa el id de la receta actual
       />
       <EditOrdenDialog 
         open={isOrdenDialogOpen} 

@@ -48,7 +48,7 @@ const EditMedicamentoDialog = ({ open, onClose, recetaId, onSave }) => {
         <FormControl fullWidth>
           <InputLabel>Medicamento</InputLabel>
           <Select
-            value={editableMedicamento.id}
+            value={editableMedicamento.id || ''}
             onChange={handleSelectChange}
           >
             {medicamentos.map((med) => (
