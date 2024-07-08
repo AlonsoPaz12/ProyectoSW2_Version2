@@ -30,6 +30,12 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
 
+  function cerrarSesion() {
+    localStorage.clear();
+    window.location.href = 'http://localhost:3001'; 
+}
+
+
   const open = Boolean(anchorEl);
 
   return (
@@ -66,7 +72,7 @@ const UserMenu = () => {
         <MenuItem onClick={() => { handleMenuClose(); router.push(`/VisualizacionDePerfil`);}}>
           <Typography variant="body1" style={{ color: '#1a73e8', width: '100%' }}>Mi perfil</Typography>
         </MenuItem>
-        <MenuItem onClick={() => { handleMenuClose()}} style={{ width: 200 }}> {/* Ancho fijo de las opciones del menú */}
+        <MenuItem onClick={() => { handleMenuClose(); cerrarSesion() }} style={{ width: 200 }}> {/* Ancho fijo de las opciones del menú */}
           <Typography variant="body1" style={{ width: '100%' }}>Cerrar sesión</Typography>
         </MenuItem>
       </Menu>
