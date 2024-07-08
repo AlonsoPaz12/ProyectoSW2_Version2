@@ -2,17 +2,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
+import { DocumentoMedico } from '../interfaces/DocumentoMedico';
 import { OrdenMedica } from './ordenes-medicas.entity';
 import { Cita } from '../citas/citas.entity';
-import { Medico } from 'src/medicos/medicos.entity';
-import { Paciente } from 'src/pacientes/pacientes.entity';
+import { Medico } from '../medicos/medicos.entity';
+import { Paciente } from '../pacientes/pacientes.entity';
 import { ImagenMedica } from '../imagenes-medicas/imagenes-medicas.entity';
 
 import { ActualizarOrdenMedicaDto, CrearOrdenMedicaDto } from './dto/ordenes-medicas.dto';
-import { ResultadoLab } from 'src/resultados-lab/resultados-lab.entity';
-import { ActualizarImagenMedicaDto } from 'src/imagenes-medicas/dto/imagenes-medicas.dto';
-import { ActualizarResultadoLabDto } from 'src/resultados-lab/dto/resultados-lab.dto';
+import { ResultadoLab } from '../resultados-lab/resultados-lab.entity';
+import { ActualizarImagenMedicaDto } from '../imagenes-medicas/dto/imagenes-medicas.dto';
+import { ActualizarResultadoLabDto } from '../resultados-lab/dto/resultados-lab.dto';
 
 @Injectable()
 export class OrdenMedicaService implements DocumentoMedico {
