@@ -114,12 +114,16 @@ async updateCita(id: number, updateCitaDto: any): Promise<Cita> {
   const cita = await this.citaRepository.findOne({ where: { id } });
 
   if (!cita) {
-      throw new NotFoundException(`Cita con ID ${id} no encontrada`);
+    throw new NotFoundException(`Cita con ID ${id} no encontrada`);
   }
 
+  // Actualizar todas las propiedades de la cita con los valores del DTO
   cita.motivo = updateCitaDto.motivo;
   cita.observacion = updateCitaDto.observacion;
   cita.fecha = updateCitaDto.fecha;
+  cita.hora = updateCitaDto.hora;
+  cita.diagnostico = updateCitaDto.diagnostico;
+  cita.asistio = updateCitaDto.asistio;
 
   return this.citaRepository.save(cita);
 }

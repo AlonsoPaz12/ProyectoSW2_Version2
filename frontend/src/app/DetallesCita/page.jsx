@@ -168,15 +168,20 @@ const DetallesCita = ({ id }) => {
   };
   
   
-  
-
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         await fetchCita();
         await fectchprueba(1);
-        await fetchCita2(1, 1);
-        await fetchRecetas(1); // Pasa el `id` aquí
+      }
+    };
+    fetchData();
+  }, [id, ordenes]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        await fetchRecetas(1); 
       }
     };
     fetchData();
@@ -484,7 +489,7 @@ const DetallesCita = ({ id }) => {
         </div>
       </div>
       
-      {/* <div className={styles.recetaMedica}>
+      /* <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>ORDEN MEDICA</h5>
         <div className={styles.recetaInfo}>
           {ordenes.map( orden =>(
@@ -512,7 +517,7 @@ const DetallesCita = ({ id }) => {
           </div>
           ))}
         </div>
-      </div> */}
+      </div> */
 
       <EditMedicamentoDialog 
         open={isDialogOpen} 
