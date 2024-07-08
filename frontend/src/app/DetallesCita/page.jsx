@@ -14,7 +14,6 @@ import EditMedicamentoDialog from "./EditMedicamentoDialog";
 import { useRouter } from 'next/navigation';
 import { getOrders } from '@/services/ordenesService';
 import EditOrdenDialog from './EditOrdenDialog';
-import { GiConsoleController } from 'react-icons/gi';
 
 const updateOrdenMedica = async (id, updateData) => {
   try {
@@ -28,7 +27,6 @@ const updateOrdenMedica = async (id, updateData) => {
 
 const DetallesCita = ({ id }) => {
   const router = useRouter();
-  const [paciente, setPaciente] = useState({});
   const [paciente2, setPaciente2] = useState({});
   const [cita, setCita] = useState({ asistio: false, fecha: Date(), motivo: '', Observacion: '' });
   const [citas, setCitas] = useState([]);
@@ -45,9 +43,6 @@ const DetallesCita = ({ id }) => {
   const [currentOrden, setCurrentOrden] = useState({});
   const [recetasFiltradas, setRecetasFiltradas] = useState([]);
   const [recetas, setRecetas] = useState([]);
-
-
-
 
   const calcularEdad = (fechaNacimiento) => {
     const hoy = new Date();
@@ -81,9 +76,9 @@ const DetallesCita = ({ id }) => {
         console.log('No se encontraron citas');
         return;
       }
-  
+
       const filteredCita = data.find(cita => cita.medico?.id === medicoid && cita.paciente?.id === pacientId);
-  
+
       if (filteredCita) {
         const filteredData = {
           id: filteredCita.id,
@@ -92,7 +87,7 @@ const DetallesCita = ({ id }) => {
           motivo: filteredCita.motivo,
           observacion: filteredCita.observacion,
         };
-  
+
         
         setEditableCita(filteredData);
         setCitas(filteredData);
@@ -107,7 +102,6 @@ const DetallesCita = ({ id }) => {
       console.error(error);
     }
   };
-  
 
   const fetchPaciente = async (pacienteId) => {
     const pacienteData = pacientesData.find(paciente => paciente.id === pacienteId);
@@ -166,17 +160,17 @@ const DetallesCita = ({ id }) => {
       console.error('Error al obtener las recetas:', error);
     }
   };
-  
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         await fetchCita();
+        await fetchCita2(1,1);
         await fectchprueba(1);
       }
     };
     fetchData();
-  }, [id, ordenes]);
+  }, [id]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -278,7 +272,6 @@ const DetallesCita = ({ id }) => {
       console.error('Error al eliminar el medicamento:', error);
     }
   };
-  
 
   const handleCreateDialogClose = () => {
     setIsCreateDialogOpen(false);
@@ -312,6 +305,7 @@ const DetallesCita = ({ id }) => {
     setOrdenes(updatedOrdenes);
     setIsOrdenDialogOpen(false);
   };
+
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
     const options = { day: '2-digit', month: 'long', year: 'numeric' };
@@ -489,7 +483,7 @@ const DetallesCita = ({ id }) => {
         </div>
       </div>
       
-      /* <div className={styles.recetaMedica}>
+      <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>ORDEN MEDICA</h5>
         <div className={styles.recetaInfo}>
           {ordenes.map( orden =>(
@@ -498,26 +492,34 @@ const DetallesCita = ({ id }) => {
             <h6>{orden.observacion}</h6>
             <h6>IMAGEN MÉDICA: </h6>
             <div className={styles.imagenMedica}>
-              <div className={styles.imagenContenedor}>
-                <img src={orden.imagenMedica.imagen} alt="Resultados de Radiografía de Torax" />
-              </div>
-              <p><strong>Resultados e Interpretación: </strong>{orden.imagenMedica.indicaciones}</p>
-              <p><strong>Observaciones/Comentarios: </strong>{orden.imagenMedica.NotasMedic}</p>
+              {
+                orden.imagenMedica && orden.imagenMedica.imagen && (
+                  <div className={styles.imagenContenedor}>
+                    <img src={orden.imagenMedica.imagen} alt="Resultados de Radiografía de Torax" />
+                  </div>
+                )
+              }
+              <p><strong>Resultados e Interpretación: </strong>{orden.imagenMedica?.indicaciones}</p>
+              <p><strong>Observaciones/Comentarios: </strong>{orden.imagenMedica?.NotasMedic}</p>
             </div>
             <h6>RESULTADO DE LABORATORIO: </h6>
             <div className={styles.imagenMedica}>
-              <div className={styles.imagenContenedor}>
-                <img src={orden.resultadoLaboratorio.imageurl} alt="Resultados de Radiografía de Torax" />
-              </div>
-              <p><strong>Resultado: </strong>{orden.resultadoLaboratorio.Resultado}</p>
-              <p><strong>Motivo de prueba: </strong>{orden.resultadoLaboratorio.motivoPrueba}</p>
+              {
+                orden.resultadoLaboratorio && orden.resultadoLaboratorio.imageurl && (
+                  <div className={styles.imagenContenedor}>
+                    <img src={orden.resultadoLaboratorio.imageurl} alt="Resultados de Radiografía de Torax" />
+                  </div>
+                )
+              }
+              <p><strong>Resultado: </strong>{orden.resultadoLaboratorio?.Resultado}</p>
+              <p><strong>Motivo de prueba: </strong>{orden.resultadoLaboratorio?.motivoPrueba}</p>
             </div>
             <br></br>
             <button className={styles.editButton} onClick={() => handleEditOrdenClick(orden)}><FaEdit size={"20px"} /> Editar Orden</button>
           </div>
           ))}
         </div>
-      </div> */
+      </div>
 
       <EditMedicamentoDialog 
         open={isDialogOpen} 
