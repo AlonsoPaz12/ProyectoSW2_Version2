@@ -1,51 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import axios from 'axios';
 
-const EditMedicamentoDialog = ({ open, onClose, medicamento, onSave }) => {
-  const [editableMedicamento, setEditableMedicamento] = useState({ id: '', nombre: '', dosis: '', frecuencia: ''});
-
+const EditMedicamentoDialog = ({ open, onClose, recetaId, onSave }) => {
+  const [editableMedicamento, setEditableMedicamento] = useState([]);
+  const [medicamentos, setMedicamentos] = useState([]);
 
   useEffect(() => {
-    setEditableMedicamento(medicamento);
-  }, [medicamento]);
+    const fetchMedicamentos = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/medicamentos');
+        setMedicamentos(response.data);
+        console.log('Fetched medicamentos:', response.data);
+      } catch (error) {
+        console.error('Error fetching medicamentos', error);
+      }
+    };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditableMedicamento((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    fetchMedicamentos();
+  }, []);
+
+  const handleSelectChange = (e) => {
+    const selectedMedicamento = medicamentos.find(m => m.id === e.target.value);
+    setEditableMedicamento(selectedMedicamento);
+    console.log('Selected medicamento:', selectedMedicamento);
   };
 
-  const handleSave = () => {
-    onSave(editableMedicamento);
+  const handleSave = async () => {
+    console.log('Saving medicamento:', editableMedicamento);
+    try {
+      await axios.post('http://localhost:3000/recetas/agregar-medicamento', {
+        recetaId,
+        medicamentoId: editableMedicamento.id
+      });
+      console.log('Medicamento saved:', editableMedicamento);
+      onSave(editableMedicamento); // Llamar a la función onSave si deseas realizar alguna acción adicional
+      onClose(); // Cerrar el diálogo después de guardar
+    } catch (error) {
+      console.error('Error saving medicamento', error);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Edit Medicamento</DialogTitle>
       <DialogContent>
-        <TextField
-          label="Nombre"
-          name="nombre"
-          value={editableMedicamento.nombre}
-          onChange={handleInputChange}
-          fullWidth
-        />
-        <TextField
-          label="Dosis"
-          name="dosis"
-          value={editableMedicamento.dosis}
-          onChange={handleInputChange}
-          fullWidth
-        />
-        <TextField
-          label="Frecuencia"
-          name="frecuencia"
-          value={editableMedicamento.frecuencia}
-          onChange={handleInputChange}
-          fullWidth
-        />
+        <FormControl fullWidth>
+          <InputLabel>Medicamento</InputLabel>
+          <Select
+            value={editableMedicamento.id}
+            onChange={handleSelectChange}
+          >
+            {medicamentos.map((med) => (
+              <MenuItem key={med.id} value={med.id}>
+                {med.nombre}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
@@ -56,4 +68,3 @@ const EditMedicamentoDialog = ({ open, onClose, medicamento, onSave }) => {
 };
 
 export default EditMedicamentoDialog;
-

@@ -7,6 +7,7 @@ import { Medico } from '../medicos/medicos.entity';
 import { Paciente } from 'src/pacientes/pacientes.entity';
 
 
+
 @Injectable()
 export class CitaService {
   constructor(

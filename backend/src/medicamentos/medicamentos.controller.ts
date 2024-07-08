@@ -35,4 +35,9 @@ export class MedicamentoController {
             throw new NotFoundException(error.message);
         }
     }
+    // Nueva ruta para obtener todos los medicamentos
+    @Get()
+    async obtenerTodosLosMedicamentos() {
+        return await this.medicamentoService.obtenerTodosLosMedicamentos();
+    }
 }

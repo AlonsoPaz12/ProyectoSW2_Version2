@@ -49,4 +49,8 @@ export class MedicamentoService {
         }
         await this.medicamentoRepository.remove(medicamento);
     }
+    // Nuevo método para obtener todos los medicamentos
+    async obtenerTodosLosMedicamentos(): Promise<Medicamento[]> {
+        return await this.medicamentoRepository.find();
+    }
 }

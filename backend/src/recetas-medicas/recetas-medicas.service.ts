@@ -11,7 +11,7 @@ import { Cita } from 'src/citas/citas.entity';
 import { Medico } from 'src/medicos/medicos.entity';
 
 import { CrearRecetaMedicaDto } from './dto/recetas-medicas.dto';
-
+import { Medicamento } from 'src/medicamentos/medicamentos.entity';
 @Injectable()
 export class RecetaService implements DocumentoMedico {
     constructor(
@@ -27,7 +27,11 @@ export class RecetaService implements DocumentoMedico {
         @InjectRepository(Medico)
         private readonly medicoRepository: Repository<Medico>,
 
-    ) { }
+        @InjectRepository(Medicamento)
+        private readonly medicamentoRepository: Repository<Medicamento>, // Nueva línea
+    ) { }
+    //...
+
 
     async crearDocumentoMedico(crearRecetaMedicaDto: CrearRecetaMedicaDto) {
         const { observacion, citaId, medicoId, pacienteId } = crearRecetaMedicaDto;
@@ -73,6 +77,22 @@ export class RecetaService implements DocumentoMedico {
     }
 
     async obtenerTodasRecetas(): Promise<RecetaMedica[]> {
-        return await this.recetaMedicaRepository.find();
+        return await this.recetaMedicaRepository.find({ relations: ['medicamentos'] });
+    }
+    async agregarMedicamentoAReceta(recetaId: number, medicamentoId: number) {
+        const receta = await this.recetaMedicaRepository.findOne({ where: { id: recetaId }, relations: ['medicamentos'] });
+        if (!receta) {
+            throw new NotFoundException(`No se encontró la receta con ID ${recetaId}`);
+        }
+
+        const medicamento = await this.medicamentoRepository.findOne({ where: { id: medicamentoId } });
+        if (!medicamento) {
+            throw new NotFoundException(`No se encontró el medicamento con ID ${medicamentoId}`);
+        }
+
+        receta.medicamentos.push(medicamento);
+        await this.recetaMedicaRepository.save(receta);
+
+        return receta;
     }
 }

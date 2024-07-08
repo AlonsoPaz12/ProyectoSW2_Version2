@@ -1,21 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecetaMedica } from './recetas-medicas.entity';
-import { CitaModule } from 'src/citas/citas.module';
-import { RecetaMedicaController } from './recetas-medicas.controller';
 import { RecetaService } from './recetas-medicas.service';
-import { Cita } from 'src/citas/citas.entity';
-import { Paciente } from 'src/pacientes/pacientes.entity';
-import { Medico } from 'src/medicos/medicos.entity';
+import { RecetaMedicaController } from './recetas-medicas.controller';
+import { Cita } from '../citas/citas.entity';
+import { Paciente } from '../pacientes/pacientes.entity';
+import { Medico } from '../medicos/medicos.entity';
+import { MedicamentoModule } from '../medicamentos/medicamento.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([RecetaMedica, Cita, Medico, Paciente]),
-        CitaModule,
+        TypeOrmModule.forFeature([RecetaMedica, Cita, Paciente, Medico]),
+        MedicamentoModule,
     ],
-    controllers: [RecetaMedicaController],
     providers: [RecetaService],
-    exports: [RecetaService]
-
+    controllers: [RecetaMedicaController],
+    exports: [RecetaService], // Exportar RecetaService
 })
-export class RecetasMedicasModule {}
+export class RecetasMedicasModule {}
