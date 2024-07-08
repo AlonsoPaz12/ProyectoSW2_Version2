@@ -4,7 +4,7 @@ import { Repository, MoreThan } from 'typeorm';
 
 import { Medico } from './medicos.entity';
 import { Cita } from '../citas/citas.entity';
-import { Medicamento } from 'src/medicamentos/medicamentos.entity';
+import { Medicamento } from '../medicamentos/medicamentos.entity';
 import { HoraDisponible } from 'src/horario-disponible/hora-disponible.entity';
 import { OrdenMedica } from 'src/ordenes-medicas/ordenes-medicas.entity';
 import { ResultadoLab } from '../resultados-lab/resultados-lab.entity';

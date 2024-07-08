@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Paciente } from "src/pacientes/pacientes.entity";
+import { Paciente } from "../pacientes/pacientes.entity";
 import { Repository } from 'typeorm';
 import { Medico } from '../medicos/medicos.entity';
 import { Vacuna } from "./vacunas.entity";
@@ -20,42 +20,42 @@ export class VacunaService {
     ){}
 
     async crearVacuna(crearVacunaDto: CrearVacunaDto){
-        const { nombre, fecha, dosis, fabricante, lugarDeVacunacion, medicos, pacientes } = crearVacunaDto;
+        const { nombre, fecha, dosis, fabricante, lugarDeVacunacion, medicos, pacientes } = crearVacunaDto; // nodo 1
 
-        const nuevaVacuna = new Vacuna();
-        nuevaVacuna.nombre = nombre;
-        nuevaVacuna.fecha = fecha;
-        nuevaVacuna.dosis = dosis;
-        nuevaVacuna.fabricante = fabricante;
-        nuevaVacuna.lugarDeVacunacion = lugarDeVacunacion;
+        const nuevaVacuna = new Vacuna(); //nodo 2
+        nuevaVacuna.nombre = nombre; //nodo3
+        nuevaVacuna.fecha = fecha; //nodo3
+        nuevaVacuna.dosis = dosis; //nodo3
+        nuevaVacuna.fabricante = fabricante; //nodo3
+        nuevaVacuna.lugarDeVacunacion = lugarDeVacunacion; //nodo3
 
-        const vacunaGuardada = await this.vacunaRepository.save(nuevaVacuna);
+        const vacunaGuardada = await this.vacunaRepository.save(nuevaVacuna); //nodo 4
 
         // Añadir las relaciones Many-to-Many después de guardar la vacuna
-        if (medicos && medicos.length > 0) {
-            vacunaGuardada.medicos = [];
-            for (let i = 0; i < medicos.length; i++) {
-                const medico = await this.medicoRepository.findOne({ where: { id: medicos[i] } });
-                if (!medico) {
-                    throw new NotFoundException(`No se encontró el medico con ID ${medicos[i]}`);
+        if (medicos && medicos.length > 0) { //nodo 5 y nodo 6
+            vacunaGuardada.medicos = []; //nodo 7
+            for (let i = 0; i < medicos.length; i++) { //nodo 8, nodo 9 y nodo 10
+                const medico = await this.medicoRepository.findOne({ where: { id: medicos[i] } }); //nodo 11 (declaracion), nodo 12 (incremento), nodo 13 (comparacion)
+                if (!medico) { //nodo 14 
+                    throw new NotFoundException(`No se encontró el medico con ID ${medicos[i]}`); //nodo 15
                 }
-                vacunaGuardada.medicos.push(medico);
+                vacunaGuardada.medicos.push(medico); //nodo 16
             }
         }
 
-        if (pacientes && pacientes.length > 0) {
-            vacunaGuardada.pacientes = [];
-            for (let j = 0; j < pacientes.length; j++) {
-                const paciente = await this.pacienteRepository.findOne({ where: { id: pacientes[j] } });
-                if (!paciente) {
-                    throw new NotFoundException(`No se encontró el paciente con ID ${pacientes[j]}`);
+        if (pacientes && pacientes.length > 0) { //nodo 17 y nodo 18
+            vacunaGuardada.pacientes = []; //nodo 19
+            for (let j = 0; j < pacientes.length; j++) { //nodo 20, nodo 21 y nodo 22
+                const paciente = await this.pacienteRepository.findOne({ where: { id: pacientes[j] } }); //nodo 23, nodo 24 y nodo 25
+                if (!paciente) { //nodo 26
+                    throw new NotFoundException(`No se encontró el paciente con ID ${pacientes[j]}`); //nodo 27
                 }
-                vacunaGuardada.pacientes.push(paciente);
+                vacunaGuardada.pacientes.push(paciente); //nodo 28
             }
         }
 
         // Guardar las relaciones actualizadas
-        return this.vacunaRepository.save(vacunaGuardada);
+        return this.vacunaRepository.save(vacunaGuardada); //nodo 29
 
     }
 
