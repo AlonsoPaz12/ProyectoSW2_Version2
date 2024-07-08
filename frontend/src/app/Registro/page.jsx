@@ -240,8 +240,8 @@ const Registro = () => {
                                     <input
                                         type="radio"
                                         name="genero"
-                                        value="Hombre"
-                                        checked={formData.genero === 'Hombre'}
+                                        value="MASCULINO"
+                                        checked={formData.genero === 'MASCULINO'}
                                         onChange={handleChange}
                                     />
                                     Hombre
@@ -250,8 +250,8 @@ const Registro = () => {
                                     <input
                                         type="radio"
                                         name="genero"
-                                        value="Mujer"
-                                        checked={formData.genero === 'Mujer'}
+                                        value="FEMENINO"
+                                        checked={formData.genero === 'FEMENINO'}
                                         onChange={handleChange}
                                     />
                                     Mujer
