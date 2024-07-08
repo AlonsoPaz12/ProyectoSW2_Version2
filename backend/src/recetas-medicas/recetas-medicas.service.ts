@@ -6,12 +6,13 @@ import { Repository } from 'typeorm';
 
 import { DocumentoMedico } from 'src/interfaces/DocumentoMedico';
 import { RecetaMedica } from './recetas-medicas.entity';
-import { Paciente } from 'src/pacientes/pacientes.entity';
-import { Cita } from 'src/citas/citas.entity';
-import { Medico } from 'src/medicos/medicos.entity';
+import { Paciente } from '../pacientes/pacientes.entity';
+
+import { Cita } from '../citas/citas.entity';
+import { Medico } from '../medicos/medicos.entity';
 
 import { CrearRecetaMedicaDto } from './dto/recetas-medicas.dto';
-import { Medicamento } from 'src/medicamentos/medicamentos.entity';
+import { Medicamento } from '../medicamentos/medicamentos.entity';
 @Injectable()
 export class RecetaService implements DocumentoMedico {
     constructor(
