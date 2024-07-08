@@ -95,4 +95,15 @@ export class RecetaService implements DocumentoMedico {
 
         return receta;
     }
+    async eliminarMedicamentoDeReceta(recetaId: number, medicamentoId: number) {
+        const receta = await this.recetaMedicaRepository.findOne({ where: { id: recetaId }, relations: ['medicamentos'] });
+        if (!receta) {
+            throw new NotFoundException(`No se encontró la receta con ID ${recetaId}`);
+        }
+
+        receta.medicamentos = receta.medicamentos.filter(med => med.id !== medicamentoId);
+        await this.recetaMedicaRepository.save(receta);
+
+        return receta;
+    }
 }

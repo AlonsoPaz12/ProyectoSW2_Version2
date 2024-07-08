@@ -14,9 +14,9 @@ import EditMedicamentoDialog from "./EditMedicamentoDialog";
 import { useRouter } from 'next/navigation';
 import { getOrders } from '@/services/ordenesService';
 import EditOrdenDialog from './EditOrdenDialog';
-import axios from 'axios';
+import { GiConsoleController } from 'react-icons/gi';
 
-const updateOrdenMedica = async (id, updateData) =>{
+const updateOrdenMedica = async (id, updateData) => {
   try {
     const response = await axios.put(`http://localhost:3000/ordenes-medicas/${id}`, updateData);
     return response.data;
@@ -26,8 +26,7 @@ const updateOrdenMedica = async (id, updateData) =>{
   }
 }
 
-
-const DetallesCita = ({id}) => {
+const DetallesCita = ({ id }) => {
   const router = useRouter();
   const [paciente, setPaciente] = useState({});
   const [paciente2, setPaciente2] = useState({});
@@ -44,6 +43,11 @@ const DetallesCita = ({id}) => {
   const [ordenes, setOrdenes] = useState([]);
   const [isOrdenDialogOpen, setIsOrdenDialogOpen] = useState(false);
   const [currentOrden, setCurrentOrden] = useState({});
+  const [recetasFiltradas, setRecetasFiltradas] = useState([]);
+  const [recetas, setRecetas] = useState([]);
+
+
+
 
   const calcularEdad = (fechaNacimiento) => {
     const hoy = new Date();
@@ -57,28 +61,28 @@ const DetallesCita = ({id}) => {
 
     return edad;
   };
+
   const fectchprueba = async (pacienteId) => {
     try {
       const response = await axios.get(`http://localhost:3000/pacientes/${pacienteId}`);
-      
       setPaciente2(response.data.paciente);
       console.log(response.data.paciente);
-      
-      //setEditablePaciente({ ...pacienteData });
-      //await fetchCitasFromPaciente(pacienteData);
     } catch (error) {
       console.error('Error al obtener las vacunas del paciente:', error);
     }
   };
+
   const fetchCita2 = async (pacientId, medicoid) => {
     try {
       const response = await axios.get(`http://localhost:3000/citas`);
       const data = response.data;
-      console.log("Aquí está la data");
-      console.log(response.data);
+      console.log(data)
+      if (!data || data.length === 0) {
+        console.log('No se encontraron citas');
+        return;
+      }
   
-      // Encontrar la cita correspondiente con los IDs específicos
-      const filteredCita = data.find(cita => cita.medico.id === medicoid && cita.paciente.id === pacientId);
+      const filteredCita = data.find(cita => cita.medico?.id === medicoid && cita.paciente?.id === pacientId);
   
       if (filteredCita) {
         const filteredData = {
@@ -89,10 +93,13 @@ const DetallesCita = ({id}) => {
           observacion: filteredCita.observacion,
         };
   
-        setCitas(filteredData);
+        
         setEditableCita(filteredData);
+        setCitas(filteredData);
         console.log("Estas son las citas editables");
         console.log(filteredData);
+        console.log(citas);
+        console.log("hasta aquí");
       } else {
         console.log(`No se encontró ninguna cita con el médico ID ${medicoid} y paciente ID ${pacientId}`);
       }
@@ -101,44 +108,35 @@ const DetallesCita = ({id}) => {
     }
   };
   
-  
-    
-  
-
 
   const fetchPaciente = async (pacienteId) => {
-    
     const pacienteData = pacientesData.find(paciente => paciente.id === pacienteId);
     if (!pacienteData) {
       console.log(`No se encontró ningún paciente con el ID ${pacienteId}`);
       return;
     }
-    //setPaciente(pacienteData);
-    console.log(pacienteData)
+    console.log(pacienteData);
     setEditablePaciente({ ...pacienteData });
     await fetchCitasFromPaciente(pacienteData);
     await fetchOrdenes(id);
   };
-  console.log(pacientesData)
+
   const fetchCita = async () => {
     const citaData = citasData.find(cita => cita.id === id);
-    console.log("hola")
     if (!citaData) {
       console.log(`No se encontró ninguna cita con el ID ${id}`);
       setNotFound(true);
       return;
     }
     setCita(citaData);
-    
     fetchPaciente(citaData.IDpaciente);
     fetchReceta(citaData.id);
-    
   };
 
   const fetchCitasFromPaciente = async (paciente) => {
     const pacienteId = paciente.id;
     const citasDataFromPaciente = citasData.filter(cita => cita.IDpaciente === pacienteId && new Date(cita.fecha) > new Date());
-    setCitas(citasDataFromPaciente);    
+    setCitas(citasDataFromPaciente);
   };
 
   const fetchReceta = async (citaId) => {
@@ -152,21 +150,37 @@ const DetallesCita = ({id}) => {
 
   const fetchOrdenes = async (pacienteId) => {
     const ordenesData = await getOrders(pacienteId);
-    console.log(ordenesData)
     setOrdenes(ordenesData);
   }
+  const fetchRecetas = async (id) => {
+    try {
+      const response = await axios.get('http://localhost:3000/recetas');
+      console.log(response.data);
+      console.log(response.data.id)
+      const recetasFiltradas = response.data.filter(receta => receta.id === id);
+      console.log(recetasFiltradas);
+      setRecetasFiltradas(recetasFiltradas);
+      console.log("Recetas filtradas");
+      console.log(recetasFiltradas);
+    } catch (error) {
+      console.error('Error al obtener las recetas:', error);
+    }
+  };
+  
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         await fetchCita();
-        
         await fectchprueba(1);
-        await fetchCita2(1,1);
+        await fetchCita2(1, 1);
+        await fetchRecetas(1); // Pasa el `id` aquí
       }
     };
     fetchData();
-  }, [id, ordenes]);
+  }, [id]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -181,22 +195,18 @@ const DetallesCita = ({id}) => {
         },
         body: JSON.stringify(editableCita),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         console.log('Cita actualizada:', result);
-        // Aquí puedes manejar la respuesta exitosa, por ejemplo, mostrar un mensaje al usuario.
       } else {
         console.error('Error al actualizar la cita:', result.message);
-        // Aquí puedes manejar el error, por ejemplo, mostrar un mensaje al usuario.
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
-      // Aquí puedes manejar errores de la solicitud, por ejemplo, mostrar un mensaje al usuario.
     }
   };
-  
 
   const handlePacienteInputChange = (e) => {
     const { name, value } = e.target;
@@ -215,29 +225,19 @@ const DetallesCita = ({id}) => {
   };
 
   const handleEditMedicamentoClick = (medicamento) => {
-    console.log(medicamento);
     setCurrentMedicamento(medicamento);
-    console.log(currentMedicamento)
     setIsDialogOpen(true);
   };
 
   const handleCreateMedicamentoClick = () => {
-    console.log('Create medicamento');
     setIsCreateDialogOpen(true);
   };
-
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
   };
-  const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const options = { day: '2-digit', month: 'long', year: 'numeric' };
-    return date.toLocaleDateString('es-ES', options);
-};
 
   const handleCreateDialogSave = (newMedicamento) => {
-    console.log(newMedicamento);
     const medicamentos = receta.medicamento;
 
     if (medicamentos.length > 0) {
@@ -252,7 +252,6 @@ const DetallesCita = ({id}) => {
   };
 
   const handleDialogSave = (updatedMedicamento) => {
-    console.log(updatedMedicamento);
     const updatedMedicamentos = receta.medicamento.map(med => 
       med.id === updatedMedicamento.id ? updatedMedicamento : med
     );
@@ -260,10 +259,21 @@ const DetallesCita = ({id}) => {
     setIsDialogOpen(false);
   };
 
-  const handleDeleteMedicamentoClick = (medicamentoId) => {
-    const medicamentos = receta.medicamento.filter(medicamento => medicamento.id !== medicamentoId);
-    setReceta({ ...receta, medicamento: medicamentos });
+  const handleDeleteMedicamentoClick = async (recetaId, medicamentoId) => {
+    try {
+      // Realiza la solicitud DELETE al backend
+      await axios.delete(`http://localhost:3000/recetas/${recetaId}/medicamentos/${medicamentoId}`);
+      
+      // Filtra los medicamentos en el estado local después de eliminar
+      const medicamentosActualizados = receta.medicamento.filter(medicamento => medicamento.id !== medicamentoId);
+      setReceta({ ...receta, medicamento: medicamentosActualizados });
+  
+      console.log(`Medicamento con ID ${medicamentoId} eliminado de la receta con ID ${recetaId}`);
+    } catch (error) {
+      console.error('Error al eliminar el medicamento:', error);
+    }
   };
+  
 
   const handleCreateDialogClose = () => {
     setIsCreateDialogOpen(false);
@@ -280,12 +290,12 @@ const DetallesCita = ({id}) => {
 
     if (!imagenesIguales && resultadoIguales) {
       const updatedImagenesData = await updateOrdenMedica(currentOrden.id, updatedOrden.imagenMedica);
-    }else if(imagenesIguales && !resultadoIguales){
+    } else if (imagenesIguales && !resultadoIguales) {
       const updatedResultadoData = await updateOrdenMedica(currentOrden.id, updatedOrden.resultadoLaboratorio);
-    }else if(!imagenesIguales && !resultadoIguales){
+    } else if (!imagenesIguales && !resultadoIguales) {
       const updatedImagenesData = await updateOrdenMedica(currentOrden.id, updatedOrden.imagenMedica);
       const updatedResultadoData = await updateOrdenMedica(currentOrden.id, updatedOrden.resultadoLaboratorio);
-    }else{
+    } else {
       await updateOrdenMedica(currentOrden.id, updatedOrden);
     }
 
@@ -294,9 +304,13 @@ const DetallesCita = ({id}) => {
     const updatedOrdenes = ordenes.map(ord => 
       ord.id === updatedOrdenData.id ? updatedOrdenData : ord
     );
-    console.log(updatedOrdenData);
     setOrdenes(updatedOrdenes);
     setIsOrdenDialogOpen(false);
+  };
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const options = { day: '2-digit', month: 'long', year: 'numeric' };
+    return date.toLocaleDateString('es-ES', options);
   };
 
   const handleOrdenDialogClose = () => {
@@ -317,17 +331,17 @@ const DetallesCita = ({id}) => {
   const shallowEqual = (obj1, obj2) => {
     const keys1 = Object.keys(obj1);
     const keys2 = Object.keys(obj2);
-  
+
     if (keys1.length !== keys2.length) {
       return false;
     }
-  
+
     for (let key of keys1) {
       if (obj1[key] !== obj2[key]) {
         return false;
       }
     }
-  
+
     return true;
   };
 
@@ -345,17 +359,14 @@ const DetallesCita = ({id}) => {
           <div className={styles.columna2}>
             {isEditing ? (
               <>
-                
                 <input
-                    type="checkbox"
-                    name="asistio"
-                    className={styles.input}
-                    checked={editableCita.asistio}
-                    value={true}
-                    onChange={
-                      handleCitaInputChange
-                    }
-                  />
+                  type="checkbox"
+                  name="asistio"
+                  className={styles.input}
+                  checked={editableCita.asistio}
+                  value={true}
+                  onChange={handleCitaInputChange}
+                />
                 <input
                   type="datetime-local"
                   name="fecha"
@@ -385,9 +396,12 @@ const DetallesCita = ({id}) => {
                 <p className={styles.texto}><strong>Edad:</strong> {calcularEdad(paciente2.fechaNacimiento)} años</p>
                 <p className={styles.texto}><strong>Estado:</strong> <span className={citas.asistio ? styles.asistio : styles.noAsistio}>{cita.asistio ? 'Asistió' : 'No Asistió'}</span></p>
                 
-                <p className={styles.texto}><strong>Fecha:</strong>  {new Date(citas.fecha).toLocaleDateString()}</p>
-                <p className={styles.texto}><strong>Hora:</strong> {new Date(citas.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
-                
+                <p className={styles.texto}>
+                  <strong>Fecha:</strong> {new Date(citas.fecha).toLocaleDateString() !== 'Invalid Date' ? new Date(citas.fecha).toLocaleDateString() : 'Fecha no válida'}
+                </p>
+                <p className={styles.texto}>
+                  <strong>Hora:</strong> {new Date(citas.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) !== 'Invalid Date' ? new Date(citas.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) : 'Hora no válida'}
+                </p>
               </>
             )}
           </div>
@@ -406,7 +420,6 @@ const DetallesCita = ({id}) => {
           <div className={styles.columna4}>
             {isEditing ? (
               <button className={styles.backButton} onClick={() => handleSaveClick(citas.id)}>Guardar</button>
-
             ) : (
               <button className={styles.editButton} onClick={handleEditClick}><FaEdit size={"20px"} /> Editar</button>
             )}
@@ -416,42 +429,42 @@ const DetallesCita = ({id}) => {
       <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>RECETAS</h5>
         <div className={styles.recetaInfo}>
-          <div className={styles.receta}>
-          {
-            receta && receta.id ? (
-              <div className={styles.receta}>
+        <div className={styles.receta}>
+        {
+          recetasFiltradas.length > 0 ? (
+            recetasFiltradas.map((receta) => (
+              <div key={receta.id} className={styles.receta}>
                 <div className={styles.receta__head}>
                   <p className={styles.receta__title}>Nro RECETA: <span className={styles.receta__text}>{receta.id}</span></p>
                   <p className={styles.receta__title}>NOTAS ADICIONALES: <span className={styles.receta__text}>{receta.observacion}</span></p>
                 </div>
                 <div className={styles.medicamentos}>
                   {
-                    receta.medicamento && receta.medicamento.length > 0 &&
-                    receta.medicamento.map(medicamento => (
+                    receta.medicamentos && receta.medicamentos.length > 0 &&
+                    receta.medicamentos.map(medicamento => (
                       <div key={medicamento.id} className={styles.card}>
                         <p className={styles.texto}><strong>Nombre: </strong> {medicamento.nombre}</p>
                         <p className={styles.texto}><strong>Dosis: </strong> {medicamento.dosis}</p>
                         <p className={styles.texto}><strong>Frecuencia: </strong> {medicamento.frecuencia}</p>
                         <div className={styles.medicamento__buttons}>
                           <button 
-                          className={styles.editButton}
-                          onClick={() => handleEditMedicamentoClick(medicamento)}  // Pass the medicamento object
+                            className={styles.editButton}
+                            onClick={() => handleEditMedicamentoClick(medicamento)}
                           ><FaEdit size={"20px"} /></button>
                           <button className={styles.editButton}
-                          onClick={() => handleDeleteMedicamentoClick(medicamento.id)}
+                            onClick={() => handleDeleteMedicamentoClick(citas.id,medicamento.id)}
                           ><FaTrashAlt size={"20px"} /></button>
                         </div>
                       </div>
                     ))
                   }
                 </div>
-                <button className={styles.addButton}  onClick={handleCreateMedicamentoClick}><IoMdAdd size={"20px"}
-                /> Agregar Medicamento</button>
+                <button className={styles.addButton} onClick={handleCreateMedicamentoClick}><IoMdAdd size={"20px"} /> Agregar Medicamento</button>
               </div>
-            ) : <p>No se ha encontrado receta</p>
-          }
-          </div>
-         
+            ))
+          ) : <p>No se ha encontrado receta</p>
+        }
+        </div>
         </div>
       </div>
       <div className={styles.recetaMedica}>
@@ -462,19 +475,16 @@ const DetallesCita = ({id}) => {
             citas.length > 0 ? (
               citas.map(cita => (
                 <div key={cita.id} className={styles.cita}>
-                  <p>{cita.fecha} - {cita.fecha}
-                    { }- {cita.motivo}
-                  </p>
+                  <p>{cita.fecha} - {cita.fecha} - {cita.motivo}</p>
                 </div>
               ))
-            ) : <p>No se han encontrado proximas citas</p>
+            ) : <p>No se han encontrado próximas citas</p>
           }
           </div>
-         
         </div>
       </div>
-
-      <div className={styles.recetaMedica}>
+      
+      {/* <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>ORDEN MEDICA</h5>
         <div className={styles.recetaInfo}>
           {ordenes.map( orden =>(
@@ -502,7 +512,7 @@ const DetallesCita = ({id}) => {
           </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <EditMedicamentoDialog 
         open={isDialogOpen} 
@@ -511,19 +521,18 @@ const DetallesCita = ({id}) => {
         onSave={handleDialogSave} 
       />
       <EditMedicamentoDialog
-      open={isCreateDialogOpen}
-      onClose={handleCreateDialogClose}
-      onSave={handleCreateDialogSave}
-      medicamento={ { id: '', nombre: '', dosis: '', frecuencia: '' } }
-    />
-    <EditOrdenDialog 
+        open={isCreateDialogOpen}
+        onClose={handleCreateDialogClose}
+        onSave={handleCreateDialogSave}
+        medicamento={{ id: '', nombre: '', dosis: '', frecuencia: '' }}
+      />
+      <EditOrdenDialog 
         open={isOrdenDialogOpen} 
         onClose={handleOrdenDialogClose} 
         orden={currentOrden} 
         onSave={handleOrdenDialogSave} 
       />
     </div>
-    
   );
 };
 

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, NotFoundException, ParseIntPipe, Get, Logger } from '@nestjs/common';
+import { Controller, Post, Body, Param, NotFoundException, ParseIntPipe, Get, Logger,Delete} from '@nestjs/common';
 import { RecetaService } from './recetas-medicas.service';
 import { CrearRecetaMedicaDto } from './dto/recetas-medicas.dto';
 
@@ -36,5 +36,12 @@ export class RecetaMedicaController {
             this.logger.error(error.message);
             throw new NotFoundException(error.message);
         }
+    }
+    @Delete(':recetaId/medicamentos/:medicamentoId')
+    async eliminarMedicamentoDeReceta(
+        @Param('recetaId', ParseIntPipe) recetaId: number,
+        @Param('medicamentoId', ParseIntPipe) medicamentoId: number,
+    ) {
+        return this.recetaService.eliminarMedicamentoDeReceta(recetaId, medicamentoId);
     }
 }

@@ -17,11 +17,12 @@ export class CitaService {
 
   async obtenerTodasCitas(): Promise<Cita[]> {
     try {
-      return await this.citaRepository.find();
+      return await this.citaRepository.find({
+        relations: ['paciente', 'medico', 'receta'], // Agrega aquí las relaciones que necesitas
+      });
     } catch (error) {
       throw new Error(`Error al obtener las citas: ${error.message}`);
     }
-  
   }
   async obtenerCitasPorIdMedico(medicoId: number): Promise<Partial<Cita>[]> {
     try {
