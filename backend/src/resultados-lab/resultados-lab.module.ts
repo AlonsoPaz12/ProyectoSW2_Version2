@@ -9,5 +9,6 @@ import { OrdenMedica } from '../ordenes-medicas/ordenes-medicas.entity';
   imports: [TypeOrmModule.forFeature([ResultadoLab, OrdenMedica])],
   providers: [ResultadoLabService],
   controllers: [ResultadoLabController],
+  exports: [TypeOrmModule, ResultadoLabService]
 })
 export class ResultadoLabModule {}

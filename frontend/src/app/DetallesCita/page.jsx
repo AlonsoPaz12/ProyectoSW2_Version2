@@ -12,7 +12,21 @@ import { IoMdAdd } from "react-icons/io";
 import { FaTrashAlt } from "react-icons/fa";
 import EditMedicamentoDialog from "./EditMedicamentoDialog";
 import { useRouter } from 'next/navigation';
-import { parseISO, format } from 'date-fns';
+import { getOrders } from '@/services/ordenesService';
+import EditOrdenDialog from './EditOrdenDialog';
+import axios from 'axios';
+
+const updateOrdenMedica = async (id, updateData) =>{
+  try {
+    const response = await axios.put(`http://localhost:3000/ordenes-medicas/${id}`, updateData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating orden médica:', error);
+    throw error;
+  }
+}
+
+
 const DetallesCita = ({id}) => {
   const router = useRouter();
   const [paciente, setPaciente] = useState({});
@@ -27,6 +41,9 @@ const DetallesCita = ({id}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [currentMedicamento, setCurrentMedicamento] = useState({ id: '', nombre: '', dosis: '', frecuencia: '' });
+  const [ordenes, setOrdenes] = useState([]);
+  const [isOrdenDialogOpen, setIsOrdenDialogOpen] = useState(false);
+  const [currentOrden, setCurrentOrden] = useState({});
 
   const calcularEdad = (fechaNacimiento) => {
     const hoy = new Date();
@@ -90,6 +107,7 @@ const DetallesCita = ({id}) => {
 
 
   const fetchPaciente = async (pacienteId) => {
+    
     const pacienteData = pacientesData.find(paciente => paciente.id === pacienteId);
     if (!pacienteData) {
       console.log(`No se encontró ningún paciente con el ID ${pacienteId}`);
@@ -97,8 +115,9 @@ const DetallesCita = ({id}) => {
     }
     //setPaciente(pacienteData);
     console.log(pacienteData)
-    //setEditablePaciente({ ...pacienteData });
-    //await fetchCitasFromPaciente(pacienteData);
+    setEditablePaciente({ ...pacienteData });
+    await fetchCitasFromPaciente(pacienteData);
+    await fetchOrdenes(id);
   };
   console.log(pacientesData)
   const fetchCita = async () => {
@@ -113,6 +132,7 @@ const DetallesCita = ({id}) => {
     
     fetchPaciente(citaData.IDpaciente);
     fetchReceta(citaData.id);
+    
   };
 
   const fetchCitasFromPaciente = async (paciente) => {
@@ -130,16 +150,23 @@ const DetallesCita = ({id}) => {
     setReceta(recetaAux);
   };
 
+  const fetchOrdenes = async (pacienteId) => {
+    const ordenesData = await getOrders(pacienteId);
+    console.log(ordenesData)
+    setOrdenes(ordenesData);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         await fetchCita();
+        
         await fectchprueba(1);
         await fetchCita2(1,1);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, ordenes]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -242,6 +269,40 @@ const DetallesCita = ({id}) => {
     setIsCreateDialogOpen(false);
   };
 
+  const handleEditOrdenClick = (orden) => {
+    setCurrentOrden(orden);
+    setIsOrdenDialogOpen(true);
+  };
+
+  const handleOrdenDialogSave = async (updatedOrden) => {
+    const imagenesIguales = shallowEqual(updatedOrden.imagenMedica, currentOrden.imagenMedica);
+    const resultadoIguales = shallowEqual(updatedOrden.resultadoLaboratorio, currentOrden.resultadoLaboratorio);
+
+    if (!imagenesIguales && resultadoIguales) {
+      const updatedImagenesData = await updateOrdenMedica(currentOrden.id, updatedOrden.imagenMedica);
+    }else if(imagenesIguales && !resultadoIguales){
+      const updatedResultadoData = await updateOrdenMedica(currentOrden.id, updatedOrden.resultadoLaboratorio);
+    }else if(!imagenesIguales && !resultadoIguales){
+      const updatedImagenesData = await updateOrdenMedica(currentOrden.id, updatedOrden.imagenMedica);
+      const updatedResultadoData = await updateOrdenMedica(currentOrden.id, updatedOrden.resultadoLaboratorio);
+    }else{
+      await updateOrdenMedica(currentOrden.id, updatedOrden);
+    }
+
+    const updatedOrdenData = await getOrders(currentOrden.id);
+
+    const updatedOrdenes = ordenes.map(ord => 
+      ord.id === updatedOrdenData.id ? updatedOrdenData : ord
+    );
+    console.log(updatedOrdenData);
+    setOrdenes(updatedOrdenes);
+    setIsOrdenDialogOpen(false);
+  };
+
+  const handleOrdenDialogClose = () => {
+    setIsOrdenDialogOpen(false);
+  };
+
   if (notFound) {
     return (
       <div className={styles.body}>
@@ -252,6 +313,23 @@ const DetallesCita = ({id}) => {
       </div>
     );
   }
+
+  const shallowEqual = (obj1, obj2) => {
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+  
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+  
+    for (let key of keys1) {
+      if (obj1[key] !== obj2[key]) {
+        return false;
+      }
+    }
+  
+    return true;
+  };
 
   return (
     <div className={styles.body}>
@@ -351,9 +429,9 @@ const DetallesCita = ({id}) => {
                     receta.medicamento && receta.medicamento.length > 0 &&
                     receta.medicamento.map(medicamento => (
                       <div key={medicamento.id} className={styles.card}>
-                        <p className={styles.texto}><strong>Nombre:</strong> {medicamento.nombre}</p>
-                        <p className={styles.texto}><strong>Dosis:</strong> {medicamento.dosis}</p>
-                        <p className={styles.texto}><strong>Frecuencia:</strong> {medicamento.frecuencia}</p>
+                        <p className={styles.texto}><strong>Nombre: </strong> {medicamento.nombre}</p>
+                        <p className={styles.texto}><strong>Dosis: </strong> {medicamento.dosis}</p>
+                        <p className={styles.texto}><strong>Frecuencia: </strong> {medicamento.frecuencia}</p>
                         <div className={styles.medicamento__buttons}>
                           <button 
                           className={styles.editButton}
@@ -385,7 +463,7 @@ const DetallesCita = ({id}) => {
               citas.map(cita => (
                 <div key={cita.id} className={styles.cita}>
                   <p>{cita.fecha} - {cita.fecha}
-                    {` `}- {cita.motivo}
+                    { }- {cita.motivo}
                   </p>
                 </div>
               ))
@@ -399,18 +477,30 @@ const DetallesCita = ({id}) => {
       <div className={styles.recetaMedica}>
         <h5 className={styles.titulo}>ORDEN MEDICA</h5>
         <div className={styles.recetaInfo}>
-          <div className={styles.ordenMedica}>
-            <p><strong>Nº ORDEN:</strong> 123.456.789</p>
-            <h6>IMAGEN MÉDICA:</h6>
+          {ordenes.map( orden =>(
+          <div key={orden.id} className={styles.ordenMedica}>
+            <p><strong>Nº ORDEN: </strong>{orden.id}</p>
+            <h6>{orden.observacion}</h6>
+            <h6>IMAGEN MÉDICA: </h6>
             <div className={styles.imagenMedica}>
-              <h6>Resultados de Radiografía de Torax</h6>
               <div className={styles.imagenContenedor}>
-                <img src="https://via.placeholder.com/150" alt="Resultados de Radiografía de Torax" />
+                <img src={orden.imagenMedica.imagen} alt="Resultados de Radiografía de Torax" />
               </div>
-              <p><strong>Resultados e Interpretación:</strong> Se observan opacidades en el lóbulo superior del pulmón derecho, sugestivas de proceso inflamatorio. No se observan fracturas ni lesiones óseas.</p>
-              <p><strong>Observaciones/Comentarios:</strong> El paciente no presenta síntomas respiratorios en este momento.</p>
+              <p><strong>Resultados e Interpretación: </strong>{orden.imagenMedica.indicaciones}</p>
+              <p><strong>Observaciones/Comentarios: </strong>{orden.imagenMedica.NotasMedic}</p>
             </div>
+            <h6>RESULTADO DE LABORATORIO: </h6>
+            <div className={styles.imagenMedica}>
+              <div className={styles.imagenContenedor}>
+                <img src={orden.resultadoLaboratorio.imageurl} alt="Resultados de Radiografía de Torax" />
+              </div>
+              <p><strong>Resultado: </strong>{orden.resultadoLaboratorio.Resultado}</p>
+              <p><strong>Motivo de prueba: </strong>{orden.resultadoLaboratorio.motivoPrueba}</p>
+            </div>
+            <br></br>
+            <button className={styles.editButton} onClick={() => handleEditOrdenClick(orden)}><FaEdit size={"20px"} /> Editar Orden</button>
           </div>
+          ))}
         </div>
       </div>
 
@@ -426,6 +516,12 @@ const DetallesCita = ({id}) => {
       onSave={handleCreateDialogSave}
       medicamento={ { id: '', nombre: '', dosis: '', frecuencia: '' } }
     />
+    <EditOrdenDialog 
+        open={isOrdenDialogOpen} 
+        onClose={handleOrdenDialogClose} 
+        orden={currentOrden} 
+        onSave={handleOrdenDialogSave} 
+      />
     </div>
     
   );

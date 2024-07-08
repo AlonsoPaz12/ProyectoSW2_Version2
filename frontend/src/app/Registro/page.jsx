@@ -72,8 +72,13 @@ const Registro = () => {
             return false;
         }
 
-        if (!/^\d{9}$/.test(celular)) {
-            alert('El número de celular debe tener 9 dígitos.');
+        if (!/^\d{8}$/.test(documento) || parseInt(documento, 10) < 0) {
+            alert('El número de documento debe tener 8 dígitos y no ser negativo.');
+            return false;
+        }
+
+        if (!/^\d{9}$/.test(celular) || parseInt(celular,10) < 0) {
+            alert('El número de celular debe tener 9 dígitos y no puede ser negativo.');
             return false;
         }
 
@@ -235,8 +240,8 @@ const Registro = () => {
                                     <input
                                         type="radio"
                                         name="genero"
-                                        value="Hombre"
-                                        checked={formData.genero === 'Hombre'}
+                                        value="MASCULINO"
+                                        checked={formData.genero === 'MASCULINO'}
                                         onChange={handleChange}
                                     />
                                     Hombre
@@ -245,8 +250,8 @@ const Registro = () => {
                                     <input
                                         type="radio"
                                         name="genero"
-                                        value="Mujer"
-                                        checked={formData.genero === 'Mujer'}
+                                        value="FEMENINO"
+                                        checked={formData.genero === 'FEMENINO'}
                                         onChange={handleChange}
                                     />
                                     Mujer

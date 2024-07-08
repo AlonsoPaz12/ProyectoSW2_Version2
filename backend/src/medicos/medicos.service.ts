@@ -112,7 +112,7 @@ export class MedicoService {
     }
 
     async crearOrdenMedica(crearOrdenMedicaDto: CrearOrdenMedicaDto) {
-        const { citaId, medicoId, pacienteId, observacion } = crearOrdenMedicaDto;
+        const { imagenMedicaId, resultadoLabId, citaId, medicoId, pacienteId, observacion } = crearOrdenMedicaDto;
 
         const cita = await this.citaRepository.findOne({
             where: { id: citaId },
@@ -140,12 +140,30 @@ export class MedicoService {
             throw new NotFoundException(`No se encontró el paciente con ID ${pacienteId}`);
         }
 
+        const imagen = await this.imagenMedicaRepository.findOne({
+            where: { id: imagenMedicaId }
+        });
+        if (!imagen) {
+            throw new NotFoundException(`No se encontró la imagen medica con ID ${imagenMedicaId}`);
+        }
+
+
+        const resultado = await this.resultadoLabRepository.findOne({
+            where: { id: resultadoLabId }
+        });
+        if (!resultado) {
+            throw new NotFoundException(`No se encontró el resultado de laboratorio con ID ${resultadoLabId}`);
+        }
+
+
         // Crear la orden médica utilizando OrdenService
         return await this.ordenService.crearDocumentoMedico({
-            citaId,
-            medicoId,
-            pacienteId,
-            observacion,
+        citaId,
+        medicoId,
+        pacienteId,
+        observacion,
+        imagenMedicaId,  
+        resultadoLabId 
         });
     }
 
@@ -379,4 +397,15 @@ export class MedicoService {
         ordenMedica.resultadoLaboratorio = null;
         return await this.ordenMedicaRepository.save(ordenMedica);
     }
+
+    async verHistorialCitas(medicoId: number) {
+        const citas = await this.citaRepository.find({
+            relations: ['medico', 'paciente']
+        });
+
+        const citasFiltradas = citas.filter(cita => cita.medico.id  == medicoId);
+
+        return citasFiltradas;
+    }
+
 }

@@ -25,6 +25,6 @@ export class ImagenMedicaController {
 
     @Get()
     async obtenerImagenesMedicas() {
-        return await this.imagenMedicaService.obtenerTodasImagenesMedicas();
+        return await this.imagenMedicaService.mostrarImagenesMedicas();
     }
 }

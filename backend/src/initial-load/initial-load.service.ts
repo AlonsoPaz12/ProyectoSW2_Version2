@@ -16,6 +16,10 @@ import { defaultCitas } from './default-citas';
 import { defaultRecetas } from './default-recetas';
 import { defaultOrdenes } from './default-ordenes';
 import { defaultVacunas } from './default-vacunas';
+import { ImagenMedicaService } from 'src/imagenes-medicas/imagenes-medicas.service';
+import { ResultadoLabService } from 'src/resultados-lab/resultados-lab.service';
+import { defaultImagenes } from './default-imagenes';
+import { defaultResultado } from './default-resultado';
 
 @Injectable()
 export class InitialLoadService implements OnModuleInit {
@@ -26,7 +30,9 @@ export class InitialLoadService implements OnModuleInit {
     private readonly citaService: CitaService,
     private readonly recetaService: RecetaService,
     private readonly ordenMedicaService: OrdenMedicaService,
-    private readonly vacunaService: VacunaService
+    private readonly vacunaService: VacunaService,
+    private readonly imagenesService: ImagenMedicaService,
+    private readonly resultadoService: ResultadoLabService
   ) { }
 
   async onModuleInit() {
@@ -66,6 +72,21 @@ export class InitialLoadService implements OnModuleInit {
         }
       }
 
+      const imagenes = await this.imagenesService.mostrarImagenesMedicas();
+      if (imagenes.length === 0) {
+        for(const imagen of defaultImagenes){
+          await this.imagenesService.crearImagenMedica(imagen);
+        }
+      }
+
+      const resultado = await this.resultadoService.obtenerResultadosLab();
+      if (resultado.length === 0) {
+        for(const resultado of defaultResultado){
+          await this.resultadoService.crearResultadoLab(resultado)
+        }
+      }
+
+
       const ordenes = await this.ordenMedicaService.obtenerTodasOrdenes();
       if (ordenes.length === 0) {
         for (const orden of defaultOrdenes) {
@@ -79,6 +100,7 @@ export class InitialLoadService implements OnModuleInit {
           await this.vacunaService.crearVacuna(vacuna);
         }
       }
+
 
     } catch (error) {
       console.error('Error initializing data:', error);

@@ -64,4 +64,9 @@ export class PacienteController {
     const receta = await this.pacienteService.visualizarRecetaMedicaPorCita(idCita);
     return { receta };
   }
+
+  @Get('orden/:id')
+  async visualizarOrdenesMedicas(@Param('id') id: number){
+    return this.pacienteService.visualizarOrdenesMedicas(id);
+  }
 }

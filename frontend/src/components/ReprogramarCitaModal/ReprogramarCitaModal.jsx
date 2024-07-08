@@ -1,14 +1,31 @@
+
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 
 const ReprogramarCitaModal = ({ citaSeleccionada, onReprogramar, onClose }) => {
   const [nuevaFecha, setNuevaFecha] = useState(citaSeleccionada.fecha);
   const [nuevaHora, setNuevaHora] = useState(citaSeleccionada.hora);
 
-  const handleReprogramar = () => {
-    onReprogramar(nuevaFecha, nuevaHora);
+  const handleReprogramar = async () => {
+    try {
+      await axios.patch(`http://localhost:3000/citas/3`, {
+        fecha: nuevaFecha,
+        hora: nuevaHora,
+      });
+
+      citaSeleccionada.fecha = nuevaFecha;
+      citaSeleccionada.hora = nuevaHora;
+
+      onReprogramar(citaSeleccionada);
+
+      onClose(); 
+    } catch (error) {
+      console.error('Error al reprogramar la cita:', error);
+   
+    }
   };
 
   return (
