@@ -1,8 +1,8 @@
 // citas.controller.ts
-import { Controller, Get,Put,Param, NotFoundException,Body, Query  } from '@nestjs/common';
+import { Controller, Get,Put,Param, NotFoundException,Query, Patch, Body, Post   } from '@nestjs/common';
 import { CitaService } from './cita.service';
 import { Cita } from './citas.entity';
-
+import { ActualizarCitaDto } from './dto/citas.dto';
 @Controller('citas')
 export class CitaController {
   constructor(private readonly citasService: CitaService) {}
@@ -67,5 +67,31 @@ async updateCita(
   }
 }
 
+@Get('con-paciente/:id')
+  async obtenerCitasConPaciente(@Param('id') pacienteid: number): Promise<Partial<Cita>[]> {
+    try {
+      const citas = await this.citasService.obtenerCitasConPaciente(pacienteid);
+      return citas;
+    } catch (error) {
+      throw new NotFoundException(`Error al obtener las citas del paciente: ${error.message}`);
+    }
+  }
+
+  
+@Patch(':id')
+async editarCita(@Param('id') citaId: string, @Body() actualizarCitaDto: ActualizarCitaDto): Promise<Cita> {
+  const id = parseInt(citaId, 10);
+
+  if (isNaN(id)) {
+    throw new NotFoundException(`El ID proporcionado no es un número válido: ${citaId}`);
+  }
+
+  return this.citasService.editarCita(id, actualizarCitaDto);
+}
+
+@Post()
+async guardarCita(@Body() cita: Cita): Promise<Cita> {
+  return this.citasService.guardarCita(cita);
+}
 
 }

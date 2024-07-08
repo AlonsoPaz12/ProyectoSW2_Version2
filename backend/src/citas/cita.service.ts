@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Cita } from './citas.entity';
 import { Medico } from '../medicos/medicos.entity';
 import { Paciente } from 'src/pacientes/pacientes.entity';
-
+import { ActualizarCitaDto } from './dto/citas.dto';
 
 @Injectable()
 export class CitaService {
@@ -16,18 +16,12 @@ export class CitaService {
 
   async obtenerTodasCitas(): Promise<Cita[]> {
     try {
-      const citas = await this.citaRepository.find({
-        relations: ['medico', 'paciente', 'receta', 'ordenMedica'],
-      });
-      if (citas.length === 0) {
-        throw new NotFoundException('No se encontraron citas.');
-      }
-      return citas;
+      return await this.citaRepository.find();
     } catch (error) {
-      throw new NotFoundException('Error al obtener las citas.');
-    }
-  }
-
+      throw new Error(`Error al obtener las citas: ${error.message}`);
+    }
+  
+  }
   async obtenerCitasPorIdMedico(medicoId: number): Promise<Partial<Cita>[]> {
     try {
       const citas = await this.citaRepository
@@ -127,6 +121,57 @@ async updateCita(id: number, updateCitaDto: any): Promise<Cita> {
 
   return this.citaRepository.save(cita);
 }
+
+
+async editarCita(citaId: number, actualizarCitaDto: ActualizarCitaDto): Promise<Cita> {
+  try {
+    let cita = await this.citaRepository.findOne({ where: { id: citaId } });
+
+    if (!cita) {
+      throw new NotFoundException(`No se encontró la cita con ID ${citaId}`);
+    }
+
+    // Actualiza los campos de la cita con los valores del DTO
+    Object.assign(cita, actualizarCitaDto);
+
+    // Guarda los cambios en la base de datos
+    await this.citaRepository.save(cita);
+
+    return cita;
+  } catch (error) {
+    throw new NotFoundException(`Error al editar la cita: ${error.message}`);
+  }
+}
+
+async guardarCita(cita: Cita): Promise<Cita> {
+  try {
+    const nuevaCita = await this.citaRepository.save(cita);
+    return nuevaCita;
+  } catch (error) {
+    throw new NotFoundException(`Error al guardar la cita: ${error.message}`);
+  }
+}
+
+async obtenerCitasConPaciente(pacienteid: number): Promise<Partial<Cita>[]> {
+  try {
+    const citas = await this.citaRepository
+      .createQueryBuilder('cita')
+      .leftJoin('cita.paciente', 'paciente')
+      .select(['paciente.nombres as nombres', 'cita.fecha as fecha', 'cita.hora as hora', 'paciente.imageurl as imageurl'])
+      .where('paciente.id = :pacienteid', { pacienteid })
+      .getRawMany();
+
+    if (citas.length === 0) {
+      throw new NotFoundException(`No se encontraron citas con ID ${pacienteid}`);
+    }
+
+    return citas;
+  } catch (error) {
+    throw new NotFoundException(`Error al obtener las citas del paciente: ${error.message}`);
+  }
+}
+
+
 
 
 }
