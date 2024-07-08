@@ -47,13 +47,13 @@ export class ImagenMedicaService {
 
     async eliminarImagenMedica(id: number) {
         const imagen = await this.imagenMedicaRepository.findOne({
-            where: { id }
+          where: { id }
         });
-
+      
         if (!imagen) {
-            throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
+          throw new NotFoundException(`Imagen médica con ID ${id} no encontrada`);
         }
-
+      
         return await this.imagenMedicaRepository.remove(imagen);
     }
 }

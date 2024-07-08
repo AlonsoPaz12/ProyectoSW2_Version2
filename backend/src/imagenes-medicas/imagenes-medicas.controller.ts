@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param, NotFoundException, Get } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, NotFoundException, Get, Delete } from '@nestjs/common';
 import { ImagenMedicaService } from './imagenes-medicas.service';
 import { CrearImagenMedicaDto, ActualizarImagenMedicaDto } from './dto/imagenes-medicas.dto';
 
@@ -26,5 +26,16 @@ export class ImagenMedicaController {
     @Get()
     async obtenerImagenesMedicas() {
         return await this.imagenMedicaService.mostrarImagenesMedicas();
+    }
+
+    @Get()
+    async mostrarImagenesMedicas() {
+      return await this.imagenMedicaService.mostrarImagenesMedicas();
+    }
+
+    @Delete(':id')
+    async eliminarImagenMedica(@Param('id') id: number) {
+      console.log('ID recibido para eliminar:', id);
+      return await this.imagenMedicaService.eliminarImagenMedica(id);
     }
 }
