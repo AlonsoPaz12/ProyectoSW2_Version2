@@ -56,7 +56,7 @@ const DetallesCita = ({ id }) => {
 
     return edad;
   };
-
+  //Metodo para obtener los datos del paciente medicante su ID del paciente
   const fectchprueba = async (pacienteId) => {
     try {
       const response = await axios.get(`http://localhost:3000/pacientes/${pacienteId}`);
@@ -66,7 +66,7 @@ const DetallesCita = ({ id }) => {
       console.error('Error al obtener las vacunas del paciente:', error);
     }
   };
-
+  //Mtodo para obtener las citas dado un ID del paciente y un Id del medico
   const fetchCita2 = async (pacientId, medicoid) => {
     try {
       const response = await axios.get(`http://localhost:3000/citas`);
@@ -146,6 +146,7 @@ const DetallesCita = ({ id }) => {
     const ordenesData = await getOrders(pacienteId);
     setOrdenes(ordenesData);
   }
+  //Metodo para traer todas lsa recetas y luego filtraarlas por su id
   const fetchRecetas = async (id) => {
     try {
       const response = await axios.get('http://localhost:3000/recetas');
@@ -160,7 +161,7 @@ const DetallesCita = ({ id }) => {
       console.error('Error al obtener las recetas:', error);
     }
   };
-
+  //Fetch inicial para traer datos de las citas y del paciente
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -184,7 +185,7 @@ const DetallesCita = ({ id }) => {
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
+ //Metodo para editar una cita fecha motivo y comentarios
   const handleSaveClick = async (idCita) => {
     try {
       const response = await fetch(`http://localhost:3000/citas/${idCita}`, {
@@ -236,7 +237,7 @@ const DetallesCita = ({ id }) => {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
   };
-
+ //medotod para poder ver visualmente al agregarse un medicamento
   const handleCreateDialogSave = async (newMedicamento) => {
     await fetchRecetas(1); // Refetch the receta data from the server after adding the medicamento
     setIsCreateDialogOpen(false);
@@ -249,7 +250,7 @@ const DetallesCita = ({ id }) => {
     setReceta({ ...receta, medicamento: updatedMedicamentos });
     setIsDialogOpen(false);
   };
-
+  //Metodo: para eleminiar un medicamento entregandole el id de la receta y el id del medicamneto de la base de datos
   const handleDeleteMedicamentoClick = async (recetaId, medicamentoId) => {
     try {
       await axios.delete(`http://localhost:3000/recetas/${recetaId}/medicamentos/${medicamentoId}`);

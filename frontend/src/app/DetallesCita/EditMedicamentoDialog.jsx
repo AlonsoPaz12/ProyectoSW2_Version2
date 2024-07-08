@@ -5,7 +5,7 @@ import axios from 'axios';
 const EditMedicamentoDialog = ({ open, onClose, recetaId, onSave }) => {
   const [editableMedicamento, setEditableMedicamento] = useState([]);
   const [medicamentos, setMedicamentos] = useState([]);
-
+//Para obtener los medicamentos que tenemos en la base de datos
   useEffect(() => {
     const fetchMedicamentos = async () => {
       try {
@@ -25,7 +25,7 @@ const EditMedicamentoDialog = ({ open, onClose, recetaId, onSave }) => {
     setEditableMedicamento(selectedMedicamento);
     console.log('Selected medicamento:', selectedMedicamento);
   };
-
+//Para agregar medicamento  laa receta
   const handleSave = async () => {
     console.log('Saving medicamento:', editableMedicamento);
     try {
