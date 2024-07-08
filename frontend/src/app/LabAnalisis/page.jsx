@@ -133,7 +133,7 @@ const LabAnalisis = () => {
           handleClose={handleCloseModalimg}
           handleSave={handleSaveImpresion}
           initialAnalysisData={impresion}
-          doctorActivo={doctorActivo} // Pasa el nombre del doctor activo
+          doctorActivo={doctorActivo} 
         />
       </Box>
     </Box>

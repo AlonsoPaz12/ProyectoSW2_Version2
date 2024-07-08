@@ -5,6 +5,7 @@ import styles from "./AddInforImagenes.module.css";
 
 const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, doctorActivo }) => {
   const [analysisData, setAnalysisData] = useState([{
+    id: null,
     nombrePaciente: '',
     ExamDate: '',
     tipo: '',
@@ -17,8 +18,10 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
 
   useEffect(() => {
     if (initialAnalysisData) {
+      console.log('Datos iniciales:', initialAnalysisData); // Log de los datos iniciales
       setAnalysisData(initialAnalysisData.map(data => ({
         ...data,
+        id: data.id || null,
         NombreDoc: data.NombreDoc || doctorActivo
       })));
     }
@@ -33,6 +36,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
 
   const handleAddRow = () => {
     setAnalysisData([...analysisData, {
+      id: null,
       nombrePaciente: '',
       ExamDate: '',
       tipo: '',
@@ -43,10 +47,19 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
     }]);
   };
 
-  const handleRemoveRow = (index) => {
-    const updatedData = [...analysisData];
-    updatedData.splice(index, 1);
-    setAnalysisData(updatedData);
+  const handleRemoveRow = async (id, index) => {
+    if (id) {
+      try {
+        await axios.delete(`http://localhost:3000/imagenes-medicas/${id}`);
+        const updatedData = [...analysisData];
+        updatedData.splice(index, 1);
+        setAnalysisData(updatedData);
+      } catch (error) {
+        console.error('Error al eliminar la imagen médica:', error);
+      }
+    } else {
+      console.error('ID de la imagen médica es undefined.');
+    }
   };
 
   const handleSubmit = async () => {
@@ -59,19 +72,19 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
 
     console.log('Datos a enviar:', newData);
 
-    // Aquí es donde realizamos la petición POST o PUT
     try {
       const response = await axios.post('http://localhost:3000/imagenes-medicas', newData);
       console.log('Datos enviados exitosamente:', response.data);
+      handleSave(response.data);
+      setAnalysisData(response.data);
     } catch (error) {
       console.error('Error al enviar los datos:', error);
     }
 
-    handleSave(newData);
     handleClose();
   };
 
-  const handleImageUpload = async (index, file) => {
+  const handleImageUpload = (index, file) => {
     const imageUrl = URL.createObjectURL(file);
     const updatedData = [...analysisData];
     updatedData[index].imagen = imageUrl;
@@ -186,7 +199,7 @@ const AddInforImagenes = ({ show, handleClose, handleSave, initialAnalysisData, 
                     )}
                   </td>
                   <td>
-                    <Button variant="danger" onClick={() => handleRemoveRow(index)}>Eliminar</Button>
+                    <Button variant="danger" onClick={() => handleRemoveRow(analysis.id, index)}>Eliminar</Button>
                   </td>
                 </tr>
               ))}
