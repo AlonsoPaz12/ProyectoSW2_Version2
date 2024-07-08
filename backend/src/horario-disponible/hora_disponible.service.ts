@@ -61,7 +61,7 @@ export class HorasDisponiblesService {
     }
     //1
     async updateHorarios(medicoId: number, horarios: CrearHoraDisponibleDto[]): Promise<HoraDisponible[]> {
-        //2
+        //2         //24    //5
         const medico = await this.medicoRepository.findOne({ where: { id: medicoId }, relations: ['horasDisponibles'] });
         //3
         if (!medico) {
@@ -69,7 +69,7 @@ export class HorasDisponiblesService {
             throw new Error('Medico not found');
         }
 
-        //5 Obtener horarios existentes
+        //5 Obtener horarios existentes     //26    //27
         const horariosExistentes = await this.horaDisponibleRepository.find({ where: { medico: { id: medicoId } } });
 
         // Crear nuevos horarios y eliminar los desmarcados
@@ -85,7 +85,7 @@ export class HorasDisponiblesService {
         });
         //9                  10
         for (const horarioExistente of horariosExistentes) {
-            //11
+            //11    //28        //29
             const horarioNuevo = nuevosHorarios.find(horario => 
                 horario.diaSemana === horarioExistente.diaSemana &&
                 horario.horaInicio === horarioExistente.horaInicio &&
